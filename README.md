@@ -2,9 +2,9 @@
 
 **Type a name. Get a dozen logos.** A fully offline, zero-dependency generative logo studio that draws 12 original logo concepts in four families — right in your browser. No API keys, no backend, no waiting rooms.
 
-![Logo Mo demo](screenshots/logo-mo-hero.png)
+![Logo Mo demo](IMG_6977.png)
 
-**Live demo:** https://artzdesignmo.github.io/logo-mo/ *(enable GitHub Pages on `index.html`)*
+**Live demo:** https://artzdesignmo.github.io/logo-mo/
 
 ## Features
 
