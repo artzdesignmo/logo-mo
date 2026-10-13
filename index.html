@@ -219,10 +219,12 @@ footer{margin-top:70px;border-top:1px solid var(--line);padding:30px 0 46px;colo
 
   <div class="toolbar" id="toolbar" hidden>
     <button class="pill on" data-fam="all">All</button>
-    <button class="pill" data-fam="monogram">Monogram</button>
+    <button class="pill" data-fam="minimal">Minimal</button>
+    <button class="pill" data-fam="monoline">Monoline</button>
+    <button class="pill" data-fam="geometric">Geometric</button>
     <button class="pill" data-fam="wordmark">Wordmark</button>
-    <button class="pill" data-fam="badge">Badge</button>
-    <button class="pill" data-fam="mark">Mark</button>
+    <button class="pill" data-fam="emblem">Emblem</button>
+    <button class="pill" data-fam="gradient">Gradient</button>
     <span class="count" id="count"></span>
   </div>
 
@@ -322,18 +324,18 @@ const VIBES={
  travel:  {en:"Travel",    tc:"旅行",     fonts:["bebas","grotesk","dmserif"], pal:[3,8,6,0], motifs:["peaks","sun","waves","orbit"]},
  playful: {en:"Playful",   tc:"玩味",     fonts:["unbounded","archivo","bebas"], pal:[10,11,4,1], motifs:["dots","sun","tri","bars"]},
 };
-const FAMILIES=["monogram","wordmark","badge","mark"];
-const FAM_LABEL={monogram:{en:"Monogram",tc:"字母徽"},wordmark:{en:"Wordmark",tc:"字標"},badge:{en:"Badge",tc:"徽章"},mark:{en:"Mark",tc:"圖形"}};
+const FAMILIES=["minimal","monoline","geometric","wordmark","emblem","gradient"];
+const FAM_LABEL={minimal:{en:"Minimal",tc:"極簡"},monoline:{en:"Monoline",tc:"線條"},geometric:{en:"Geometric",tc:"幾何"},wordmark:{en:"Wordmark",tc:"字標"},emblem:{en:"Emblem",tc:"徽章"},gradient:{en:"Gradient",tc:"漸變"}};
 
 /* ---------------- i18n ---------------- */
 const I18N={
-en:{tagline:"generative logo studio · offline",history:"History",hero:"A <b>fully offline</b> generative logo studio. No API keys, no backend, no waiting rooms — a seeded design engine draws <b>12 original concepts</b> in four families, right in your browser. Export real <b>SVG + PNG</b>.",
+en:{tagline:"generative logo studio · offline",history:"History",hero:"A <b>fully offline</b> generative logo studio. No API keys, no backend, no waiting rooms — a seeded design engine draws <b>12 original concepts</b> in six signature styles, right in your browser. Export real <b>SVG + PNG</b>.",
 nameLabel:"Brand name",tagLabel:"Tagline (optional)",vibeLabel:"Vibe",generate:"Generate",surprise:"Surprise me",shuffle:"Shuffle styles",try:"Try:",
 concept:"Concept",palette:"Palette",export:"Export",svgNote:"vector · infinitely scalable",copySvg:"Copy SVG code",copyNote:"paste into Figma / web",
 mockCard:"Business card",mockIcon:"App icon",kit:"Full kit",kitNote:"svg + 3 pngs, one click each",
 note:"Type is rendered with open fonts (Google Fonts). PNG exports embed the font automatically, so what you see is what you get — no internet needed after first load.",
 foot:"built in the open, free forever",concepts:"concepts",copied:"SVG code copied ✓",dl:"Downloading",needName:"Type a brand name first ✎",regen:"New set generated ✦",fontNote:"font embedded"},
-tc:{tagline:"離線生成式標誌工作室",history:"歷史記錄",hero:"<b>完全離線</b>嘅生成式標誌工作室。唔要 API key、唔要後端、唔使排隊——種子設計引擎喺瀏覽器即場畫出 <b>12 個原創概念</b>，四大系列。匯出真正嘅 <b>SVG + PNG</b>。",
+tc:{tagline:"離線生成式標誌工作室",history:"歷史記錄",hero:"<b>完全離線</b>嘅生成式標誌工作室。唔要 API key、唔要後端、唔使排隊——種子設計引擎喺瀏覽器即場畫出 <b>12 個原創概念</b>，六大風格。匯出真正嘅 <b>SVG + PNG</b>。",
 nameLabel:"品牌名",tagLabel:"標語（可選）",vibeLabel:"風格",generate:"生成",surprise:"隨機靈感",shuffle:"換一批風格",try:"試下：",
 concept:"概念",palette:"配色",export:"匯出",svgNote:"向量 · 無限放大",copySvg:"複製 SVG 代碼",copyNote:"貼去 Figma / 網頁",
 mockCard:"卡片",mockIcon:"App 圖標",kit:"全套下載",kitNote:"svg + 3 張 png",
@@ -349,89 +351,149 @@ function applyI18n(){document.querySelectorAll("[data-i18n]").forEach(el=>{el.in
 const initials=name=>name.trim().split(/\s+/).slice(0,2).map(w=>w[0]||"").join("").toUpperCase()||"M";
 const words=name=>name.trim().split(/\s+/).filter(Boolean);
 
-/* ---- F1 · MONOGRAM: initial(s) inside a geometric frame ---- */
-function genMonogram(rng,ctx){
- const{pal,font}=ctx, L=initials(ctx.name), css=font.css;
- const frame=rng.pick(["ring","squircle","hex","arch","diamond","double"]);
- const cx=200,cy=196; let g="";
- const ink=pal.ink, ac=pal.accent;
- if(frame==="ring") g=`<circle cx="${cx}" cy="${cy}" r="118" fill="none" stroke="${ink}" stroke-width="11"/><circle cx="${cx}" cy="${cy}" r="96" fill="none" stroke="${ac}" stroke-width="3"/>`;
- else if(frame==="squircle") g=`<rect x="86" y="82" width="228" height="228" rx="58" fill="none" stroke="${ink}" stroke-width="11"/><circle cx="${cx+rng.range(-40,40)}" cy="${cy-96}" r="9" fill="${ac}"/>`;
- else if(frame==="hex"){const p=[];for(let i=0;i<6;i++){const a=Math.PI/3*i-Math.PI/6;p.push(`${cx+118*Math.cos(a)},${cy+118*Math.sin(a)}`);}g=`<polygon points="${p.join(" ")}" fill="none" stroke="${ink}" stroke-width="11"/><polygon points="${p.join(" ")}" fill="none" stroke="${ac}" stroke-width="3" transform="translate(0,14) scale(1)"/>`;}
- else if(frame==="arch") g=`<path d="M96,310 L96,210 A104,104 0 0 1 304,210 L304,310" fill="none" stroke="${ink}" stroke-width="11"/><line x1="96" y1="310" x2="304" y2="310" stroke="${ac}" stroke-width="8"/>`;
- else if(frame==="diamond") g=`<rect x="96" y="92" width="208" height="208" fill="none" stroke="${ink}" stroke-width="11" transform="rotate(45 200 196)"/><circle cx="${cx}" cy="${cy}" r="7" fill="${ac}"/>`;
- else g=`<circle cx="${cx}" cy="${cy}" r="120" fill="none" stroke="${ink}" stroke-width="5"/><circle cx="${cx}" cy="${cy}" r="102" fill="none" stroke="${ink}" stroke-width="10"/>`;
- const fs=L.length>1?104:128;
- g+=`<text x="${cx}" y="${cy+fs*0.36}" text-anchor="middle" font-family="${css}" font-size="${fs}" fill="${ink}" letter-spacing="2">${esc(L)}</text>`;
- if(rng.chance(.6)){const w=rng.range(30,70);g+=`<line x1="${cx-w/2}" y1="${cy+72}" x2="${cx+w/2}" y2="${cy+72}" stroke="${ac}" stroke-width="7" stroke-linecap="round"/>`;}
- return g;
+/* ================= generator styles (pure SVG, seeded) =================
+   Design language — style-driven (after logocreator's principles), rebuilt
+   fully offline as deterministic algorithms:
+   · 6 form styles; color is chosen separately (two-color discipline)
+   · generous negative space: artwork lives inside a ~230px clearspace
+   · optical centering: the mark sits slightly above geometric center
+   · one hero color per concept; the accent appears exactly once
+   · flat solid shapes, crisp edges — except the gradient style
+   · combination-mark default: mark + letterspaced name = real logo format
+*/
+
+/* ---------- shared composition ---------- */
+function heroPick(rng,pal){return rng.chance(.72)?[pal.ink,pal.accent]:[pal.accent,pal.ink];}
+function nameLine(ctx,y,fs,ls,color){
+  return `<text x="200" y="${y}" text-anchor="middle" font-family="${ctx.font.css}" font-size="${fs}" letter-spacing="${ls}" fill="${color}">${esc(ctx.name.trim().toUpperCase())}</text>`;
+}
+function tagLine(ctx,y){
+  if(!ctx.tagline)return "";
+  return `<text x="200" y="${y}" text-anchor="middle" font-family="${ctx.font.css}" font-size="14" letter-spacing="5" fill="${ctx.pal.ink}" opacity=".62">${esc(ctx.tagline.toUpperCase())}</text>`;
+}
+function comboName(ctx){
+  const fs=fitSize(ctx.name,ctx.font.k,300,40);
+  return nameLine(ctx,318,fs,10,ctx.pal.ink)+tagLine(ctx,348);
+}
+function tint(hex,amt){
+  const n=parseInt(hex.slice(1),16),r=n>>16,g=n>>8&255,b=n&255,m=v=>Math.round(v+(255-v)*amt);
+  return `rgb(${m(r)},${m(g)},${m(b)})`;
+}
+function blobPath(rng,cx,cy,r){
+  const n=8,pts=[];
+  for(let i=0;i<n;i++){const a=i/n*Math.PI*2,rr=r*rng.range(.78,1.12);pts.push([cx+rr*Math.cos(a),cy+rr*Math.sin(a)]);}
+  let d=`M${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)}`;
+  for(let i=0;i<n;i++){const p0=pts[(i-1+n)%n],p1=pts[i],p2=pts[(i+1)%n],p3=pts[(i+2)%n];
+    const c1x=p1[0]+(p2[0]-p0[0])/6,c1y=p1[1]+(p2[1]-p0[1])/6,c2x=p2[0]-(p3[0]-p1[0])/6,c2y=p2[1]-(p3[1]-p1[1])/6;
+    d+=`C${c1x.toFixed(1)},${c1y.toFixed(1)} ${c2x.toFixed(1)},${c2y.toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`;}
+  return d+"Z";
 }
 
-/* ---- F2 · WORDMARK: the name as the logo ---- */
+/* ---------- mark archetypes: mathematically constructed, o={cx,cy,s,hero,ac,lw} ---------- */
+const MARKS={
+arc(rng,o){const s=o.s,w=o.lw||1,r=78*s,a0=rng.range(0,Math.PI*2),sw=rng.range(Math.PI*1.05,Math.PI*1.65);
+  const x1=o.cx+r*Math.cos(a0),y1=o.cy+r*Math.sin(a0),x2=o.cx+r*Math.cos(a0+sw),y2=o.cy+r*Math.sin(a0+sw);
+  return `<path d="M${x1.toFixed(1)},${y1.toFixed(1)} A${r},${r} 0 ${sw>Math.PI?1:0},1 ${x2.toFixed(1)},${y2.toFixed(1)}" fill="none" stroke="${o.hero}" stroke-width="${13*s*w}" stroke-linecap="round"/>`+
+  (rng.chance(.55)?`<circle cx="${x2.toFixed(1)}" cy="${y2.toFixed(1)}" r="${8*s}" fill="${o.ac}"/>`:"");},
+vesica(rng,o){const s=o.s,dx=54*s,r=62*s;
+  return `<circle cx="${(o.cx-dx/2).toFixed(1)}" cy="${o.cy}" r="${r}" fill="none" stroke="${o.hero}" stroke-width="${12*s*(o.lw||1)}"/><circle cx="${(o.cx+dx/2).toFixed(1)}" cy="${o.cy}" r="${r}" fill="${o.ac}" opacity=".92"/>`;},
+halfsun(rng,o){const s=o.s,r=62*s;let g=`<path d="M${o.cx-r},${o.cy} A${r},${r} 0 0 1 ${o.cx+r},${o.cy} Z" fill="${o.hero}"/>`;
+  const n=7;for(let i=0;i<n;i++){const a=Math.PI*i/(n-1),mid=i===Math.floor(n/2);
+    g+=`<line x1="${(o.cx+Math.cos(a)*(r+14*s)).toFixed(1)}" y1="${(o.cy-Math.sin(a)*(r+14*s)).toFixed(1)}" x2="${(o.cx+Math.cos(a)*(r+36*s)).toFixed(1)}" y2="${(o.cy-Math.sin(a)*(r+36*s)).toFixed(1)}" stroke="${mid?o.ac:o.hero}" stroke-width="${8*s}" stroke-linecap="round"/>`;}
+  g+=`<line x1="${o.cx-r-18*s}" y1="${o.cy+18*s}" x2="${o.cx+r+18*s}" y2="${o.cy+18*s}" stroke="${o.hero}" stroke-width="${8*s}" stroke-linecap="round"/>`;return g;},
+peaks(rng,o){const s=o.s,w=92*s;
+  return `<path d="M${o.cx-w},${o.cy+54*s} L${o.cx-w/2},${o.cy-50*s} L${o.cx},${o.cy+54*s} Z" fill="${o.hero}"/><path d="M${o.cx},${o.cy+54*s} L${o.cx+w/2},${o.cy-50*s} L${o.cx+w},${o.cy+54*s} Z" fill="${o.ac}" opacity=".94"/>`;},
+pillars(rng,o){const s=o.s,n=rng.int(3,5),bw=26*s,gap=20*s,W=n*bw+(n-1)*gap,mid=Math.floor(n/2);let g="";
+  for(let i=0;i<n;i++){const t=Math.abs(i/(n-1)-.5)*2,h=(66-48*t)*s,x=o.cx-W/2+i*(bw+gap);
+    g+=`<rect x="${x.toFixed(1)}" y="${(o.cy+58*s-h).toFixed(1)}" width="${bw}" height="${h.toFixed(1)}" rx="${bw/2}" fill="${i===mid?o.ac:o.hero}"/>`;}return g;},
+wave(rng,o){const s=o.s,w=104*s,amp=30*s,wgt=12*s*(o.lw||1);
+  return `<path d="M${o.cx-w},${o.cy} q${w/2},${-amp*2} ${w},0 t${w},0" fill="none" stroke="${o.hero}" stroke-width="${wgt}" stroke-linecap="round"/><circle cx="${(o.cx+w*.5).toFixed(1)}" cy="${(o.cy-amp).toFixed(1)}" r="${9*s}" fill="${o.ac}"/>`;},
+orbit(rng,o){const s=o.s,rot=rng.range(-28,-12),rad=rot*Math.PI/180,th=rng.range(.5,1.2);
+  const ex=o.cx+96*s*Math.cos(th),ey=o.cy+38*s*Math.sin(th);
+  const px=o.cx+(ex-o.cx)*Math.cos(rad)-(ey-o.cy)*Math.sin(rad),py=o.cy+(ex-o.cx)*Math.sin(rad)+(ey-o.cy)*Math.cos(rad);
+  return `<circle cx="${o.cx}" cy="${o.cy}" r="${24*s}" fill="${o.hero}"/><ellipse cx="${o.cx}" cy="${o.cy}" rx="${96*s}" ry="${38*s}" fill="none" stroke="${o.hero}" stroke-width="${5.5*s*(o.lw||1)}" opacity=".55" transform="rotate(${rot.toFixed(1)} ${o.cx} ${o.cy})"/><circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="${10*s}" fill="${o.ac}"/>`;},
+tri(rng,o){const s=o.s;
+  return `<path d="M${o.cx},${o.cy-72*s} L${(o.cx+72*s).toFixed(1)},${o.cy+52*s} L${(o.cx-72*s).toFixed(1)},${o.cy+52*s} Z" fill="none" stroke="${o.hero}" stroke-width="${12*s*(o.lw||1)}" stroke-linejoin="round"/><circle cx="${o.cx}" cy="${o.cy+10*s}" r="${15*s}" fill="${o.ac}"/>`;},
+corner(rng,o){const s=o.s,h=72*s,L=24*s,sw=13*s*(o.lw||1);let g="";
+  [[-1,-1],[1,-1],[-1,1],[1,1]].forEach(([sx,sy],i)=>{const x=o.cx+sx*h,y=o.cy+sy*h;
+    g+=`<path d="M${x-sx*L},${y} L${x},${y} L${x},${y-sy*L}" fill="none" stroke="${i===0?o.ac:o.hero}" stroke-width="${sw}"/>`;});return g;},
+lens(rng,o){const s=o.s,r=70*s,a=rng.range(-.7,.7);
+  return `<circle cx="${o.cx}" cy="${o.cy}" r="${r}" fill="${o.hero}"/><path d="M${o.cx},${o.cy} L${(o.cx+r*Math.cos(a)).toFixed(1)},${(o.cy+r*Math.sin(a)).toFixed(1)} A${r},${r} 0 0 1 ${(o.cx+r*Math.cos(a+1.15)).toFixed(1)},${(o.cy+r*Math.sin(a+1.15)).toFixed(1)} Z" fill="${o.ac}"/>`;},
+duo(rng,o){const s=o.s;
+  return `<circle cx="${o.cx-36*s}" cy="${o.cy}" r="${46*s}" fill="${o.hero}"/><circle cx="${(o.cx+46*s).toFixed(1)}" cy="${o.cy}" r="${27*s}" fill="${o.ac}"/>`;},
+target(rng,o){const s=o.s,w=o.lw||1;
+  return `<circle cx="${o.cx}" cy="${o.cy}" r="${64*s}" fill="none" stroke="${o.hero}" stroke-width="${13*s*w}"/><circle cx="${o.cx}" cy="${o.cy}" r="${19*s}" fill="${o.ac}"/>`;}
+};
+
+/* ---- S1 · MINIMAL: one hero shape, massive negative space ---- */
+function genMinimal(rng,ctx){
+  const pal=ctx.pal,[hero,ac]=heroPick(rng,pal);
+  const kind=rng.pick(["arc","target","lens","duo","corner","tri"]);
+  const mark=MARKS[kind](rng,{cx:200,cy:156,s:1.02,hero,ac});
+  return mark+comboName(ctx);
+}
+/* ---- S2 · MONOLINE: luxury thin-stroke line mark ---- */
+function genMonoline(rng,ctx){
+  const pal=ctx.pal,kind=rng.pick(["arc","orbit","wave","corner","target"]);
+  const mark=MARKS[kind](rng,{cx:200,cy:156,s:1.0,lw:.3,hero:pal.ink,ac:pal.accent});
+  const fs=fitSize(ctx.name,ctx.font.k,300,36);
+  return mark+nameLine(ctx,318,fs,12,pal.ink)+tagLine(ctx,348);
+}
+/* ---- S3 · GEOMETRIC: grid-constructed, crisp flat shapes ---- */
+function genGeometric(rng,ctx){
+  const pal=ctx.pal,[hero,ac]=heroPick(rng,pal);
+  const kind=rng.pick(["vesica","tri","lens","peaks","pillars","duo","corner"]);
+  const mark=MARKS[kind](rng,{cx:200,cy:156,s:1.0,hero,ac});
+  return mark+comboName(ctx);
+}
+/* ---- S4 · WORDMARK: typography as the hero ---- */
 function genWordmark(rng,ctx){
- const{pal,font}=ctx, css=font.css, W=words(ctx.name), full=ctx.name.trim();
- const treat=rng.pick(["spaced","stacked","dot","bar","outline","slant"]);
- let g=""; const ink=pal.ink, ac=pal.accent;
- if(treat==="spaced"){
-   const fs=fitSize(full,font.k,300,64);
-   g=`<text x="200" y="196" text-anchor="middle" font-family="${css}" font-size="${fs}" letter-spacing="14" fill="${ink}">${esc(full.toUpperCase())}</text>
-   <line x1="70" y1="228" x2="160" y2="228" stroke="${ac}" stroke-width="5"/><line x1="240" y1="228" x2="330" y2="228" stroke="${ac}" stroke-width="5"/>`;
-   if(ctx.tagline) g+=`<text x="200" y="262" text-anchor="middle" font-family="${css}" font-size="17" letter-spacing="6" fill="${ink}" opacity=".72">${esc(ctx.tagline.toUpperCase())}</text>`;
- }else if(treat==="stacked"&&W.length>1){
-   const fs=fitSize(W.reduce((a,w)=>Math.max(a,w.length),0)*1.0,font.k,300,84);
-   W.slice(0,3).forEach((w,i)=>{g+=`<text x="200" y="${150+i*(fs+8)}" text-anchor="middle" font-family="${css}" font-size="${fs}" fill="${i===1?ac:ink}">${esc(w.toUpperCase())}</text>`;});
- }else if(treat==="dot"){
-   const fs=fitSize(full,font.k,300,92);
-   g=`<text x="196" y="212" text-anchor="middle" font-family="${css}" font-size="${fs}" fill="${ink}">${esc(full)}</text><circle cx="${196+full.length*fs*font.k/2+14}" cy="196" r="11" fill="${ac}"/>`;
- }else if(treat==="bar"){
-   const fs=fitSize(full,font.k,300,80);
-   g=`<text x="200" y="188" text-anchor="middle" font-family="${css}" font-size="${fs}" fill="${ink}">${esc(full)}</text><rect x="${200-fitSize(full,font.k,300,80)*full.length*font.k/2}" y="214" width="${fitSize(full,font.k,300,80)*full.length*font.k}" height="12" fill="${ac}"/>`;
- }else if(treat==="outline"){
-   const fs=fitSize(full,font.k,320,88);
-   g=`<text x="200" y="208" text-anchor="middle" font-family="${css}" font-size="${fs}" fill="none" stroke="${ink}" stroke-width="2.5" paint-order="stroke">${esc(full.toUpperCase())}</text><circle cx="${rng.range(90,310)}" cy="${rng.range(120,150)}" r="8" fill="${ac}"/>`;
- }else{
-   const fs=fitSize(full,font.k,300,84);
-   g=`<g transform="skewX(-8)"><text x="200" y="208" text-anchor="middle" font-family="${css}" font-size="${fs}" font-style="italic" fill="${ink}">${esc(full)}</text></g><line x1="90" y1="240" x2="310" y2="240" stroke="${ac}" stroke-width="4" stroke-dasharray="2 10" stroke-linecap="round"/>`;
- }
- return g;
+  const pal=ctx.pal,css=ctx.font.css,full=ctx.name.trim(),W=words(ctx.name),ink=pal.ink,ac=pal.accent;
+  const treat=rng.pick(W.length>1?["grand","stacked","tracked"]:["grand","tracked"]);
+  if(treat==="stacked"){
+    const longest=W.slice(0,3).reduce((a,w)=>w.length>a.length?w:a,"")||full;
+    const fs=fitSize(longest,ctx.font.k,300,72);let g="";
+    W.slice(0,3).forEach((w,i)=>{g+=`<text x="200" y="${158+i*(fs+6)}" text-anchor="middle" font-family="${css}" font-size="${fs}" letter-spacing="6" fill="${i===1?ac:ink}">${esc(w.toUpperCase())}</text>`;});
+    return g+tagLine(ctx,158+3*(fs+6)+34);
+  }
+  if(treat==="tracked"){
+    const n=full.length,k=ctx.font.k;
+    const fs=Math.min(56,200/(n*(k+0.5))),ls=+(fs*0.5).toFixed(1),tw=n*fs*(k+0.5);
+    const lx=200-tw/2-26,rx=200+tw/2+26;
+    return `<text x="200" y="208" text-anchor="middle" font-family="${css}" font-size="${fs.toFixed(1)}" letter-spacing="${ls}" fill="${ink}">${esc(full.toUpperCase())}</text>
+    <line x1="${lx-48}" y1="196" x2="${lx}" y2="196" stroke="${ac}" stroke-width="3"/><line x1="${rx}" y1="196" x2="${rx+48}" y2="196" stroke="${ac}" stroke-width="3"/>`+tagLine(ctx,258);
+  }
+  const fs=fitSize(full,ctx.font.k,320,80);
+  return `<text x="200" y="212" text-anchor="middle" font-family="${css}" font-size="${fs}" fill="${ink}">${esc(full)}</text>
+  <line x1="168" y1="248" x2="232" y2="248" stroke="${ac}" stroke-width="4" stroke-linecap="round"/>`+tagLine(ctx,288);
+}
+/* ---- S5 · EMBLEM: refined heritage badge ---- */
+function genEmblem(rng,ctx){
+  const pal=ctx.pal,css=ctx.font.css,ink=pal.ink,ac=pal.accent,id=uid("emb");
+  const top=ctx.name.toUpperCase().slice(0,28),bot=(ctx.tagline||"EST · MMXXVI").toUpperCase().slice(0,28);
+  const kind=rng.pick(["target","arc","vesica","tri"]);
+  const mark=MARKS[kind](rng,{cx:200,cy:200,s:.52,hero:ink,ac});
+  return `<defs>
+    <path id="${id}t" d="M82,200 A118,118 0 0 1 318,200"/>
+    <path id="${id}b" d="M318,200 A118,118 0 0 1 82,200"/></defs>
+  <circle cx="200" cy="200" r="150" fill="none" stroke="${ink}" stroke-width="7"/>
+  <circle cx="200" cy="200" r="100" fill="none" stroke="${ink}" stroke-width="2.5"/>
+  <text font-family="${css}" font-size="21" letter-spacing="4" fill="${ink}"><textPath href="#${id}t" startOffset="50%" text-anchor="middle">${esc(top)}</textPath></text>
+  <text font-family="${css}" font-size="17" letter-spacing="4" fill="${ink}" opacity=".75"><textPath href="#${id}b" startOffset="50%" text-anchor="middle">${esc(bot)}</textPath></text>
+  <rect x="74" y="194" width="12" height="12" transform="rotate(45 80 200)" fill="${ac}"/>
+  <rect x="314" y="194" width="12" height="12" transform="rotate(45 320 200)" fill="${ac}"/>${mark}`;
+}
+/* ---- S6 · GRADIENT: soft fluid shape, smooth duotone ---- */
+function genGradient(rng,ctx){
+  const pal=ctx.pal,id=uid("lg"),g2=tint(pal.accent,.55);
+  const d=blobPath(rng,200,150,86);
+  const fs=fitSize(ctx.name,ctx.font.k,300,40);
+  return `<defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${pal.accent}"/><stop offset="1" stop-color="${g2}"/></linearGradient></defs>
+  <path d="${d}" fill="url(#${id})"/>`+comboName(ctx);
 }
 
-/* ---- F3 · BADGE: circular seal with text on a path ---- */
-function genBadge(rng,ctx){
- const{pal,font}=ctx, css=font.css, id=uid("arc");
- const top=((ctx.name+"   ✦   "+(ctx.tagline||ctx.name)).toUpperCase()).slice(0,42);
- const ink=pal.ink, ac=pal.accent;
- return `<defs><path id="${id}" d="M200,200 m-128,0 a128,128 0 1,1 256,0 a128,128 0 1,1 -256,0"/></defs>
- <circle cx="200" cy="200" r="150" fill="none" stroke="${ink}" stroke-width="9"/>
- <circle cx="200" cy="200" r="104" fill="none" stroke="${ac}" stroke-width="3" stroke-dasharray="${rng.chance(.5)?"4 8":"none"}"/>
- <text font-family="${css}" font-size="24" letter-spacing="5" fill="${ink}"><textPath href="#${id}" startOffset="25%" text-anchor="middle">${esc(top)}</textPath></text>
- <text x="200" y="238" text-anchor="middle" font-family="${css}" font-size="96" fill="${ink}">${esc(initials(ctx.name))}</text>
- <text x="200" y="286" text-anchor="middle" font-family="${css}" font-size="19" letter-spacing="7" fill="${ac}">✦ ✦ ✦</text>`;
-}
+const GEN={minimal:genMinimal,monoline:genMonoline,geometric:genGeometric,wordmark:genWordmark,emblem:genEmblem,gradient:genGradient};
 
-/* ---- F4 · MARK: abstract geometric symbol + name ---- */
-function markMotif(rng,kind,pal){
- const ink=pal.ink, ac=pal.accent, cx=200, cy=150; let g="";
- if(kind==="sun"){for(let i=0;i<5;i++)g+=`<path d="M${cx-100+i*8},${cy+40} A${100-i*8},${100-i*8} 0 0 1 ${cx+100-i*8},${cy+40}" fill="none" stroke="${i===2?ac:ink}" stroke-width="9"/>`;g+=`<circle cx="${cx}" cy="${cy+40}" r="16" fill="${ac}"/>`;}
- else if(kind==="orbit"){g=`<circle cx="${cx}" cy="${cy}" r="52" fill="${ac}"/><ellipse cx="${cx}" cy="${cy}" rx="110" ry="44" fill="none" stroke="${ink}" stroke-width="9" transform="rotate(-24 ${cx} ${cy})"/><circle cx="${cx+92}" cy="${cy-38}" r="13" fill="${ink}"/>`;}
- else if(kind==="bars"){for(let i=0;i<5;i++){const h=40+rng.range(0,90);g+=`<rect x="${cx-90+i*40}" y="${cy+60-h}" width="24" height="${h}" rx="12" fill="${i===2?ac:ink}"/>`;}}
- else if(kind==="waves"){for(let i=0;i<3;i++){const y=cy-36+i*36;g+=`<path d="M${cx-110},${y} q27,-30 55,0 t55,0 t55,0 t55,0" fill="none" stroke="${i===1?ac:ink}" stroke-width="10" stroke-linecap="round"/>`;}}
- else if(kind==="dots"){for(let r=0;r<4;r++)for(let c=0;c<4;c++){const on=rng.chance(.28);g+=`<circle cx="${cx-66+c*44}" cy="${cy-66+r*44}" r="${on?15:9}" fill="${on?ac:ink}" opacity="${on?1:.55}"/>`;}}
- else if(kind==="peaks"){g=`<polygon points="${cx-110},${cy+60} ${cx-30},${cy-50} ${cx+40},${cy+60}" fill="${ink}"/><polygon points="${cx-20},${cy+60} ${cx+60},${cy-20} ${cx+110},${cy+60}" fill="${ac}"/>`;}
- else{g=`<polygon points="${cx},${cy-80} ${cx+80},${cy+60} ${cx-80},${cy+60}" fill="none" stroke="${ink}" stroke-width="10"/><circle cx="${cx}" cy="${cy+10}" r="26" fill="${ac}"/>`;}
- return g;
-}
-function genMark(rng,ctx){
- const{pal,font}=ctx, css=font.css;
- const kind=rng.pick(ctx.vibe.motifs);
- const name=ctx.name.trim(), fs=fitSize(name,font.k,300,44);
- return markMotif(rng,kind,pal)+
- `<text x="200" y="336" text-anchor="middle" font-family="${css}" font-size="${fs}" letter-spacing="8" fill="${pal.ink}">${esc(name.toUpperCase())}</text>
-  ${ctx.tagline?`<text x="200" y="364" text-anchor="middle" font-family="${css}" font-size="15" letter-spacing="4" fill="${pal.ink}" opacity=".65">${esc(ctx.tagline.toUpperCase())}</text>`:""}`;
-}
-
-/* tile = full standalone-able svg */
-const GEN={monogram:genMonogram,wordmark:genWordmark,badge:genBadge,mark:genMark};
 function tileSVG(inner,pal){return `<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" role="img"><rect width="400" height="400" fill="${pal.bg}"/>${inner}</svg>`;}
 function standaloneSVG(concept){
  const inner=GEN[concept.family](RNG(concept.seed),{...concept.ctx,pal:concept.pal});
@@ -474,7 +536,7 @@ function buildSet(name,tagline,vibeKey,sd){
  const vibe=VIBES[vibeKey]||VIBES.any, r=RNG(name+"|"+vibeKey+"|"+sd);
  concepts=[];
  FAMILIES.forEach(fam=>{
-   for(let i=0;i<3;i++){
+   for(let i=0;i<2;i++){
      const pal=PALETTES[r.pick(vibe.pal)], fontKey=r.pick(vibe.fonts);
      const seed=`${name}|${vibeKey}|${fam}|${i}|${sd}`;
      concepts.push({id:uid("c"),family:fam,name,tagline,pal,fontKey,seed,
