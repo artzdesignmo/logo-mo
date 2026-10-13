@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Logo Mo — Offline Generative Logo Studio</title>
-<meta name="description" content="Type a name, get a dozen original logo concepts. Fully offline generative logo studio — no API keys, no backend, zero dependencies.">
+<meta name="description" content="Type a name, get 18 original logo concepts. Fully offline generative logo studio — no API keys, no backend, zero dependencies.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Bebas+Neue&family=DM+Serif+Display&family=Dela+Gothic+One&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Space+Grotesk:wght@400;500;700&family=Unbounded:wght@500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
@@ -191,7 +191,7 @@ footer{margin-top:70px;border-top:1px solid var(--line);padding:30px 0 46px;colo
 <div class="wrap">
   <section class="hero">
     <h1>TYPE A NAME.<br>GET <span class="o">A DOZEN</span> LOGOS.</h1>
-    <p data-i18n="hero">A <b>fully offline</b> generative logo studio. No API keys, no backend, no waiting rooms — a seeded design engine draws <b>12 original concepts</b> in four families, right in your browser. Export real <b>SVG + PNG</b>.</p>
+    <p data-i18n="hero">A <b>fully offline</b> generative logo studio. No API keys, no backend, no waiting rooms — a seeded design engine draws <b>18 original concepts</b> in nine signature styles, right in your browser. Export real <b>SVG + PNG</b>.</p>
   </section>
 
   <section class="composer">
@@ -225,6 +225,9 @@ footer{margin-top:70px;border-top:1px solid var(--line);padding:30px 0 46px;colo
     <button class="pill" data-fam="wordmark">Wordmark</button>
     <button class="pill" data-fam="emblem">Emblem</button>
     <button class="pill" data-fam="gradient">Gradient</button>
+    <button class="pill" data-fam="japanese">Japanese</button>
+    <button class="pill" data-fam="bauhaus">Bauhaus</button>
+    <button class="pill" data-fam="kandinsky">Kandinsky</button>
     <span class="count" id="count"></span>
   </div>
 
@@ -324,18 +327,18 @@ const VIBES={
  travel:  {en:"Travel",    tc:"旅行",     fonts:["bebas","grotesk","dmserif"], pal:[3,8,6,0], motifs:["peaks","sun","waves","orbit"]},
  playful: {en:"Playful",   tc:"玩味",     fonts:["unbounded","archivo","bebas"], pal:[10,11,4,1], motifs:["dots","sun","tri","bars"]},
 };
-const FAMILIES=["minimal","monoline","geometric","wordmark","emblem","gradient"];
-const FAM_LABEL={minimal:{en:"Minimal",tc:"極簡"},monoline:{en:"Monoline",tc:"線條"},geometric:{en:"Geometric",tc:"幾何"},wordmark:{en:"Wordmark",tc:"字標"},emblem:{en:"Emblem",tc:"徽章"},gradient:{en:"Gradient",tc:"漸變"}};
+const FAMILIES=["minimal","monoline","geometric","wordmark","emblem","gradient","japanese","bauhaus","kandinsky"];
+const FAM_LABEL={minimal:{en:"Minimal",tc:"極簡"},monoline:{en:"Monoline",tc:"線條"},geometric:{en:"Geometric",tc:"幾何"},wordmark:{en:"Wordmark",tc:"字標"},emblem:{en:"Emblem",tc:"徽章"},gradient:{en:"Gradient",tc:"漸變"},japanese:{en:"Japanese",tc:"日式簡約"},bauhaus:{en:"Bauhaus",tc:"包浩斯"},kandinsky:{en:"Kandinsky",tc:"康定斯基"}};
 
 /* ---------------- i18n ---------------- */
 const I18N={
-en:{tagline:"generative logo studio · offline",history:"History",hero:"A <b>fully offline</b> generative logo studio. No API keys, no backend, no waiting rooms — a seeded design engine draws <b>12 original concepts</b> in six signature styles, right in your browser. Export real <b>SVG + PNG</b>.",
+en:{tagline:"generative logo studio · offline",history:"History",hero:"A <b>fully offline</b> generative logo studio. No API keys, no backend, no waiting rooms — a seeded design engine draws <b>18 original concepts</b> in nine signature styles, right in your browser. Export real <b>SVG + PNG</b>.",
 nameLabel:"Brand name",tagLabel:"Tagline (optional)",vibeLabel:"Vibe",generate:"Generate",surprise:"Surprise me",shuffle:"Shuffle styles",try:"Try:",
 concept:"Concept",palette:"Palette",export:"Export",svgNote:"vector · infinitely scalable",copySvg:"Copy SVG code",copyNote:"paste into Figma / web",
 mockCard:"Business card",mockIcon:"App icon",kit:"Full kit",kitNote:"svg + 3 pngs, one click each",
 note:"Type is rendered with open fonts (Google Fonts). PNG exports embed the font automatically, so what you see is what you get — no internet needed after first load.",
 foot:"built in the open, free forever",concepts:"concepts",copied:"SVG code copied ✓",dl:"Downloading",needName:"Type a brand name first ✎",regen:"New set generated ✦",fontNote:"font embedded"},
-tc:{tagline:"離線生成式標誌工作室",history:"歷史記錄",hero:"<b>完全離線</b>嘅生成式標誌工作室。唔要 API key、唔要後端、唔使排隊——種子設計引擎喺瀏覽器即場畫出 <b>12 個原創概念</b>，六大風格。匯出真正嘅 <b>SVG + PNG</b>。",
+tc:{tagline:"離線生成式標誌工作室",history:"歷史記錄",hero:"<b>完全離線</b>嘅生成式標誌工作室。唔要 API key、唔要後端、唔使排隊——種子設計引擎喺瀏覽器即場畫出 <b>18 個原創概念</b>，九大風格。匯出真正嘅 <b>SVG + PNG</b>。",
 nameLabel:"品牌名",tagLabel:"標語（可選）",vibeLabel:"風格",generate:"生成",surprise:"隨機靈感",shuffle:"換一批風格",try:"試下：",
 concept:"概念",palette:"配色",export:"匯出",svgNote:"向量 · 無限放大",copySvg:"複製 SVG 代碼",copyNote:"貼去 Figma / 網頁",
 mockCard:"卡片",mockIcon:"App 圖標",kit:"全套下載",kitNote:"svg + 3 張 png",
@@ -364,12 +367,15 @@ const words=name=>name.trim().split(/\s+/).filter(Boolean);
 
 /* ---------- shared composition ---------- */
 function heroPick(rng,pal){return rng.chance(.72)?[pal.ink,pal.accent]:[pal.accent,pal.ink];}
+function mdx(ctx){return ctx.layout?ctx.layout.markDx:0;}
 function nameLine(ctx,y,fs,ls,color){
-  return `<text x="200" y="${y}" text-anchor="middle" font-family="${ctx.font.css}" font-size="${fs}" letter-spacing="${ls}" fill="${color}">${esc(ctx.name.trim().toUpperCase())}</text>`;
+  const L=ctx.layout||{nameDy:0,nameFs:1,nameLs:0};
+  return `<text x="200" y="${(y+L.nameDy).toFixed(1)}" text-anchor="middle" font-family="${ctx.font.css}" font-size="${(fs*L.nameFs).toFixed(1)}" letter-spacing="${(ls+L.nameLs).toFixed(1)}" fill="${color}">${esc(ctx.name.trim().toUpperCase())}</text>`;
 }
 function tagLine(ctx,y){
   if(!ctx.tagline)return "";
-  return `<text x="200" y="${y}" text-anchor="middle" font-family="${ctx.font.css}" font-size="14" letter-spacing="5" fill="${ctx.pal.ink}" opacity=".62">${esc(ctx.tagline.toUpperCase())}</text>`;
+  const L=ctx.layout||{tagDy:0};
+  return `<text x="200" y="${(y+L.tagDy).toFixed(1)}" text-anchor="middle" font-family="${ctx.font.css}" font-size="14" letter-spacing="5" fill="${ctx.pal.ink}" opacity=".62">${esc(ctx.tagline.toUpperCase())}</text>`;
 }
 function comboName(ctx){
   const fs=fitSize(ctx.name,ctx.font.k,300,40);
@@ -422,28 +428,72 @@ lens(rng,o){const s=o.s,r=70*s,a=rng.range(-.7,.7);
 duo(rng,o){const s=o.s;
   return `<circle cx="${o.cx-36*s}" cy="${o.cy}" r="${46*s}" fill="${o.hero}"/><circle cx="${(o.cx+46*s).toFixed(1)}" cy="${o.cy}" r="${27*s}" fill="${o.ac}"/>`;},
 target(rng,o){const s=o.s,w=o.lw||1;
-  return `<circle cx="${o.cx}" cy="${o.cy}" r="${64*s}" fill="none" stroke="${o.hero}" stroke-width="${13*s*w}"/><circle cx="${o.cx}" cy="${o.cy}" r="${19*s}" fill="${o.ac}"/>`;}
+  return `<circle cx="${o.cx}" cy="${o.cy}" r="${64*s}" fill="none" stroke="${o.hero}" stroke-width="${13*s*w}"/><circle cx="${o.cx}" cy="${o.cy}" r="${19*s}" fill="${o.ac}"/>`;},
+/* ---- Japanese (wabi-sabi) ---- */
+enso(rng,o){const s=o.s,w=o.lw||1,r=66*s,a0=rng.range(0,6.28),gap=rng.range(.5,.95);
+  const x1=o.cx+r*Math.cos(a0),y1=o.cy+r*Math.sin(a0),x2=o.cx+r*Math.cos(a0+6.28-gap),y2=o.cy+r*Math.sin(a0+6.28-gap);
+  return `<path d="M${x1.toFixed(1)},${y1.toFixed(1)} A${r.toFixed(1)},${(r*.96).toFixed(1)} 0 1,1 ${x2.toFixed(1)},${y2.toFixed(1)}" fill="none" stroke="${o.hero}" stroke-width="${(11*s*w).toFixed(1)}" stroke-linecap="round" opacity=".92"/>`;},
+crescent(rng,o){const s=o.s,r=64*s;
+  return `<circle cx="${(o.cx-12*s).toFixed(1)}" cy="${o.cy}" r="${r}" fill="${o.hero}"/><circle cx="${(o.cx+18*s).toFixed(1)}" cy="${(o.cy-8*s).toFixed(1)}" r="${(r*.86).toFixed(1)}" fill="${o.bg}"/>`;},
+pebble(rng,o){const s=o.s,rx=70*s,ry=rng.range(50,60)*s;
+  return `<ellipse cx="${o.cx}" cy="${o.cy}" rx="${rx}" ry="${ry.toFixed(1)}" fill="${o.hero}" transform="rotate(${(rng.range(-14,14)).toFixed(1)} ${o.cx} ${o.cy})"/>`;},
+sprig(rng,o){const s=o.s,cx=o.cx,cy=o.cy;let g=`<line x1="${cx}" y1="${cy+64*s}" x2="${cx}" y2="${cy-64*s}" stroke="${o.hero}" stroke-width="${(7*s).toFixed(1)}" stroke-linecap="round"/>`;
+  for(let i=0;i<3;i++){const y=cy+34*s-i*44*s,side=i%2?1:-1,lx=cx+side*26*s;
+    g+=`<ellipse cx="${lx.toFixed(1)}" cy="${y.toFixed(1)}" rx="${(24*s).toFixed(1)}" ry="${(10*s).toFixed(1)}" fill="${i===1?o.ac:o.hero}" transform="rotate(${side*-32} ${lx.toFixed(1)} ${y.toFixed(1)})"/>`;}
+  return g;},
+sunoff(rng,o){const s=o.s;
+  return `<circle cx="${(o.cx-38*s).toFixed(1)}" cy="${(o.cy-20*s).toFixed(1)}" r="${(44*s).toFixed(1)}" fill="${o.ac}"/><circle cx="${(o.cx+40*s).toFixed(1)}" cy="${(o.cy+34*s).toFixed(1)}" r="${(30*s).toFixed(1)}" fill="none" stroke="${o.hero}" stroke-width="${(6*s).toFixed(1)}"/>`;},
+/* ---- Bauhaus (canonical primaries via hero/ac/extra) ---- */
+bautrio(rng,o){const s=o.s;
+  return `<circle cx="${(o.cx-44*s).toFixed(1)}" cy="${(o.cy-10*s).toFixed(1)}" r="${(46*s).toFixed(1)}" fill="${o.ac}"/><path d="M${(o.cx+58*s).toFixed(1)},${(o.cy-58*s).toFixed(1)} L${(o.cx+104*s).toFixed(1)},${(o.cy+40*s).toFixed(1)} L${(o.cx+12*s).toFixed(1)},${(o.cy+40*s).toFixed(1)} Z" fill="${o.hero}"/><rect x="${(o.cx-96*s).toFixed(1)}" y="${(o.cy+16*s).toFixed(1)}" width="${(58*s).toFixed(1)}" height="${(58*s).toFixed(1)}" fill="${o.extra||o.hero}"/>`;},
+baugrid(rng,o){const s=o.s,cell=58*s,cols=[o.hero,o.ac,o.extra||o.hero];let g="";
+  for(let r=0;r<2;r++)for(let c=0;c<2;c++){const x=o.cx-cell+c*cell,y=o.cy-cell+r*cell,col=cols[(r*2+c)%3],sh=(r+c)%3;
+    if(sh===0)g+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(cell*.42).toFixed(1)}" fill="${col}"/>`;
+    else if(sh===1)g+=`<rect x="${(x-cell*.42).toFixed(1)}" y="${(y-cell*.42).toFixed(1)}" width="${(cell*.84).toFixed(1)}" height="${(cell*.84).toFixed(1)}" fill="${col}"/>`;
+    else g+=`<path d="M${x.toFixed(1)},${(y-cell*.45).toFixed(1)} L${(x+cell*.45).toFixed(1)},${(y+cell*.38).toFixed(1)} L${(x-cell*.45).toFixed(1)},${(y+cell*.38).toFixed(1)} Z" fill="${col}"/>`;}
+  return g;},
+bauquarter(rng,o){const s=o.s,r=66*s,cols=[o.hero,o.ac,o.extra||o.hero,o.hero];let g="";
+  [[-1,-1],[1,-1],[-1,1],[1,1]].forEach(([sx,sy],i)=>{
+    g+=`<path d="M${o.cx},${o.cy} L${o.cx+sx*r},${o.cy} A${r},${r} 0 0 ${sx*sy>0?1:0} ${o.cx},${o.cy+sy*r} Z" fill="${cols[i]}"/>`;});
+  return g;},
+baubars(rng,o){const s=o.s,cols=[o.hero,o.ac,o.extra||o.hero,o.hero];let g="";
+  for(let i=0;i<4;i++){const w=(58-i*9)*s;
+    g+=`<rect x="${(o.cx-w/2).toFixed(1)}" y="${(o.cy-72*s+i*42*s).toFixed(1)}" width="${w.toFixed(1)}" height="${(22*s).toFixed(1)}" fill="${cols[i]}"/>`;}
+  return g;},
+/* ---- Kandinsky (spiritual geometry) ---- */
+kcircle(rng,o){const s=o.s;
+  return `<circle cx="${o.cx}" cy="${o.cy}" r="${(58*s).toFixed(1)}" fill="none" stroke="${o.hero}" stroke-width="${(10*s).toFixed(1)}"/><circle cx="${(o.cx-30*s).toFixed(1)}" cy="${(o.cy-34*s).toFixed(1)}" r="${(22*s).toFixed(1)}" fill="${o.ac}"/><circle cx="${(o.cx+44*s).toFixed(1)}" cy="${(o.cy+40*s).toFixed(1)}" r="${(12*s).toFixed(1)}" fill="${o.extra||o.hero}"/><line x1="${o.cx-84*s}" y1="${(o.cy+62*s).toFixed(1)}" x2="${(o.cx+84*s).toFixed(1)}" y2="${(o.cy-62*s).toFixed(1)}" stroke="${o.hero}" stroke-width="${(6*s).toFixed(1)}"/>`;},
+karcs(rng,o){const s=o.s;let g="";
+  for(let i=0;i<3;i++){const r=(34+i*26)*s;
+    g+=`<path d="M${o.cx-r},${o.cy} A${r},${r} 0 0 1 ${o.cx+r},${o.cy}" fill="none" stroke="${i===1?o.ac:o.hero}" stroke-width="${(8*s).toFixed(1)}" opacity="${(1-i*.22).toFixed(2)}"/>`;}
+  g+=`<circle cx="${(o.cx+52*s).toFixed(1)}" cy="${(o.cy-48*s).toFixed(1)}" r="${(11*s).toFixed(1)}" fill="${o.extra||o.hero}"/>`;return g;},
+ktri(rng,o){const s=o.s;
+  return `<path d="M${o.cx},${(o.cy-66*s).toFixed(1)} L${(o.cx+62*s).toFixed(1)},${(o.cy+44*s).toFixed(1)} L${(o.cx-62*s).toFixed(1)},${(o.cy+44*s).toFixed(1)} Z" fill="${o.ac}"/><circle cx="${(o.cx-52*s).toFixed(1)}" cy="${(o.cy-40*s).toFixed(1)}" r="${(18*s).toFixed(1)}" fill="${o.hero}"/><line x1="${(o.cx-70*s).toFixed(1)}" y1="${(o.cy+66*s).toFixed(1)}" x2="${(o.cx+70*s).toFixed(1)}" y2="${(o.cy+66*s).toFixed(1)}" stroke="${o.hero}" stroke-width="${(7*s).toFixed(1)}"/><circle cx="${(o.cx+58*s).toFixed(1)}" cy="${(o.cy-58*s).toFixed(1)}" r="${(9*s).toFixed(1)}" fill="${o.extra||o.hero}"/>`;},
+kscatter(rng,o){const s=o.s;
+  return `<circle cx="${(o.cx-40*s).toFixed(1)}" cy="${(o.cy-30*s).toFixed(1)}" r="${(34*s).toFixed(1)}" fill="${o.ac}"/><rect x="${(o.cx+8*s).toFixed(1)}" y="${(o.cy-58*s).toFixed(1)}" width="${(40*s).toFixed(1)}" height="${(40*s).toFixed(1)}" transform="rotate(18 ${(o.cx+28*s).toFixed(1)} ${(o.cy-38*s).toFixed(1)})" fill="${o.hero}"/><line x1="${(o.cx-72*s).toFixed(1)}" y1="${(o.cy+52*s).toFixed(1)}" x2="${(o.cx+72*s).toFixed(1)}" y2="${(o.cy+30*s).toFixed(1)}" stroke="${o.hero}" stroke-width="${(6*s).toFixed(1)}"/><circle cx="${(o.cx+52*s).toFixed(1)}" cy="${(o.cy+8*s).toFixed(1)}" r="${(10*s).toFixed(1)}" fill="${o.extra||o.hero}"/><path d="M${(o.cx-64*s).toFixed(1)},${(o.cy+10*s).toFixed(1)} l${(24*s).toFixed(1)},${(-30*s).toFixed(1)} l${(24*s).toFixed(1)},${(30*s).toFixed(1)} Z" fill="none" stroke="${o.ac}" stroke-width="${(5*s).toFixed(1)}"/>`;}
 };
 
 /* ---- S1 · MINIMAL: one hero shape, massive negative space ---- */
 function genMinimal(rng,ctx){
   const pal=ctx.pal,[hero,ac]=heroPick(rng,pal);
-  const kind=rng.pick(["arc","target","lens","duo","corner","tri"]);
-  const mark=MARKS[kind](rng,{cx:200,cy:156,s:1.02,hero,ac});
+  const kind=ctx.markKind||rng.pick(KINDS.minimal);
+  const inner=MARKS[kind](rng,{cx:200+mdx(ctx),cy:rng.range(148,166),s:rng.range(.94,1.1),hero,ac,bg:pal.bg});
+  const rot=rng.chance(.4)?rng.range(-8,8):0;
+  const mark=`<g transform="rotate(${rot.toFixed(1)} 200 157)">${inner}</g>`;
   return mark+comboName(ctx);
 }
 /* ---- S2 · MONOLINE: luxury thin-stroke line mark ---- */
 function genMonoline(rng,ctx){
-  const pal=ctx.pal,kind=rng.pick(["arc","orbit","wave","corner","target"]);
-  const mark=MARKS[kind](rng,{cx:200,cy:156,s:1.0,lw:.3,hero:pal.ink,ac:pal.accent});
+  const pal=ctx.pal,kind=ctx.markKind||rng.pick(KINDS.monoline);
+  const mark=MARKS[kind](rng,{cx:200+mdx(ctx),cy:rng.range(148,166),s:rng.range(.94,1.06),lw:.3,hero:pal.ink,ac:pal.accent,bg:pal.bg});
   const fs=fitSize(ctx.name,ctx.font.k,300,36);
   return mark+nameLine(ctx,318,fs,12,pal.ink)+tagLine(ctx,348);
 }
 /* ---- S3 · GEOMETRIC: grid-constructed, crisp flat shapes ---- */
 function genGeometric(rng,ctx){
   const pal=ctx.pal,[hero,ac]=heroPick(rng,pal);
-  const kind=rng.pick(["vesica","tri","lens","peaks","pillars","duo","corner"]);
-  const mark=MARKS[kind](rng,{cx:200,cy:156,s:1.0,hero,ac});
+  const kind=ctx.markKind||rng.pick(KINDS.geometric);
+  const mark=MARKS[kind](rng,{cx:200+mdx(ctx),cy:rng.range(150,164),s:rng.range(.94,1.08),hero,ac,bg:pal.bg});
   return mark+comboName(ctx);
 }
 /* ---- S4 · WORDMARK: typography as the hero ---- */
@@ -471,8 +521,8 @@ function genWordmark(rng,ctx){
 function genEmblem(rng,ctx){
   const pal=ctx.pal,css=ctx.font.css,ink=pal.ink,ac=pal.accent,id=uid("emb");
   const top=ctx.name.toUpperCase().slice(0,28),bot=(ctx.tagline||"EST · MMXXVI").toUpperCase().slice(0,28);
-  const kind=rng.pick(["target","arc","vesica","tri"]);
-  const mark=MARKS[kind](rng,{cx:200,cy:200,s:.52,hero:ink,ac});
+  const kind=ctx.markKind||rng.pick(KINDS.emblem);
+  const mark=MARKS[kind](rng,{cx:200,cy:200,s:.52,hero:ink,ac,bg:pal.bg});
   return `<defs>
     <path id="${id}t" d="M82,200 A118,118 0 0 1 318,200"/>
     <path id="${id}b" d="M318,200 A118,118 0 0 1 82,200"/></defs>
@@ -486,13 +536,56 @@ function genEmblem(rng,ctx){
 /* ---- S6 · GRADIENT: soft fluid shape, smooth duotone ---- */
 function genGradient(rng,ctx){
   const pal=ctx.pal,id=uid("lg"),g2=tint(pal.accent,.55);
-  const d=blobPath(rng,200,150,86);
+  const d=blobPath(rng,200+mdx(ctx),150+rng.range(-8,8),rng.range(78,94));
   const fs=fitSize(ctx.name,ctx.font.k,300,40);
   return `<defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${pal.accent}"/><stop offset="1" stop-color="${g2}"/></linearGradient></defs>
   <path d="${d}" fill="url(#${id})"/>`+comboName(ctx);
 }
 
-const GEN={minimal:genMinimal,monoline:genMonoline,geometric:genGeometric,wordmark:genWordmark,emblem:genEmblem,gradient:genGradient};
+/* ---------- variable randomness: distinct archetypes per style, jittered params ---------- */
+function sampleDistinct(rng,arr,n){const pool=[...arr],out=[];while(out.length<n&&pool.length){out.push(pool.splice(Math.floor(rng.f()*pool.length),1)[0]);}return out;}
+function isDark(hex){const n=parseInt(hex.slice(1),16),l=(0.299*(n>>16)+0.587*(n>>8&255)+0.114*(n&255))/255;return l<0.5;}
+const KINDS={
+ minimal:["arc","target","lens","duo","corner","tri","halfsun","wave"],
+ monoline:["arc","orbit","wave","corner","target","crescent"],
+ geometric:["vesica","tri","lens","peaks","pillars","duo","corner","bautrio"],
+ emblem:["target","arc","vesica","tri","enso"],
+ japanese:["enso","crescent","pebble","sprig","sunoff","wave"],
+ bauhaus:["bautrio","baugrid","bauquarter","baubars"],
+ kandinsky:["kcircle","karcs","ktri","kscatter"]
+};
+/* ---- S7 · JAPANESE: wabi-sabi restraint, asymmetry, ma ---- */
+function genJapanese(rng,ctx){
+  const pal=ctx.pal,kind=ctx.markKind||rng.pick(KINDS.japanese);
+  const ax=rng.pick([-36,36]);
+  const mark=MARKS[kind](rng,{cx:200+ax+mdx(ctx)*.5,cy:rng.range(142,162),s:rng.range(.8,.95),hero:pal.ink,ac:pal.accent,bg:pal.bg});
+  const fs=fitSize(ctx.name,ctx.font.k,280,34);
+  return mark+nameLine(ctx,318,fs,12,pal.ink)+tagLine(ctx,346);
+}
+/* ---- S8 · BAUHAUS: canonical primaries, basic forms ---- */
+const BAUH={red:"#E30613",yellow:"#FFD200",blue:"#0057B8"};
+function genBauhaus(rng,ctx){
+  const pal=ctx.pal,kind=ctx.markKind||rng.pick(KINDS.bauhaus);
+  const cols=[BAUH.red,BAUH.yellow,BAUH.blue],c1=rng.pick(cols);
+  const c2=rng.pick(cols.filter(c=>c!==c1)),dark=isDark(pal.bg);
+  const mark=MARKS[kind](rng,{cx:200+mdx(ctx),cy:rng.range(148,164),s:rng.range(.95,1.08),hero:c1,ac:c2,extra:dark?"#F5F4EF":"#111111",bg:pal.bg});
+  const fs=fitSize(ctx.name,ctx.font.k,300,44);
+  return mark+`<text x="200" y="318" text-anchor="middle" font-family="${ctx.font.css}" font-size="${fs}" letter-spacing="4" fill="${pal.ink}">${esc(ctx.name.trim().toLowerCase())}</text>`+tagLine(ctx,348);
+}
+/* ---- S9 · KANDINSKY: spiritual geometry, cosmic composition ---- */
+const KAND={yellow:"#F5C518",red:"#E63946",blue:"#2B5CE6"};
+function genKandinsky(rng,ctx){
+  const pal=ctx.pal,kind=ctx.markKind||rng.pick(KINDS.kandinsky);
+  const cols=[KAND.yellow,KAND.red,KAND.blue],c1=rng.pick(cols);
+  const c2=rng.pick(cols.filter(c=>c!==c1)),dark=isDark(pal.bg);
+  const inner=MARKS[kind](rng,{cx:200+mdx(ctx),cy:rng.range(148,164),s:rng.range(.95,1.1),hero:dark?"#F5F4EF":"#141414",ac:c1,extra:c2,bg:pal.bg});
+  const rot=rng.chance(.5)?rng.range(-10,10):0;
+  const mark=`<g transform="rotate(${rot.toFixed(1)} 200 156)">${inner}</g>`;
+  const fs=fitSize(ctx.name,ctx.font.k,300,40);
+  return mark+nameLine(ctx,318,fs,8,pal.ink)+tagLine(ctx,348);
+}
+
+const GEN={minimal:genMinimal,monoline:genMonoline,geometric:genGeometric,wordmark:genWordmark,emblem:genEmblem,gradient:genGradient,japanese:genJapanese,bauhaus:genBauhaus,kandinsky:genKandinsky};
 
 function tileSVG(inner,pal){return `<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" role="img"><rect width="400" height="400" fill="${pal.bg}"/>${inner}</svg>`;}
 function standaloneSVG(concept){
@@ -536,11 +629,14 @@ function buildSet(name,tagline,vibeKey,sd){
  const vibe=VIBES[vibeKey]||VIBES.any, r=RNG(name+"|"+vibeKey+"|"+sd);
  concepts=[];
  FAMILIES.forEach(fam=>{
+   const kinds=KINDS[fam]?sampleDistinct(r,KINDS[fam],2):[undefined,undefined];
    for(let i=0;i<2;i++){
      const pal=PALETTES[r.pick(vibe.pal)], fontKey=r.pick(vibe.fonts);
      const seed=`${name}|${vibeKey}|${fam}|${i}|${sd}`;
+     const lr=RNG(seed+"|layout");
+     const layout={nameDy:lr.range(-6,6),nameFs:lr.range(.94,1.05),nameLs:lr.range(-2,2),tagDy:lr.range(-4,4),markDx:lr.range(-8,8)};
      concepts.push({id:uid("c"),family:fam,name,tagline,pal,fontKey,seed,
-       ctx:{name,tagline,vibe,font:FONTS[fontKey]}});
+       ctx:{name,tagline,vibe,font:FONTS[fontKey],markKind:kinds[i],layout}});
    }
  });
  $("#toolbar").hidden=false;
