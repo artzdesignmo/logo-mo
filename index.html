@@ -191,7 +191,7 @@ footer{margin-top:70px;border-top:1px solid var(--line);padding:30px 0 46px;colo
 <div class="wrap">
   <section class="hero">
     <h1>TYPE A NAME.<br>GET <span class="o">A DOZEN</span> LOGOS.</h1>
-    <p data-i18n="hero">A <b>fully offline</b> generative logo studio. No API keys, no backend, no waiting rooms — a seeded design engine draws <b>18 original concepts</b> in nine signature styles, right in your browser. Export real <b>SVG + PNG</b>.</p>
+    <p data-i18n="hero">A <b>fully offline</b> generative logo studio. No API keys, no backend, no waiting rooms — a seeded design engine draws <b>20 original concepts</b> in ten signature styles, right in your browser. Export real <b>SVG + PNG</b>.</p>
   </section>
 
   <section class="composer">
@@ -228,6 +228,7 @@ footer{margin-top:70px;border-top:1px solid var(--line);padding:30px 0 46px;colo
     <button class="pill" data-fam="japanese">Japanese</button>
     <button class="pill" data-fam="bauhaus">Bauhaus</button>
     <button class="pill" data-fam="kandinsky">Kandinsky</button>
+    <button class="pill" data-fam="diagram">Diagram</button>
     <span class="count" id="count"></span>
   </div>
 
@@ -327,18 +328,18 @@ const VIBES={
  travel:  {en:"Travel",    tc:"旅行",     fonts:["bebas","grotesk","dmserif"], pal:[3,8,6,0], motifs:["peaks","sun","waves","orbit"]},
  playful: {en:"Playful",   tc:"玩味",     fonts:["unbounded","archivo","bebas"], pal:[10,11,4,1], motifs:["dots","sun","tri","bars"]},
 };
-const FAMILIES=["minimal","monoline","geometric","wordmark","emblem","gradient","japanese","bauhaus","kandinsky"];
-const FAM_LABEL={minimal:{en:"Minimal",tc:"極簡"},monoline:{en:"Monoline",tc:"線條"},geometric:{en:"Geometric",tc:"幾何"},wordmark:{en:"Wordmark",tc:"字標"},emblem:{en:"Emblem",tc:"徽章"},gradient:{en:"Gradient",tc:"漸變"},japanese:{en:"Japanese",tc:"日式簡約"},bauhaus:{en:"Bauhaus",tc:"包浩斯"},kandinsky:{en:"Kandinsky",tc:"康定斯基"}};
+const FAMILIES=["minimal","monoline","geometric","wordmark","emblem","gradient","japanese","bauhaus","kandinsky","diagram"];
+const FAM_LABEL={minimal:{en:"Minimal",tc:"極簡"},monoline:{en:"Monoline",tc:"線條"},geometric:{en:"Geometric",tc:"幾何"},wordmark:{en:"Wordmark",tc:"字標"},emblem:{en:"Emblem",tc:"徽章"},gradient:{en:"Gradient",tc:"漸變"},japanese:{en:"Japanese",tc:"日式簡約"},bauhaus:{en:"Bauhaus",tc:"包浩斯"},kandinsky:{en:"Kandinsky",tc:"康定斯基"},diagram:{en:"Diagram",tc:"圖表編輯"}};
 
 /* ---------------- i18n ---------------- */
 const I18N={
-en:{tagline:"generative logo studio · offline",history:"History",hero:"A <b>fully offline</b> generative logo studio. No API keys, no backend, no waiting rooms — a seeded design engine draws <b>18 original concepts</b> in nine signature styles, right in your browser. Export real <b>SVG + PNG</b>.",
+en:{tagline:"generative logo studio · offline",history:"History",hero:"A <b>fully offline</b> generative logo studio. No API keys, no backend, no waiting rooms — a seeded design engine draws <b>20 original concepts</b> in ten signature styles, right in your browser. Export real <b>SVG + PNG</b>.",
 nameLabel:"Brand name",tagLabel:"Tagline (optional)",vibeLabel:"Vibe",generate:"Generate",surprise:"Surprise me",shuffle:"Shuffle styles",try:"Try:",
 concept:"Concept",palette:"Palette",export:"Export",svgNote:"vector · infinitely scalable",copySvg:"Copy SVG code",copyNote:"paste into Figma / web",
 mockCard:"Business card",mockIcon:"App icon",kit:"Full kit",kitNote:"svg + 3 pngs, one click each",
 note:"Type is rendered with open fonts (Google Fonts). PNG exports embed the font automatically, so what you see is what you get — no internet needed after first load.",
 foot:"built in the open, free forever",concepts:"concepts",copied:"SVG code copied ✓",dl:"Downloading",needName:"Type a brand name first ✎",regen:"New set generated ✦",fontNote:"font embedded"},
-tc:{tagline:"離線生成式標誌工作室",history:"歷史記錄",hero:"<b>完全離線</b>嘅生成式標誌工作室。唔要 API key、唔要後端、唔使排隊——種子設計引擎喺瀏覽器即場畫出 <b>18 個原創概念</b>，九大風格。匯出真正嘅 <b>SVG + PNG</b>。",
+tc:{tagline:"離線生成式標誌工作室",history:"歷史記錄",hero:"<b>完全離線</b>嘅生成式標誌工作室。唔要 API key、唔要後端、唔使排隊——種子設計引擎喺瀏覽器即場畫出 <b>20 個原創概念</b>，十大風格。匯出真正嘅 <b>SVG + PNG</b>。",
 nameLabel:"品牌名",tagLabel:"標語（可選）",vibeLabel:"風格",generate:"生成",surprise:"隨機靈感",shuffle:"換一批風格",try:"試下：",
 concept:"概念",palette:"配色",export:"匯出",svgNote:"向量 · 無限放大",copySvg:"複製 SVG 代碼",copyNote:"貼去 Figma / 網頁",
 mockCard:"卡片",mockIcon:"App 圖標",kit:"全套下載",kitNote:"svg + 3 張 png",
@@ -470,7 +471,43 @@ karcs(rng,o){const s=o.s;let g="";
 ktri(rng,o){const s=o.s;
   return `<path d="M${o.cx},${(o.cy-66*s).toFixed(1)} L${(o.cx+62*s).toFixed(1)},${(o.cy+44*s).toFixed(1)} L${(o.cx-62*s).toFixed(1)},${(o.cy+44*s).toFixed(1)} Z" fill="${o.ac}"/><circle cx="${(o.cx-52*s).toFixed(1)}" cy="${(o.cy-40*s).toFixed(1)}" r="${(18*s).toFixed(1)}" fill="${o.hero}"/><line x1="${(o.cx-70*s).toFixed(1)}" y1="${(o.cy+66*s).toFixed(1)}" x2="${(o.cx+70*s).toFixed(1)}" y2="${(o.cy+66*s).toFixed(1)}" stroke="${o.hero}" stroke-width="${(7*s).toFixed(1)}"/><circle cx="${(o.cx+58*s).toFixed(1)}" cy="${(o.cy-58*s).toFixed(1)}" r="${(9*s).toFixed(1)}" fill="${o.extra||o.hero}"/>`;},
 kscatter(rng,o){const s=o.s;
-  return `<circle cx="${(o.cx-40*s).toFixed(1)}" cy="${(o.cy-30*s).toFixed(1)}" r="${(34*s).toFixed(1)}" fill="${o.ac}"/><rect x="${(o.cx+8*s).toFixed(1)}" y="${(o.cy-58*s).toFixed(1)}" width="${(40*s).toFixed(1)}" height="${(40*s).toFixed(1)}" transform="rotate(18 ${(o.cx+28*s).toFixed(1)} ${(o.cy-38*s).toFixed(1)})" fill="${o.hero}"/><line x1="${(o.cx-72*s).toFixed(1)}" y1="${(o.cy+52*s).toFixed(1)}" x2="${(o.cx+72*s).toFixed(1)}" y2="${(o.cy+30*s).toFixed(1)}" stroke="${o.hero}" stroke-width="${(6*s).toFixed(1)}"/><circle cx="${(o.cx+52*s).toFixed(1)}" cy="${(o.cy+8*s).toFixed(1)}" r="${(10*s).toFixed(1)}" fill="${o.extra||o.hero}"/><path d="M${(o.cx-64*s).toFixed(1)},${(o.cy+10*s).toFixed(1)} l${(24*s).toFixed(1)},${(-30*s).toFixed(1)} l${(24*s).toFixed(1)},${(30*s).toFixed(1)} Z" fill="none" stroke="${o.ac}" stroke-width="${(5*s).toFixed(1)}"/>`;}
+  return `<circle cx="${(o.cx-40*s).toFixed(1)}" cy="${(o.cy-30*s).toFixed(1)}" r="${(34*s).toFixed(1)}" fill="${o.ac}"/><rect x="${(o.cx+8*s).toFixed(1)}" y="${(o.cy-58*s).toFixed(1)}" width="${(40*s).toFixed(1)}" height="${(40*s).toFixed(1)}" transform="rotate(18 ${(o.cx+28*s).toFixed(1)} ${(o.cy-38*s).toFixed(1)})" fill="${o.hero}"/><line x1="${(o.cx-72*s).toFixed(1)}" y1="${(o.cy+52*s).toFixed(1)}" x2="${(o.cx+72*s).toFixed(1)}" y2="${(o.cy+30*s).toFixed(1)}" stroke="${o.hero}" stroke-width="${(6*s).toFixed(1)}"/><circle cx="${(o.cx+52*s).toFixed(1)}" cy="${(o.cy+8*s).toFixed(1)}" r="${(10*s).toFixed(1)}" fill="${o.extra||o.hero}"/><path d="M${(o.cx-64*s).toFixed(1)},${(o.cy+10*s).toFixed(1)} l${(24*s).toFixed(1)},${(-30*s).toFixed(1)} l${(24*s).toFixed(1)},${(30*s).toFixed(1)} Z" fill="none" stroke="${o.ac}" stroke-width="${(5*s).toFixed(1)}"/>`;},
+/* ---- Diagram (editorial diagram vocabulary, after cathrynlavery/diagram-design) ----
+   Philosophy: deletion is the highest-quality move. 1-2 focal nodes max.
+   Flat shapes, hairline rules, generous whitespace. No shadows. */
+venn(rng,o){const s=o.s,r=58*s,dx=44*s;
+  return `<circle cx="${(o.cx-dx/2).toFixed(1)}" cy="${o.cy.toFixed(1)}" r="${r.toFixed(1)}" fill="none" stroke="${o.hero}" stroke-width="${(11*s).toFixed(1)}"/><circle cx="${(o.cx+dx/2).toFixed(1)}" cy="${o.cy.toFixed(1)}" r="${(r*.7).toFixed(1)}" fill="${o.ac}"/>`;},
+loop(rng,o){const s=o.s,r=62*s;let g="";
+  for(let i=0;i<3;i++){const a0=i*2.094+rng.range(-.2,.2);
+    const x1=o.cx+r*Math.cos(a0),y1=o.cy+r*Math.sin(a0),x2=o.cx+r*Math.cos(a0+1.65),y2=o.cy+r*Math.sin(a0+1.65);
+    g+=`<path d="M${x1.toFixed(1)},${y1.toFixed(1)} A${r.toFixed(1)},${r.toFixed(1)} 0 0 1 ${x2.toFixed(1)},${y2.toFixed(1)}" fill="none" stroke="${i===0?o.ac:o.hero}" stroke-width="${(10*s).toFixed(1)}" stroke-linecap="round"/>`;}
+  return g+`<circle cx="${o.cx.toFixed(1)}" cy="${o.cy.toFixed(1)}" r="${(13*s).toFixed(1)}" fill="${o.hero}"/>`;},
+nested(rng,o){const s=o.s,S=118*s;
+  return `<rect x="${(o.cx-S/2).toFixed(1)}" y="${(o.cy-S/2).toFixed(1)}" width="${S.toFixed(1)}" height="${S.toFixed(1)}" fill="none" stroke="${o.hero}" stroke-width="${(6*s).toFixed(1)}"/><rect x="${(o.cx-S/5).toFixed(1)}" y="${(o.cy-S/5).toFixed(1)}" width="${(S*.4).toFixed(1)}" height="${(S*.4).toFixed(1)}" fill="${o.ac}"/>`;},
+radar(rng,o){const s=o.s,n=rng.int(5,6),R=66*s;let pts=[],ax="";
+  for(let i=0;i<n;i++){const a=-Math.PI/2+i/n*Math.PI*2,r=R*rng.range(.45,1);
+    const x=o.cx+r*Math.cos(a),y=o.cy+r*Math.sin(a);pts.push(x.toFixed(1)+","+y.toFixed(1));
+    ax+=`<line x1="${o.cx.toFixed(1)}" y1="${o.cy.toFixed(1)}" x2="${(o.cx+R*Math.cos(a)).toFixed(1)}" y2="${(o.cy+R*Math.sin(a)).toFixed(1)}" stroke="${o.hero}" stroke-width="${(2.5*s).toFixed(1)}" opacity=".35"/>`;}
+  return ax+`<polygon points="${pts.join(" ")}" fill="${o.ac}" opacity=".9"/><polygon points="${pts.join(" ")}" fill="none" stroke="${o.hero}" stroke-width="${(5*s).toFixed(1)}" stroke-linejoin="round"/>`;},
+quadrant(rng,o){const s=o.s,S=116*s,c=rng.int(0,3);let g="";
+  for(let i=0;i<4;i++){const x=o.cx-S/2+(i%2)*S/2,y=o.cy-S/2+Math.floor(i/2)*S/2;
+    g+=`<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${(S/2).toFixed(1)}" height="${(S/2).toFixed(1)}" fill="${i===c?o.ac:"none"}" stroke="${o.hero}" stroke-width="${(5*s).toFixed(1)}"/>`;}
+  return g;},
+dtree(rng,o){const s=o.s,cx=o.cx,cy=o.cy;
+  let g=`<line x1="${cx.toFixed(1)}" y1="${(cy+64*s).toFixed(1)}" x2="${cx.toFixed(1)}" y2="${(cy-12*s).toFixed(1)}" stroke="${o.hero}" stroke-width="${(10*s).toFixed(1)}" stroke-linecap="round"/>`;
+  [[-1,26],[1,44],[-1,62]].forEach(([sx,dy],i)=>{
+    const y0=cy+40*s-dy*s,x1=cx+sx*46*s,y1=y0-30*s;
+    g+=`<line x1="${cx.toFixed(1)}" y1="${y0.toFixed(1)}" x2="${x1.toFixed(1)}" y2="${y1.toFixed(1)}" stroke="${o.hero}" stroke-width="${(8*s).toFixed(1)}" stroke-linecap="round"/><circle cx="${x1.toFixed(1)}" cy="${y1.toFixed(1)}" r="${((i===1?12:8)*s).toFixed(1)}" fill="${i===1?o.ac:o.hero}"/>`;});
+  return g;},
+pyramid(rng,o){const s=o.s;let g="";const n=4;
+  for(let i=0;i<n;i++){const w=(108-i*24)*s,y=o.cy-52*s+i*30*s;
+    g+=`<rect x="${(o.cx-w/2).toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="${(20*s).toFixed(1)}" fill="${i===0?o.ac:o.hero}"/>`;}
+  return g;},
+polar(rng,o){const s=o.s,n=8,R=62*s;let g="";
+  for(let i=0;i<n;i++){const a=i/n*Math.PI*2,r=R*rng.range(.3,1);
+    const x=o.cx+r*Math.cos(a),y=o.cy+r*Math.sin(a),focal=i%3===0;
+    g+=`<line x1="${o.cx.toFixed(1)}" y1="${o.cy.toFixed(1)}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="${o.hero}" stroke-width="${(3*s).toFixed(1)}" opacity=".4"/><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${((focal?9:6)*s).toFixed(1)}" fill="${focal?o.ac:o.hero}"/>`;}
+  return g;}
 };
 
 /* ---- S1 · MINIMAL: one hero shape, massive negative space ---- */
@@ -552,7 +589,8 @@ const KINDS={
  emblem:["target","arc","vesica","tri","enso"],
  japanese:["enso","crescent","pebble","sprig","sunoff","wave"],
  bauhaus:["bautrio","baugrid","bauquarter","baubars"],
- kandinsky:["kcircle","karcs","ktri","kscatter"]
+ kandinsky:["kcircle","karcs","ktri","kscatter"],
+ diagram:["venn","loop","nested","radar","quadrant","dtree","pyramid","polar"]
 };
 /* ---- S7 · JAPANESE: wabi-sabi restraint, asymmetry, ma ---- */
 function genJapanese(rng,ctx){
@@ -585,7 +623,17 @@ function genKandinsky(rng,ctx){
   return mark+nameLine(ctx,318,fs,8,pal.ink)+tagLine(ctx,348);
 }
 
-const GEN={minimal:genMinimal,monoline:genMonoline,geometric:genGeometric,wordmark:genWordmark,emblem:genEmblem,gradient:genGradient,japanese:genJapanese,bauhaus:genBauhaus,kandinsky:genKandinsky};
+/* ---- S10 · DIAGRAM: editorial diagram vocabulary as logo marks ----
+   After cathrynlavery/diagram-design: Venn, loop, nested, radar, quadrant,
+   tree, pyramid, polar. One accent focal max. No shadows. */
+function genDiagram(rng,ctx){
+  const pal=ctx.pal,[hero,ac]=heroPick(rng,pal);
+  const kind=ctx.markKind||rng.pick(KINDS.diagram);
+  const mark=MARKS[kind](rng,{cx:200+mdx(ctx),cy:rng.range(148,166),s:rng.range(.94,1.08),hero,ac,bg:pal.bg});
+  return mark+comboName(ctx);
+}
+
+const GEN={minimal:genMinimal,monoline:genMonoline,geometric:genGeometric,wordmark:genWordmark,emblem:genEmblem,gradient:genGradient,japanese:genJapanese,bauhaus:genBauhaus,kandinsky:genKandinsky,diagram:genDiagram};
 
 function tileSVG(inner,pal){return `<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" role="img"><rect width="400" height="400" fill="${pal.bg}"/>${inner}</svg>`;}
 function standaloneSVG(concept){
