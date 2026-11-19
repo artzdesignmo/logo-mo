@@ -1,46 +1,69 @@
-# Logo Mo — Offline Generative Logo Studio
+# Logo Mo — Professional Logo Prompt Studio
 
-**Name it. Describe it. Pick a style.** A fully offline, zero-dependency generative logo studio, rebuilt the logocreator way: one focused form on the left, a gallery of original concepts on the right. No API keys, no backend, no waiting rooms.
+**Type the basics. Get 12 pro prompts.** A fully offline logo prompt studio: type a brand name and a few basic requirements, and Logo Mo writes **12 professional, precise logo prompts** — one per design approach. Copy any prompt and generate the real logo in **Midjourney, Flux, Ideogram or DALL·E**.
 
 ![Logo Mo demo](IMG_6977.png)
 
 **Live demo:** https://artzdesignmo.github.io/logo-mo/
 
-## The way it works (after logocreator)
+## Why prompts, not auto-drawn logos?
 
-Logocreator (Nutlope/logocreator) showed the cleanest way to make a logo: brand name → quick-start preset → describe it → logo type → style → colors → generate → gallery → brand kit. Logo Mo v2 adopts that whole flow — rebuilt offline, with a seeded design engine instead of an image model.
+The first versions of Logo Mo drew logos procedurally in the browser. They were fast — and rough. A professional logo prompt, written precisely and pasted into a real image model, produces a far better logo. So v3 flips the job: Logo Mo writes the prompt; your favourite AI draws the logo. The small picture on each card is a **reference preview only**, not the finished logo.
 
-1. **Brand name** — the only required field.
-2. **Quick start** — 12 industry presets (Tech, Coffee, Fitness, Finance, Beauty, Restaurant, Eco, Gaming, Law, Creative, Real Estate, Photo). One tap seeds logo type, style, description and background.
-3. **Describe it** — optional, in plain words ("a friendly fox"). Keywords steer the mark: fox → mascot fox, leaf → organic sprig, sun → half-sun. Suggestion chips when the box is empty.
-4. **Logo type** — Icon + Name, Emblem, Monogram, Wordmark, Abstract. The same mark re-locks into five real logo formats.
-5. **Style** — visual cards, each preview drawn live by the engine itself. 8 primary styles (Minimal, Geometric, Gradient, Mascot, Hand-drawn, Luxury, Retro, 3D) plus 5 classic studio styles under *More styles* (Monoline, Japanese, Bauhaus, Kandinsky, Diagram).
-6. **Brand color + Background** — Auto (engine picks) or a fixed swatch, plus a custom picker. A WCAG contrast warning appears when the pair is hard to read.
-7. **Advanced** — detail level (Minimal / Balanced / Detailed), Monochrome switch, and a reference-logo upload: the image never leaves your browser, its dominant colors become your palette.
-8. **Variations** — 4 / 8 / 12 concepts per generation, plus a Feeling-lucky dice.
+## The 12 approaches
 
-## Features
+One card per design direction — each a different way to design the same brand:
 
-- **Seeded design engine** — the same name always generates the same set; shuffle for fresh variations. Deterministic, no AI calls.
-- **13 style engines** — every style draws from a library of mathematically-constructed marks with generous negative space, optical centering and strict two-color discipline. Archetypes never repeat within a style per generation; scale, position and rotation are jittered for variable randomness. Diagram keeps its editorial vocabulary after cathrynlavery/diagram-design (Venn, loop, nested, radar, quadrant, tree, pyramid, polar).
-- **16 curated palettes** + 6 open display fonts, shortlisted per style (Luxury leans Champagne / Noir Gold, Retro leans cream and teal).
-- **Detail studio** — click any concept for palette variants, a business-card mockup, an app-icon mockup.
-- **Brand kit** — four lockups (primary, monochrome, app icon, reversed on dark), the palette with hex values, the display typeface, and one-click downloads: SVG, PNG 1024, and a standalone brand-sheet HTML file.
-- **Real exports** — SVG (infinitely scalable), PNG at 512 / 1024 / 2048, copy-SVG-to-clipboard. PNG exports automatically embed the display font, so exports match the screen pixel-for-pixel.
-- **History dashboard** — last 12 generations saved in localStorage with thumbnails; one click restores the whole form (name, description, type, style, colors) and regenerates the set.
-- **Bilingual** EN / 繁體中文, **day/night** studio themes, keyboard-first (Enter to generate). On phones the Generate bar sticks to the bottom, one thumb-tap away.
+1. **Minimal Geometric** — one clean geometric mark, circles and triangles only
+2. **Luxury Monogram** — interlocked initials, hairline strokes, gold on charcoal
+3. **Modern Wordmark** — the name itself is the logo, one custom letter detail
+4. **Friendly Mascot** — a warm geometric character, simple enough to scale
+5. **Retro Badge** — a vintage circular badge, crafted and classic
+6. **Abstract Gradient** — fluid overlapping forms, premium tech energy
+7. **Hand-drawn Artisan** — loose ink strokes, slightly imperfect, handmade
+8. **Japanese Zen** — one red ensō circle, vast empty space
+9. **Bauhaus** — primary-color shapes on a bold grid, 1920s modernism
+10. **Monoline** — one unbroken line forms the whole mark
+11. **3D / Isometric** — a clean dimensional form with soft depth
+12. **Editorial Diagram** — a precise infographic mark, nested geometry
+
+## What each prompt contains
+
+Every prompt is written in English (AI image tools understand English best) and built from your inputs — brand name, industry, describe keywords, logo type, colors, detail level:
+
+- **Concept** — the mark idea, in plain professional language
+- **Style** — the design direction, precisely described
+- **Colors** — named palette with hex values (your brand color, or one sampled from an uploaded reference logo)
+- **Typography** — the right typeface direction for the approach
+- **Composition** — the lockup for your chosen logo type (icon + name, emblem, monogram, wordmark, abstract)
+- **Output** — flat vector, sharp edges, scalable, isolated on a plain background
+- **Negative prompt** — what to keep out (photorealism, gradients where they don't belong, extra text, watermarks…)
+
+Each card also names which AI tools it suits best — wordmarks, for example, work best in Ideogram, which renders text most reliably.
 
 ## Usage
 
 Open `index.html` — that's it. No build, no install, no server.
 
-1. Type a brand name, describe it in a few words, pick a style.
-2. Hit **Generate** — concepts appear instantly.
-3. Click a concept to open the detail studio, then **Brand kit** for the full set.
+1. Type a brand name, pick a quick-start industry (or describe it in a few words).
+2. Hit **Generate prompts** — 12 prompts appear instantly.
+3. Copy one prompt (or copy all 12 / download them as a `.txt` file) and paste it into Midjourney, Flux, Ideogram or DALL·E.
+
+## Features
+
+- **12 professional prompt templates** — precise, structured, and filled in from your actual brand details, not generic filler.
+- **Quick start** — 12 industry presets (Tech, Coffee, Fitness, Finance, Beauty, Restaurant, Eco, Gaming, Law, Creative, Real Estate, Photo). One tap seeds the industry, logo type, description and background.
+- **Describe-it steering** — keywords in your description steer the concept ("a friendly fox" puts a fox in the mark).
+- **Reference logo upload** — the image never leaves your browser; its dominant colors become your prompt palette.
+- **History** — last 12 generations saved in localStorage; one click restores the whole form.
+- **Bilingual** EN / 繁體中文, **day/night** studio themes, keyboard-first (Enter to generate). On phones the Generate bar sticks to the bottom.
+- **Fully offline** — the prompt engine and the reference previews run entirely in your browser. No API keys, no backend.
 
 ## How it works
 
-A seeded PRNG (`xmur3` + `mulberry32`) drives everything: palette harmony selection, font pairing, style and mark-archetype choice. Each concept is pure inline SVG generated by one of thirteen style generators — no canvas, no libraries, no AI calls. The PNG exporter serializes the SVG, embeds the webfont as a data URI, and rasterizes via an offscreen canvas. Reference-logo colors are read with a 48×48 canvas sample — fully client-side.
+A seeded PRNG (`xmur3` + `mulberry32`) drives the reference previews: palette selection, font pairing and mark choice. Each reference preview is pure inline SVG from one of thirteen style generators — the same engine as v2, now demoted to reference duty. The prompts themselves are deterministic templates filled from your inputs, so the same brand always gets the same 12 prompts (regenerate for different palettes and reference looks).
+
+The workflow follows logocreator (Nutlope/logocreator) — brand name → quick-start preset → describe it → logo type → colors → generate → gallery. Note: logocreator ships with no license file, so it is all rights reserved — only its workflow was studied; no code or assets were copied.
 
 ## Tech
 

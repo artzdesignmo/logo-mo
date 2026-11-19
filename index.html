@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Logo Mo — Offline Generative Logo Studio</title>
-<meta name="description" content="Type a name, describe it, pick a style — get a set of original logo concepts. Fully offline generative logo studio, after the logocreator way of working: no API keys, no backend, zero dependencies.">
+<title>Logo Mo — Professional Logo Prompt Studio</title>
+<meta name="description" content="Type the basics — get 12 professional logo prompts in 12 design approaches. Copy one into Midjourney, Flux, Ideogram or DALL·E and generate the real logo. Fully offline prompt studio.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Bebas+Neue&family=DM+Serif+Display&family=Dela+Gothic+One&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Space+Grotesk:wght@400;500;700&family=Unbounded:wght@500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
@@ -176,16 +176,34 @@ header.top{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
 .gallery-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
 .gallery-head h2{font-family:'Dela Gothic One','Noto Sans TC',sans-serif;font-size:22px}
 .gallery-head .count{margin-left:auto;font-size:13px;color:var(--ink2)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:16px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
-  overflow:hidden;cursor:pointer;transition:transform .22s,box-shadow .22s;animation:rise .5s both}
-.card:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
-.card .tile{aspect-ratio:1/1;display:block;width:100%}
-.card .tile svg{display:block;width:100%;height:100%}
-.card .meta{display:flex;align-items:center;gap:8px;padding:11px 14px;border-top:1px solid var(--line)}
-.fam{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-  background:var(--bg2);border-radius:6px;padding:4px 8px;color:var(--ink2)}
-.palname{font-size:12.5px;color:var(--ink2);margin-left:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px}
+/* prompt cards: reference thumb on top, professional prompt below */
+.pcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  overflow:hidden;display:flex;flex-direction:column;animation:rise .5s both}
+.pcard .pref{position:relative;aspect-ratio:1/1;display:block;width:100%;overflow:hidden}
+.pcard .pref svg{display:block;width:100%;height:100%}
+.pcard .refbadge{position:absolute;left:10px;top:10px;background:rgba(20,19,15,.85);color:#f5f4ef;
+  font-size:10.5px;font-weight:700;letter-spacing:.08em;padding:5px 9px;border-radius:999px}
+.pcard .pbody{padding:16px 16px 14px;display:flex;flex-direction:column;gap:10px;flex:1}
+.pcard .pnum{font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--accent);text-transform:uppercase}
+.pcard h3{font-family:'Dela Gothic One','Noto Sans TC',sans-serif;font-size:17px;line-height:1.3}
+.pcard .pline{font-size:13px;color:var(--ink2);line-height:1.55}
+.pcard .prompt{font:12.5px/1.65 ui-monospace,'SF Mono',Menlo,Consolas,monospace;white-space:pre-wrap;
+  background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:12px;
+  max-height:190px;overflow:auto;margin:0;color:var(--ink)}
+.pcard .neg{font-size:12px;color:var(--ink2);line-height:1.55}
+.pcard .neg b{color:var(--ink)}
+.pcard .pfoot{margin-top:auto;display:flex;align-items:center;gap:10px;padding-top:4px}
+.pcard .copybtn{flex:1;background:var(--ink);color:var(--bg);border:none;border-radius:999px;
+  padding:10px 14px;font:600 13.5px var(--ui);cursor:pointer;white-space:nowrap}
+.pcard .copybtn.done{background:var(--accent);color:#fff}
+.pcard .best{font-size:11.5px;color:var(--ink2);white-space:nowrap}
+.galtools{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
+.toolbtn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;
+  padding:8px 14px;font:600 12.5px var(--ui);cursor:pointer}
+.toolbtn:hover{border-color:var(--accent)}
+.galnote{font-size:13px;color:var(--ink2);line-height:1.65;margin:0 0 14px;max-width:760px}
+.galnote b{color:var(--ink)}
 @keyframes rise{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
 .empty{grid-column:1/-1;text-align:center;color:var(--ink2);padding:60px 20px;font-size:15px}
 
@@ -284,14 +302,14 @@ footer{margin-top:70px;border-top:1px solid var(--line);padding:30px 0 46px;colo
   .actionbar{position:sticky;bottom:0;z-index:40;box-shadow:0 -8px 24px -12px rgba(0,0,0,.3)}
 }
 @media(max-width:860px){.sheet-in{grid-template-columns:1fr}.preview{border-right:none;border-bottom:1px solid var(--line)}}
-@media(max-width:560px){.pagehead{padding-top:26px}.styles{grid-template-columns:1fr 1fr}.colorgrid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.pagehead{padding-top:26px}.colorgrid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 <header class="top">
   <div class="top-in">
     <svg class="brandmark" viewBox="0 0 40 40" aria-hidden="true"><rect x="2" y="2" width="36" height="36" rx="10" fill="#171512"/><text x="20" y="28" text-anchor="middle" font-family="Dela Gothic One,sans-serif" font-size="20" fill="#f2f1ec">M<tspan fill="#e4572e">o</tspan></text></svg>
-    <div><span class="wordmark">LOGO<em>&nbsp;MO</em></span><br><span class="tagline" data-i18n="tagline">generative logo studio · offline</span></div>
+    <div><span class="wordmark">LOGO<em>&nbsp;MO</em></span><br><span class="tagline" data-i18n="tagline">logo prompt studio · offline</span></div>
     <div class="spacer"></div>
     <button class="chipbtn" id="langBtn">繁 / EN</button>
     <button class="chipbtn theme3" id="themeBtn" title="color theme"><span class="tdot" data-t="white"></span><span class="tdot" data-t="silver"></span><span class="tdot" data-t="black"></span></button>
@@ -301,15 +319,15 @@ footer{margin-top:70px;border-top:1px solid var(--line);padding:30px 0 46px;colo
 
 <div class="wrap">
   <section class="pagehead">
-    <h1>NAME IT. DESCRIBE IT.<br>PICK A <span class="o">STYLE.</span></h1>
-    <p data-i18n="hero">A <b>fully offline</b> generative logo studio, rebuilt the logocreator way: one focused form on the left, a gallery of <b>original concepts</b> on the right. No API keys, no backend, no waiting rooms — a seeded design engine draws every logo right in your browser. Export real <b>SVG + PNG</b>, or take the whole <b>brand kit</b>.</p>
+    <h1>TYPE THE BASICS.<br>GET <span class="o">12 PRO PROMPTS.</span></h1>
+    <p data-i18n="hero">The auto-drawn logos looked rough — so Logo Mo now writes <b>professional logo prompts</b> instead. Type the basics, get <b>12 precise prompts</b> in 12 different design approaches, copy one, and generate the real logo in <b>Midjourney, Flux, Ideogram or DALL·E</b>. The little picture on each card is a <b>reference only</b>.</p>
   </section>
 
   <div class="app">
     <!-- ============ settings sidebar ============ -->
     <aside class="settings" aria-label="Logo settings">
       <div class="settings-scroll">
-        <div class="set-head"><span class="set-title" data-i18n="settings">Logo settings</span><span class="set-title" style="color:var(--accent)">v2</span></div>
+        <div class="set-head"><span class="set-title" data-i18n="settings">Logo settings</span><span class="set-title" style="color:var(--accent)">v3</span></div>
 
         <div class="field">
           <label data-i18n="nameLabel">Brand name</label>
@@ -331,13 +349,6 @@ footer{margin-top:70px;border-top:1px solid var(--line);padding:30px 0 46px;colo
         <div>
           <div class="set-title" style="margin-bottom:8px" data-i18n="typeLabel">Logo type</div>
           <div class="seg" id="typeSeg" role="group" aria-label="Logo type"></div>
-        </div>
-
-        <div>
-          <div class="set-title" style="margin-bottom:8px" data-i18n="styleLabel">Style</div>
-          <div class="styles" id="styleGrid"></div>
-          <button class="morebtn" id="moreStylesBtn" style="margin-top:9px"><span class="chev">›</span> <span data-i18n="moreStyles">More styles — classic studio</span></button>
-          <div class="styles" id="heritageGrid" hidden style="margin-top:9px"></div>
         </div>
 
         <div class="colorgrid">
@@ -372,10 +383,6 @@ footer{margin-top:70px;border-top:1px solid var(--line);padding:30px 0 46px;colo
       </div>
 
       <div class="actionbar">
-        <div class="vrow">
-          <span class="set-title" data-i18n="variations">Variations</span>
-          <div class="seg small" id="varSeg" style="width:150px" role="group" aria-label="Number of variations"></div>
-        </div>
         <div class="btnrow">
           <button class="btn dice" id="diceBtn" title="Feeling lucky" aria-label="Feeling lucky">🎲</button>
           <button class="btn primary" id="genBtn">✦ <span data-i18n="generate">Generate logo</span></button>
@@ -386,9 +393,13 @@ footer{margin-top:70px;border-top:1px solid var(--line);padding:30px 0 46px;colo
     <!-- ============ gallery + history ============ -->
     <main>
       <div class="gallery-head">
-        <h2 data-i18n="galleryTitle">Your concepts</h2>
-        <span class="count" id="count"></span>
+        <h2 data-i18n="galleryTitle">12 professional prompts</h2>
+        <span class="galtools">
+          <button class="toolbtn" id="copyAllBtn">⧉ <span data-i18n="copyAll">Copy all 12</span></button>
+          <button class="toolbtn" id="dlTxtBtn">↓ <span data-i18n="downloadTxt">Download .txt</span></button>
+        </span>
       </div>
+      <p class="galnote" data-i18n="promptNote">Prompts are written in English — AI image tools understand English best. Paste one into Midjourney, Flux, Ideogram or DALL·E and generate. The small picture on each card is a <b>reference preview only</b>, not the finished logo.</p>
       <div class="grid" id="grid"></div>
 
       <section class="histdash" id="histDash">
@@ -403,58 +414,6 @@ footer{margin-top:70px;border-top:1px solid var(--line);padding:30px 0 46px;colo
   </div>
 </div>
 
-<!-- ============ detail modal ============ -->
-<div class="scrim" id="scrim">
-  <div class="sheet"><div class="sheet-in">
-    <div class="preview">
-      <div class="big" id="bigPrev"></div>
-      <div class="mockrow">
-        <div><div class="mock"><div class="bcard" id="mockCard"></div></div><div class="mockcap" data-i18n="mockCard">Business card</div></div>
-        <div><div class="mock"><div class="appicon" id="mockIcon"></div></div><div class="mockcap" data-i18n="mockIcon">App icon</div></div>
-      </div>
-    </div>
-    <div class="detail">
-      <button class="x" id="closeBtn">✕</button>
-      <div><div class="dlabel" data-i18n="concept">Concept</div><h2 id="dTitle"></h2></div>
-      <div><div class="dlabel" data-i18n="palette">Palette</div><div class="varrow" id="varRow" style="margin-top:8px"></div></div>
-      <div><div class="dlabel" data-i18n="export">Export</div>
-        <div class="expgrid" style="margin-top:8px">
-          <button class="exp" id="dlSvg">↓ SVG<small data-i18n="svgNote">vector · infinitely scalable</small></button>
-          <button class="exp" id="cpSvg">⧉ <span data-i18n="copySvg">Copy SVG code</span><small data-i18n="copyNote">paste into Figma / web</small></button>
-          <button class="exp" id="dlPng512">↓ PNG · 512<small>social avatar</small></button>
-          <button class="exp" id="dlPng1024">↓ PNG · 1024<small>web / deck</small></button>
-          <button class="exp" id="dlPng2048">↓ PNG · 2048<small>print starter</small></button>
-          <button class="exp wide" id="kitBtn">▣ <span data-i18n="brandKit">Brand kit</span><small data-i18n="kitNote">lockups · palette · type · brand sheet</small></button>
-        </div>
-      </div>
-      <div class="note" data-i18n="note">Type is rendered with open fonts (Google Fonts). PNG exports embed the font automatically, so what you see is what you get — no internet needed after first load.</div>
-    </div>
-  </div></div>
-</div>
-
-<!-- ============ brand kit modal ============ -->
-<div class="scrim" id="kitScrim">
-  <div class="sheet" style="max-width:760px"><div style="padding:30px;display:flex;flex-direction:column;gap:20px">
-    <button class="x" id="kitCloseBtn">✕</button>
-    <div><div class="dlabel" data-i18n="brandKit">Brand kit</div><h2 id="kitTitle" style="font-family:'Dela Gothic One','Noto Sans TC',sans-serif;font-size:28px;margin-top:4px"></h2></div>
-    <div><div class="dlabel" style="margin-bottom:8px" data-i18n="kitLockups">Lockups</div>
-      <div class="kitgrid">
-        <div class="kitcell"><div class="kb" id="kitPrimary"></div><div class="kl" data-i18n="kitPrimary">Primary · color</div></div>
-        <div class="kitcell"><div class="kb" id="kitMono" style="background:#fff"></div><div class="kl" data-i18n="kitMono">Monochrome · one ink</div></div>
-        <div class="kitcell"><div class="kb" id="kitIcon"></div><div class="kl" data-i18n="kitIcon">App icon · mark only</div></div>
-        <div class="kitcell"><div class="kb" id="kitDark" style="background:#14130f"></div><div class="kl" data-i18n="kitDark">Reversed · on dark</div></div>
-      </div>
-    </div>
-    <div><div class="dlabel" style="margin-bottom:8px" data-i18n="palette">Palette</div><div class="kitpal" id="kitPal"></div></div>
-    <div><div class="dlabel" style="margin-bottom:6px" data-i18n="kitType">Typography</div><div class="kitfont" id="kitFont"></div></div>
-    <div class="expgrid">
-      <button class="exp" id="kitDlSvg">↓ SVG<small data-i18n="svgNote">vector · infinitely scalable</small></button>
-      <button class="exp" id="kitDlPng">↓ PNG · 1024<small>web / deck</small></button>
-      <button class="exp wide" id="kitDlSheet">↓ <span data-i18n="kitSheet">Brand sheet (.html)</span><small data-i18n="kitSheetNote">logo · palette · type, one file</small></button>
-    </div>
-  </div></div>
-</div>
-
 <div class="toast" id="toast"></div>
 
 <footer><div class="wrap foot-in">
@@ -466,12 +425,15 @@ footer{margin-top:70px;border-top:1px solid var(--line);padding:30px 0 46px;colo
 <script>
 "use strict";
 /* =====================================================================
-   LOGO MO v2 · offline generative logo studio
-   Rebuilt the logocreator way (after Nutlope/logocreator, MIT):
-   form on the left, gallery on the right — brand name, quick-start
-   presets, describe-it, logo type, visual style cards, brand color +
+   LOGO MO v3 · offline logo PROMPT studio
+   Rebuilt the logocreator way (after Nutlope/logocreator — which ships
+   with NO license, so all rights reserved: studied its workflow only,
+   no code copied, no assets reused):
+   form on the left, 12 professional prompt cards on the right — brand
+   name, quick-start presets, describe-it, logo type, brand color +
    background swatches, detail level, monochrome, reference colors,
-   variations, feeling lucky, brand kit, history dashboard.
+   feeling lucky, history dashboard. The prompt is the deliverable;
+   the small engine-drawn picture on each card is a reference only.
    Engine stays fully offline: seeded PRNG -> palette -> pure SVG.
    No code copied from logocreator; only the way of working.
    ===================================================================== */
@@ -920,50 +882,43 @@ function applyDetail(inner,c){
     dots+=`<circle cx="${x}" cy="${y}" r="${i===0?7:5}" fill="${i===0?p.accent:p.ink}"/>`;});
   return `<circle cx="200" cy="157" r="128" fill="none" stroke="${p.ink}" stroke-width="2" opacity=".28"/>${dots}${inner}`;
 }
-function standaloneSVG(concept){
-  const inner=composeConcept(RNG(concept.seed),{...concept.ctx,pal:concept.pal});
-  return tileSVG(applyDetail(inner,concept),concept.pal).replace("<svg ",`<svg width="1200" height="1200" `)
-    .replace('role="img"',`role="img" aria-label="${esc(concept.name)} logo concept"`);
-}
 
 /* ================= i18n ================= */
 const I18N={
-en:{tagline:"generative logo studio · offline",hero:"A <b>fully offline</b> generative logo studio, rebuilt the logocreator way: one focused form on the left, a gallery of <b>original concepts</b> on the right. No API keys, no backend, no waiting rooms — a seeded design engine draws every logo right in your browser. Export real <b>SVG + PNG</b>, or take the whole <b>brand kit</b>.",
+en:{tagline:"logo prompt studio · offline",hero:"The auto-drawn logos looked rough — so Logo Mo now writes <b>professional logo prompts</b> instead. Type the basics, get <b>12 precise prompts</b> in 12 different design approaches, copy one, and generate the real logo in <b>Midjourney, Flux, Ideogram or DALL·E</b>. The little picture on each card is a <b>reference only</b>.",
 settings:"Logo settings",nameLabel:"Brand name",quickstart:"Quick start",describeLabel:"Describe it",optional:"(optional)",
-typeLabel:"Logo type",styleLabel:"Style",moreStyles:"More styles — classic studio",lessStyles:"Fewer styles",
+typeLabel:"Logo type",
 brandColor:"Brand color",bgColor:"Background",advanced:"Advanced",detailLabel:"Detail",monoLabel:"Monochrome",
 refLabel:"Reference logo",refHint:"Upload a logo — we read its colors, nothing leaves your browser",
-variations:"Variations",generate:"Generate logo",galleryTitle:"Your concepts",historyTitle:"Logo history",
+generate:"Generate prompts",galleryTitle:"12 professional prompts",
+promptNote:"Prompts are written in English — AI image tools understand English best. Paste one into Midjourney, Flux, Ideogram or DALL·E and generate. The small picture on each card is a <b>reference preview only</b>, not the finished logo.",
+copyAll:"Copy all 12",downloadTxt:"Download .txt",refOnly:"Reference preview · not the final logo",
+copyPrompt:"Copy prompt",copied:"Prompt copied ✓",copiedAll:"All 12 prompts copied ✓",downloadDone:".txt downloaded ✓",
+negative:"Negative",bestFor:"Best for",
+historyTitle:"Logo history",
 clearHistory:"Clear history",histEmpty:"Nothing yet — your generations will land here.",
-concept:"Concept",palette:"Palette",export:"Export",svgNote:"vector · infinitely scalable",copySvg:"Copy SVG code",
-copyNote:"paste into Figma / web",mockCard:"Business card",mockIcon:"App icon",brandKit:"Brand kit",
-kitNote:"lockups · palette · type · brand sheet",
-note:"Type is rendered with open fonts (Google Fonts). PNG exports embed the font automatically, so what you see is what you get — no internet needed after first load.",
-foot:"built in the open, free forever",kitLockups:"Lockups",kitPrimary:"Primary · color",kitMono:"Monochrome · one ink",
-kitIcon:"App icon · mark only",kitDark:"Reversed · on dark",kitType:"Typography",kitSheet:"Brand sheet (.html)",
-kitSheetNote:"logo · palette · type, one file",
-concepts:"concepts",copied:"SVG code copied ✓",dl:"Downloading",needName:"Type a brand name first ✎",
-regen:"New set generated ✦",fontNote:"font embedded",surprise:"Surprise",auto:"Auto",
+foot:"built in the open, free forever",
+needName:"Type a brand name first ✎",
+regen:"12 new prompts generated ✦",surprise:"Surprise",auto:"Auto",
 aiPicks:"Engine picks a fitting color — regenerate for different looks.",
 lowContrast:"Low contrast: your logo may be hard to see on this background.",
 refInspired:"Inspired by reference",refReady:"Reference colors applied ✓",cleared:"History cleared",
 restored:"Restored ✓",applied:"Applied ✓"},
-tc:{tagline:"離線生成式標誌工作室",hero:"<b>完全離線</b>嘅生成式標誌工作室，照 logocreator 嗰套做法重做：左邊一張集中嘅表單，右邊一格格<b>原創概念</b>。唔要 API key、唔要後端、唔使排隊——種子設計引擎喺瀏覽器即場畫出每個標誌。匯出真正嘅 <b>SVG + PNG</b>，或者成套<b>品牌套裝</b>拎走。",
+tc:{tagline:"標誌提示詞工作室",hero:"自動畫出嚟嘅標誌唔夠靚——Logo Mo 而家改為寫<b>專業標誌提示詞</b>。打基本資料，拎走 <b>12 條精準提示詞</b>，12 種唔同設計方式，複製一條，貼去 <b>Midjourney、Flux、Ideogram 或者 DALL·E</b> 生返張靚嘅。卡上面嗰張細圖只係<b>參考預覽</b>。",
 settings:"標誌設定",nameLabel:"品牌名",quickstart:"快速開始",describeLabel:"描述一下",optional:"（可選）",
-typeLabel:"標誌類型",styleLabel:"風格",moreStyles:"更多風格 — 經典工作室",lessStyles:"收起",
+typeLabel:"標誌類型",
 brandColor:"品牌顏色",bgColor:"背景",advanced:"進階",detailLabel:"細緻度",monoLabel:"單色",
 refLabel:"參考標誌",refHint:"上傳一個標誌——我哋只讀佢嘅顏色，唔會離開你部機",
-variations:"變化數量",generate:"生成標誌",galleryTitle:"你嘅概念",historyTitle:"標誌歷史",
+generate:"生成提示詞",galleryTitle:"12 條專業提示詞",
+promptNote:"提示詞用英文寫——AI 生圖工具睇英文最準。複製一條，貼去 Midjourney、Flux、Ideogram 或者 DALL·E 就可以生成。每張卡上面嗰張細圖只係<b>參考預覽</b>，唔係成品標誌。",
+copyAll:"複製全部 12 條",downloadTxt:"下載 .txt",refOnly:"參考預覽 · 非成品",
+copyPrompt:"複製提示詞",copied:"提示詞已複製 ✓",copiedAll:"12 條提示詞已複製 ✓",downloadDone:".txt 已下載 ✓",
+negative:"負面提示詞",bestFor:"適合",
+historyTitle:"標誌歷史",
 clearHistory:"清除歷史",histEmpty:"未有住——你生成嘅作品會喺呢度出現。",
-concept:"概念",palette:"配色",export:"匯出",svgNote:"向量 · 無限放大",copySvg:"複製 SVG 代碼",
-copyNote:"貼去 Figma / 網頁",mockCard:"卡片",mockIcon:"App 圖標",brandKit:"品牌套裝",
-kitNote:"組合 · 配色 · 字體 · 品牌頁",
-note:"字體用開放字型（Google Fonts）。匯出 PNG 會自動嵌入字體，所見即所得——首次載入後離線都用到。",
-foot:"開放製作，永久免費",kitLockups:"組合",kitPrimary:"主版 · 彩色",kitMono:"單色 · 一隻墨",
-kitIcon:"App 圖標 · 淨圖形",kitDark:"反白 · 深底",kitType:"字體",kitSheet:"品牌頁 (.html)",
-kitSheetNote:"標誌 · 配色 · 字體，一個檔",
-concepts:"個概念",copied:"SVG 代碼已複製 ✓",dl:"下載中",needName:"先打個品牌名 ✎",
-regen:"新一輯生成咗 ✦",fontNote:"已嵌入字體",surprise:"隨機",auto:"自動",
+foot:"開放製作，永久免費",
+needName:"先打個品牌名 ✎",
+regen:"12 條新提示詞生成咗 ✦",surprise:"隨機",auto:"自動",
 aiPicks:"引擎會揀一個啱嘅顏色——再生成會有唔同效果。",
 lowContrast:"對比太低：喺呢個背景上面個標誌可能睇唔清楚。",
 refInspired:"參考咗呢個標誌",refReady:"已套用參考顏色 ✓",cleared:"歷史已清除",
@@ -973,13 +928,13 @@ let lang=localStorage.getItem("logomo-lang")||"en";
 const t=k=>(I18N[lang]&&I18N[lang][k])||I18N.en[k]||k;
 function applyI18n(){document.querySelectorAll("[data-i18n]").forEach(el=>{el.innerHTML=t(el.dataset.i18n);});
  document.documentElement.lang=lang==="tc"?"zh-Hant":"en";
- renderPresets();renderSuggests();renderTypeSeg();renderStyleCards();renderSwatches();renderDetailSeg();renderVarSeg();renderContrastWarn();renderHistory();}
+ renderPresets();renderSuggests();renderTypeSeg();renderSwatches();renderDetailSeg();renderContrastWarn();renderHistory();}
 
 /* ================= state ================= */
 const SAMPLES=["Nebula","Fern & Field","Kobo Studio","Lumen","Driftwell","Mono & Co","Halcyon","Pip & Post","Northloop","Wanderly"];
-const S={name:"Nebula",describe:"",logoType:"icon-name",style:"surprise",detail:"balanced",
-  brandColor:"auto",bgColor:"auto",mono:false,variations:8,ref:null,activePreset:null};
-let concepts=[],cur=null,salt=(Date.now()%100000);
+const S={name:"Nebula",describe:"",logoType:"icon-name",detail:"balanced",
+  brandColor:"auto",bgColor:"auto",mono:false,ref:null,activePreset:null,industry:null};
+let prompts=[],salt=(Date.now()%100000);
 const THEMES=["white","silver","black"];
 let theme=localStorage.getItem("logomo-theme")||"silver";
 if(theme==="light")theme="silver"; if(theme==="dark")theme="black";
@@ -992,18 +947,18 @@ const blobToDataURL=b=>new Promise(res=>{const r=new FileReader();r.onload=()=>r
 
 /* ================= quick start presets (industry seeds, after logocreator's list) ================= */
 const PRESETS=[
- {id:"tech",icon:"⌘",label:{en:"Tech",tc:"科技"},logoType:"icon-name",style:"geometric",bg:"#FFFFFF",detail:"balanced",describe:"a clean geometric mark suggesting connection, speed and reliability"},
- {id:"coffee",icon:"◍",label:{en:"Coffee",tc:"咖啡"},logoType:"icon-name",style:"handdrawn",bg:"#F5F1E8",detail:"balanced",describe:"a warm hand-drawn coffee cup with rising steam, cozy and artisanal"},
- {id:"fitness",icon:"◉",label:{en:"Fitness",tc:"健身"},logoType:"icon-name",style:"minimal",bg:"#14130F",detail:"balanced",describe:"a bold dynamic mark suggesting motion, energy and strength"},
- {id:"finance",icon:"◆",label:{en:"Finance",tc:"金融"},logoType:"emblem",style:"luxury",bg:"#FFFFFF",detail:"balanced",describe:"a refined emblem suggesting trust, stability and growth"},
- {id:"beauty",icon:"✿",label:{en:"Beauty",tc:"美妝"},logoType:"icon-name",style:"luxury",bg:"#FFFFFF",detail:"balanced",describe:"an elegant minimal floral mark, soft, premium and refined"},
- {id:"food",icon:"❦",label:{en:"Restaurant",tc:"餐飲"},logoType:"emblem",style:"retro",bg:"#F5F1E8",detail:"detailed",describe:"a vintage restaurant badge, appetizing, classic and crafted"},
- {id:"eco",icon:"❧",label:{en:"Eco",tc:"環保"},logoType:"icon-name",style:"minimal",bg:"#FFFFFF",detail:"minimal",describe:"a simple leaf-based mark, organic, calm and sustainable"},
- {id:"gaming",icon:"▶",label:{en:"Gaming",tc:"遊戲"},logoType:"icon-name",style:"threed",bg:"#14130F",detail:"detailed",describe:"a bold 3D emblem with energy, edge and a futuristic feel"},
- {id:"law",icon:"§",label:{en:"Law",tc:"法律"},logoType:"monogram",style:"luxury",bg:"#FFFFFF",detail:"balanced",describe:"a classic monogram, authoritative, timeless and trustworthy"},
- {id:"creative",icon:"✦",label:{en:"Creative",tc:"創意"},logoType:"abstract",style:"gradient",bg:"#FFFFFF",detail:"balanced",describe:"a vibrant gradient abstract mark, playful, bold and modern"},
- {id:"realestate",icon:"⌂",label:{en:"Real Estate",tc:"地產"},logoType:"icon-name",style:"minimal",bg:"#FFFFFF",detail:"balanced",describe:"a clean architectural mark suggesting property, trust and modern living"},
- {id:"photo",icon:"◎",label:{en:"Photo",tc:"攝影"},logoType:"icon-name",style:"minimal",bg:"#14130F",detail:"minimal",describe:"a sleek minimal aperture or lens mark, sharp and modern"},
+ {id:"tech",icon:"⌘",label:{en:"Tech",tc:"科技"},logoType:"icon-name",style:"geometric",bg:"#FFFFFF",detail:"balanced",describe:"a clean geometric mark suggesting connection, speed and reliability",industry:"tech startup",kw:"connection"},
+ {id:"coffee",icon:"◍",label:{en:"Coffee",tc:"咖啡"},logoType:"icon-name",style:"handdrawn",bg:"#F5F1E8",detail:"balanced",describe:"a warm hand-drawn coffee cup with rising steam, cozy and artisanal",industry:"coffee shop",kw:"coffee cup"},
+ {id:"fitness",icon:"◉",label:{en:"Fitness",tc:"健身"},logoType:"icon-name",style:"minimal",bg:"#14130F",detail:"balanced",describe:"a bold dynamic mark suggesting motion, energy and strength",industry:"fitness brand",kw:"motion"},
+ {id:"finance",icon:"◆",label:{en:"Finance",tc:"金融"},logoType:"emblem",style:"luxury",bg:"#FFFFFF",detail:"balanced",describe:"a refined emblem suggesting trust, stability and growth",industry:"finance company",kw:"growth"},
+ {id:"beauty",icon:"✿",label:{en:"Beauty",tc:"美妝"},logoType:"icon-name",style:"luxury",bg:"#FFFFFF",detail:"balanced",describe:"an elegant minimal floral mark, soft, premium and refined",industry:"beauty brand",kw:"flower"},
+ {id:"food",icon:"❦",label:{en:"Restaurant",tc:"餐飲"},logoType:"emblem",style:"retro",bg:"#F5F1E8",detail:"detailed",describe:"a vintage restaurant badge, appetizing, classic and crafted",industry:"restaurant",kw:"dish"},
+ {id:"eco",icon:"❧",label:{en:"Eco",tc:"環保"},logoType:"icon-name",style:"minimal",bg:"#FFFFFF",detail:"minimal",describe:"a simple leaf-based mark, organic, calm and sustainable",industry:"eco brand",kw:"leaf"},
+ {id:"gaming",icon:"▶",label:{en:"Gaming",tc:"遊戲"},logoType:"icon-name",style:"threed",bg:"#14130F",detail:"detailed",describe:"a bold 3D emblem with energy, edge and a futuristic feel",industry:"gaming brand",kw:"energy"},
+ {id:"law",icon:"§",label:{en:"Law",tc:"法律"},logoType:"monogram",style:"luxury",bg:"#FFFFFF",detail:"balanced",describe:"a classic monogram, authoritative, timeless and trustworthy",industry:"law firm",kw:"scales"},
+ {id:"creative",icon:"✦",label:{en:"Creative",tc:"創意"},logoType:"abstract",style:"gradient",bg:"#FFFFFF",detail:"balanced",describe:"a vibrant gradient abstract mark, playful, bold and modern",industry:"creative studio",kw:"splash"},
+ {id:"realestate",icon:"⌂",label:{en:"Real Estate",tc:"地產"},logoType:"icon-name",style:"minimal",bg:"#FFFFFF",detail:"balanced",describe:"a clean architectural mark suggesting property, trust and modern living",industry:"real estate agency",kw:"building"},
+ {id:"photo",icon:"◎",label:{en:"Photo",tc:"攝影"},logoType:"icon-name",style:"minimal",bg:"#14130F",detail:"minimal",describe:"a sleek minimal aperture or lens mark, sharp and modern",industry:"photography studio",kw:"lens"},
 ];
 const DESCRIBE_SUGGESTIONS=[
  "A fox, friendly and modern","A mountain, calm and strong","A leaf, organic and fresh",
@@ -1035,10 +990,11 @@ function renderPresets(){
     b.onclick=()=>applyPreset(p);box.appendChild(b);});
 }
 function applyPreset(p){
-  S.activePreset=p.id;S.logoType=p.logoType;S.style=p.style;S.detail=p.detail;
+  S.activePreset=p.id;S.logoType=p.logoType;S.detail=p.detail;
   S.describe=p.describe;$("#descIn").value=p.describe;
+  S.industry=p.industry;
   S.bgColor=p.bg;S.brandColor="auto";S.mono=false;S.ref=null;
-  renderPresets();renderTypeSeg();renderStyleCards();renderSwatches();renderDetailSeg();renderMonoSw();renderRefChip();renderContrastWarn();
+  renderPresets();renderTypeSeg();renderSwatches();renderDetailSeg();renderMonoSw();renderRefChip();renderContrastWarn();
   generate();
 }
 function renderSuggests(){
@@ -1059,43 +1015,7 @@ function renderDetailSeg(){
     b.className=S.detail===d.id?"on":"";
     b.onclick=()=>{S.detail=d.id;renderDetailSeg();};box.appendChild(b);});
 }
-function renderVarSeg(){
-  const box=$("#varSeg");box.innerHTML="";
-  [4,8,12].forEach(n=>{const b=document.createElement("button");b.textContent=String(n);
-    b.className=S.variations===n?"on":"";
-    b.onclick=()=>{S.variations=n;renderVarSeg();};box.appendChild(b);});
-}
 function renderMonoSw(){const el=$("#monoSw");el.classList.toggle("on",S.mono);el.setAttribute("aria-checked",String(S.mono));}
-
-/* ---- style cards: live engine previews (the style draws its own thumbnail) ---- */
-const PREVIEW_PAL={minimal:0,geometric:3,gradient:10,mascot:4,handdrawn:0,luxury:12,retro:14,threed:1,monoline:5,japanese:0,bauhaus:0,kandinsky:0,diagram:3};
-function stylePreviewSVG(fam){
-  const pal=PALETTES[PREVIEW_PAL[fam]||0];
-  const ctx={name:"Mo",tagline:"",logoType:"icon-name",family:fam,font:FONTS.grotesk,markKind:(KINDS[fam]||[])[0],
-    layout:{nameDy:0,nameFs:1,nameLs:0,tagDy:0,markDx:0},mono:false,detail:"balanced"};
-  const inner=composeConcept(RNG("preview|"+fam),{...ctx,pal});
-  return tileSVG(inner,pal).replace("<svg ",'<svg preserveAspectRatio="xMidYMid slice" ');
-}
-function styleCard(fam){
-  const b=document.createElement("button");b.className="stylecard"+(S.style===fam?" on":"");
-  const n=(KINDS[fam]||[]).length;
-  b.innerHTML=`<span class="prev">${stylePreviewSVG(fam)}</span><span class="nm">${FAM_LABEL[fam][lang]||FAM_LABEL[fam].en}<span>${n?n+" marks":"fluid"}</span></span>`;
-  b.onclick=()=>{S.style=fam;S.activePreset=null;renderPresets();renderStyleCards();};
-  return b;
-}
-function renderStyleCards(){
-  const g=$("#styleGrid");g.innerHTML="";
-  const dice=document.createElement("button");dice.className="stylecard dice"+(S.style==="surprise"?" on":"");
-  dice.innerHTML=`<span class="prev">🎲</span><span class="nm">${t("surprise")}<span>all styles</span></span>`;
-  dice.onclick=()=>{S.style="surprise";S.activePreset=null;renderPresets();renderStyleCards();};
-  g.appendChild(dice);
-  PRIMARY_STYLES.forEach(f=>g.appendChild(styleCard(f)));
-  const h=$("#heritageGrid");
-  if(!h.hidden){h.innerHTML="";HERITAGE_STYLES.forEach(f=>h.appendChild(styleCard(f)));}
-  const mb=$("#moreStylesBtn");
-  mb.querySelector("[data-i18n]").textContent=h.hidden?t("moreStyles"):t("lessStyles");
-  mb.classList.toggle("open",!h.hidden);
-}
 
 /* ---- color swatches ---- */
 const BRAND_COLORS=[{name:"Blue",color:"#2F6FF5"},{name:"Red",color:"#E5484D"},{name:"Green",color:"#30A46C"},{name:"Yellow",color:"#F2C40F"}];
@@ -1182,176 +1102,221 @@ function generate(){
   pushHistory(name,salt);
   toast(t("regen"));
 }
+/* ================= 12 professional prompt approaches ================= */
+/* Each approach = one design direction. The prompt is the deliverable;
+   the small SVG on the card is a reference preview only. */
+const PROMPTS=[
+ {id:"minimal-geometric",fam:"geometric",logoType:"icon-name",
+  name:{en:"Minimal Geometric",tc:"極簡幾何"},
+  line:{en:"One clean geometric mark — circles, triangles and straight lines only.",tc:"一個乾淨幾何圖形——淨係圓形、三角形同直線。"},
+  concept:"A single geometric mark built from clean circles, triangles and straight lines, abstracting {kw} into one memorable shape",
+  style:"ultra-minimalist flat vector, precise geometry, generous negative space, perfectly balanced",
+  type:"clean geometric sans-serif, wide letter-spacing, all caps",
+  neg:"photorealism, 3D render, gradients, drop shadows, bevels, textures, extra text, watermark, stock imagery, cluttered details",
+  best:"Midjourney · Flux · Ideogram"},
+ {id:"luxury-monogram",fam:"luxury",logoType:"monogram",
+  name:{en:"Luxury Monogram",tc:"奢華字母徽"},
+  line:{en:"Interlocked initials with hairline strokes — quiet, expensive, timeless.",tc:"字母交織加幼線——低調、貴氣、唔過時。"},
+  concept:"An elegant monogram of the initials of {BRAND}, interlocked with hairline strokes and a small diamond accent",
+  style:"luxury, refined, high-end, gold foil on deep charcoal, hairline elegance",
+  type:"high-contrast serif, refined, letterspaced, small caps",
+  neg:"photorealism, gradients, drop shadows, neon colors, cartoon, extra text, watermark, cluttered details",
+  best:"Midjourney · Flux"},
+ {id:"modern-wordmark",fam:"minimal",logoType:"wordmark",
+  name:{en:"Modern Wordmark",tc:"現代字標"},
+  line:{en:"The name itself is the logo — one custom letter detail, nothing else.",tc:"個名本身就係標誌——一個特別字母細節，其餘乜都唔要。"},
+  concept:"A typography-led wordmark — the name {BRAND} itself is the logo, with one subtle custom letter detail",
+  style:"modern, confident, Swiss-style typography, no icon, the letters carry the brand",
+  type:"bold custom grotesque, tight kerning, the wordmark is the hero",
+  neg:"icons, illustrations, gradients, shadows, decorative elements, extra text, watermark",
+  best:"Ideogram · Flux"},
+ {id:"friendly-mascot",fam:"mascot",logoType:"icon-name",
+  name:{en:"Friendly Mascot",tc:"親切吉祥物"},
+  line:{en:"A warm geometric character — friendly enough to remember, simple enough to scale.",tc:"一個溫暖幾何角色——夠親切令人記得，夠簡單可以放大縮細。"},
+  concept:"A friendly flat mascot — {kw} drawn as a simple geometric character with a warm expression",
+  style:"flat illustration, bold outlines, playful yet professional, friendly and approachable",
+  type:"rounded bold sans-serif, friendly lowercase",
+  neg:"photorealism, 3D render, gradients, scary, detailed fur, extra text, watermark, cluttered background",
+  best:"Ideogram · DALL·E · Midjourney"},
+ {id:"retro-badge",fam:"retro",logoType:"emblem",
+  name:{en:"Retro Badge",tc:"復古徽章"},
+  line:{en:"A vintage circular badge — crafted, classic, built to last.",tc:"一個復古圓形徽章——手工感、經典、耐看。"},
+  concept:"A vintage circular badge with a {kw} mark at its centre, ringed by the brand name and 'EST. 2026'",
+  style:"retro vintage badge, screen-print feel, warm cream and muted tones, crafted",
+  type:"vintage slab serif, hand-lettered feel, curved along the badge ring",
+  neg:"photorealism, neon, gradients, modern minimal, extra text, watermark, distressed overkill",
+  best:"Midjourney · Flux"},
+ {id:"abstract-gradient",fam:"gradient",logoType:"abstract",
+  name:{en:"Abstract Gradient",tc:"抽象漸變"},
+  line:{en:"Fluid overlapping forms — soft, modern, premium tech energy.",tc:"流動重疊形態——柔和、現代、高級科技感。"},
+  concept:"A fluid abstract mark — soft overlapping forms flowing into one another, suggesting {kw}",
+  style:"modern gradient, smooth color transitions, soft organic forms, premium tech feel",
+  type:"light geometric sans-serif, lowercase, airy",
+  neg:"photorealism, harsh edges, extra text, watermark, stock imagery, cluttered details",
+  best:"Midjourney · Flux"},
+ {id:"handdrawn-artisan",fam:"handdrawn",logoType:"icon-name",
+  name:{en:"Hand-drawn Artisan",tc:"手繪匠人"},
+  line:{en:"Loose ink strokes, slightly imperfect — honest, warm, handmade.",tc:"鬆動墨水筆觸、少少唔完美——真誠、溫暖、手工感。"},
+  concept:"A hand-drawn {kw} sketch in loose ink strokes — slightly imperfect, warm and artisanal",
+  style:"hand-drawn ink and paper, organic, craft brand, honest and warm",
+  type:"hand-lettered script or casual serif, warm and human",
+  neg:"vector-perfect, photorealism, gradients, neon, extra text, watermark, digital clean look",
+  best:"Midjourney · Flux"},
+ {id:"japanese-zen",fam:"japanese",logoType:"icon-name",
+  name:{en:"Japanese Zen",tc:"日式禪意"},
+  line:{en:"One red ensō circle, vast empty space — calm, confident, precise.",tc:"一個紅色圓圈、大量留白——平靜、自信、精準。"},
+  concept:"A zen mark — a single red ensō circle holding a minimal {kw} silhouette, vast empty space around it",
+  style:"Japanese minimalism, wabi-sabi, one bold accent on warm paper white, calm",
+  type:"elegant serif, generous tracking, quiet and confident",
+  neg:"photorealism, gradients, bright colors, clutter, extra text, watermark, busy background",
+  best:"Midjourney · Flux"},
+ {id:"bauhaus",fam:"bauhaus",logoType:"icon-name",
+  name:{en:"Bauhaus",tc:"包浩斯"},
+  line:{en:"Primary-color shapes on a bold grid — 1920s modernism, still sharp.",tc:"原色幾何加粗格仔——1920 年代現代主義，到而家都咁利。"},
+  concept:"A Bauhaus composition — primary-color geometric shapes in a bold grid, {kw} reduced to pure form",
+  style:"Bauhaus 1920s modernist, primary red, yellow and blue with black, strong grid",
+  type:"geometric sans-serif, all caps, tight and bold",
+  neg:"photorealism, gradients, soft edges, pastel, extra text, watermark, cluttered details",
+  best:"Midjourney · Flux"},
+ {id:"monoline",fam:"monoline",logoType:"icon-name",
+  name:{en:"Monoline",tc:"單線描繪"},
+  line:{en:"One unbroken line forms the whole mark — elegant, minimal, refined.",tc:"一條唔斷嘅線畫晒成個標誌——優雅、極簡、精緻。"},
+  concept:"A single-weight continuous line drawing of {kw} — one unbroken stroke forming the whole mark",
+  style:"monoline continuous line art, elegant, one stroke weight, minimal and refined",
+  type:"light refined sans-serif, generous tracking",
+  neg:"photorealism, thick outlines, filled shapes, gradients, extra text, watermark, cluttered details",
+  best:"Midjourney · Ideogram"},
+ {id:"three-d",fam:"threed",logoType:"icon-name",
+  name:{en:"3D / Isometric",tc:"立體等距"},
+  line:{en:"A clean dimensional form with soft depth — modern, premium, tactile.",tc:"一個乾淨立體形態加柔和深度——現代、高級、有質感。"},
+  concept:"A dimensional mark — {kw} rendered as a clean isometric 3D form with soft depth",
+  style:"modern 3D, soft isometric, subtle depth, clean render, premium product feel",
+  type:"bold geometric sans-serif, confident and modern",
+  neg:"photorealism, flat vector, hand-drawn, extra text, watermark, messy background",
+  best:"Midjourney · Flux"},
+ {id:"editorial-diagram",fam:"diagram",logoType:"icon-name",
+  name:{en:"Editorial Diagram",tc:"編輯圖表"},
+  line:{en:"A precise infographic mark — nested geometry, smart and systematic.",tc:"一個精準資訊圖表標誌——嵌套幾何，聰明、有系統。"},
+  concept:"An editorial diagram mark — {kw} expressed as a precise infographic: nested circles and clean geometry",
+  style:"editorial, diagrammatic, precise, data-inspired, smart knowledge-brand feel",
+  type:"neutral grotesque, small caps, precise and editorial",
+  neg:"photorealism, decorative, gradients, extra text, watermark, cluttered details",
+  best:"Flux · Ideogram"},
+];
+/* describe keyword -> plain word for the prompt concept */
+const KW_WORDS={fox:"fox",bird:"bird",cat:"cat",bear:"bear",fish:"fish",sprig:"leafy sprig",pebble:"pebble",
+  wave:"ocean wave",sketchwave:"ocean wave",halfsun:"half sun",doodlesun:"sun",sunoff:"sun",sunburst:"sunburst",
+  peaks:"mountain peaks",wobblystar:"star",badgestar:"star",target:"target",arc:"arc",enso:"ensō circle",
+  scribble:"scribble",diamond:"diamond",corner:"corner"};
+function keywordFor(hints){
+  if(hints.length&&KW_WORDS[hints[0]])return KW_WORDS[hints[0]];
+  const p=PRESETS.find(x=>x.id===S.activePreset);
+  if(p)return p.kw;
+  return "abstract mark";
+}
+const COMP_BY_TYPE={
+ "icon-name":"Centered icon-above-wordmark lockup, balanced, generous negative space",
+ "emblem":"Circular badge lockup — the mark in the centre, the brand name on the ring",
+ "monogram":"Interlocked initials centred as the whole mark, minimal surrounding space",
+ "wordmark":"Typography-only lockup — the name itself is the logo, no separate icon",
+ "abstract":"Abstract mark centred, no text inside the mark, small wordmark below"};
+function buildPrompt(a,ctx){
+  const ind=S.industry?`a ${S.industry} brand`:"a new brand";
+  const concept=a.concept.replaceAll("{kw}",ctx.kw).replaceAll("{BRAND}",ctx.brand);
+  const pal=ctx.pal;
+  let colors;
+  if(S.mono)colors="strictly black and white — no color at all";
+  else{
+    colors=`${pal.name} palette — background ${pal.bg}, ink ${pal.ink}, accent ${pal.accent}`;
+    if(S.brandColor!=="auto")colors+=`. Brand color ${S.brandColor} as the dominant accent`;
+    if(S.ref)colors+=`. Palette sampled from the user's reference logo: ${S.ref.colors.join(", ")}`;
+  }
+  const detail=S.detail==="minimal"?"Detail: extremely clean, only the essential shapes."
+    :S.detail==="detailed"?"Detail: rich but controlled, fine lines and small accents.":"";
+  const text=[
+    `Professional logo design for "${ctx.brand}", ${ind}.`,
+    `Concept: ${concept}.`,
+    `Style: ${a.style}.`,
+    detail,
+    `Colors: ${colors}.`,
+    `Typography: ${a.type}.`,
+    `Composition: ${COMP_BY_TYPE[S.logoType]||COMP_BY_TYPE["icon-name"]}.`,
+    `Output: flat vector logo, sharp clean edges, scalable, timeless, suitable for app icon, business card and signage. Isolated on a plain background, no mockup, no scene.`
+  ].filter(Boolean).join("\n");
+  return {text,neg:a.neg};
+}
 function buildSet(name,sd){
-  const r=RNG(name+"|"+S.logoType+"|"+S.style+"|"+S.detail+"|"+sd);
+  const r=RNG(name+"|"+S.logoType+"|"+S.detail+"|"+sd);
   const hints=describeHints(S.describe);
-  concepts=[];
-  let styles;
-  if(S.style==="surprise"){
-    styles=[...ALL_STYLES];
-    for(let i=styles.length-1;i>0;i--){const j=Math.floor(r.f()*(i+1));[styles[i],styles[j]]=[styles[j],styles[i]];}
-    const hitStyle=hints.length?ALL_STYLES.find(f=>(KINDS[f]||[]).includes(hints[0])):null;
-    if(hitStyle)styles=[hitStyle,...styles.filter(s=>s!==hitStyle)];
-  }else styles=[S.style];
-  const used={};
-  for(let i=0;i<S.variations;i++){
-    const fam=styles[i%styles.length];
-    const pool=KINDS[fam]||[];
-    used[fam]=used[fam]||[];
-    let kind;
-    const hit=hints.find(h=>pool.includes(h)&&!used[fam].includes(h));
-    if(hit)kind=hit;
-    else{
-      const avail=pool.filter(k=>!used[fam].includes(k));
-      kind=avail.length?r.pick(avail):(pool.length?r.pick(pool):undefined);
-    }
-    if(kind)used[fam].push(kind);
-    const pal=applyColorOverrides(PALETTES[r.pick(palIdxFor(fam))]);
-    const fontKey=r.pick(fontKeysFor(fam));
-    const seed=`${name}|${S.logoType}|${fam}|${i}|${sd}`;
+  const kw=keywordFor(hints);
+  prompts=[];
+  PROMPTS.forEach((a,i)=>{
+    const pal=applyColorOverrides(PALETTES[r.pick(palIdxFor(a.fam))]);
+    const fontKey=r.pick(fontKeysFor(a.fam));
+    const seed=`${name}|${a.id}|${i}|${sd}`;
     const lr=RNG(seed+"|layout");
     const jit=S.detail==="minimal"?0:S.detail==="detailed"?1.6:1;
     const layout={nameDy:lr.range(-6,6)*jit,nameFs:lr.range(.94,1.05),nameLs:lr.range(-2,2)*jit,tagDy:lr.range(-4,4)*jit,markDx:lr.range(-8,8)*jit};
-    concepts.push({id:uid("c"),family:fam,name,tagline:"",pal,fontKey,seed,detail:S.detail,mono:S.mono,
-      ctx:{name,tagline:"",logoType:S.logoType,family:fam,font:FONTS[fontKey],markKind:kind,layout,mono:S.mono,detail:S.detail}});
-  }
-  renderGrid();
+    const pool=KINDS[a.fam]||[];
+    const kind=pool.find(k=>hints.includes(k))||r.pick(pool)||undefined;
+    const c={ctx:{name,tagline:"",logoType:a.logoType,family:a.fam,font:FONTS[fontKey],markKind:kind,layout,mono:S.mono,detail:S.detail},
+      pal,detail:S.detail,mono:S.mono,name,seed};
+    const ref=conceptSVG(c);
+    const built=buildPrompt(a,{brand:name,kw,pal});
+    prompts.push({id:a.id,approach:a,ref,built,pal});
+  });
+  renderPrompts();
 }
-function renderGrid(){
+async function copyText(text,btn){
+  try{await navigator.clipboard.writeText(text);}
+  catch(e){
+    const ta=document.createElement("textarea");ta.value=text;ta.style.position="fixed";ta.style.opacity="0";
+    document.body.appendChild(ta);ta.select();try{document.execCommand("copy");}catch(_){}ta.remove();
+  }
+  if(btn){const old=btn.textContent;btn.textContent=t("copied");btn.classList.add("done");
+    setTimeout(()=>{btn.textContent=old;btn.classList.remove("done");},1800);}
+  else toast(t("copied"));
+}
+function allPromptsText(){
+  return prompts.map((p,i)=>`#${i+1} ${p.approach.name.en} — ${S.name}\n\n${p.built.text}\n\nNegative prompt: ${p.built.neg}`).join("\n\n---\n\n");
+}
+function renderPrompts(){
   const g=$("#grid");g.innerHTML="";
-  $("#count").textContent=`${concepts.length} ${t("concepts")}`;
-  if(!concepts.length){g.innerHTML=`<div class="empty">—</div>`;return;}
-  concepts.forEach((c,i)=>{
-    const d=document.createElement("div");d.className="card";d.style.animationDelay=(i*45)+"ms";
-    d.innerHTML=`<div class="tile">${conceptSVG(c)}</div>
-      <div class="meta"><span class="fam">${FAM_LABEL[c.family][lang]||FAM_LABEL[c.family].en}</span><span class="palname">${esc(c.pal.name)}</span></div>`;
-    d.onclick=()=>openModal(c);
+  if(!prompts.length){g.innerHTML=`<div class="empty">—</div>`;return;}
+  prompts.forEach((p,i)=>{
+    const a=p.approach;
+    const nm=a.name[lang]||a.name.en,ln=a.line[lang]||a.line.en;
+    const d=document.createElement("article");d.className="pcard";d.style.animationDelay=(i*40)+"ms";
+    d.innerHTML=`
+      <div class="pref">${p.ref}<span class="refbadge">${t("refOnly")}</span></div>
+      <div class="pbody">
+        <span class="pnum">${String(i+1).padStart(2,"0")} · ${esc(nm.toUpperCase())}</span>
+        <h3>${esc(nm)}</h3>
+        <p class="pline">${esc(ln)}</p>
+        <pre class="prompt">${esc(p.built.text)}</pre>
+        <p class="neg"><b>${t("negative")}:</b> ${esc(p.built.neg)}</p>
+        <div class="pfoot">
+          <button class="copybtn">${t("copyPrompt")}</button>
+          <span class="best">${t("bestFor")}: ${a.best}</span>
+        </div>
+      </div>`;
+    d.querySelector(".copybtn").onclick=e=>copyText(p.built.text+"\n\nNegative prompt: "+p.built.neg,e.currentTarget);
     g.appendChild(d);
   });
 }
+$("#copyAllBtn").onclick=()=>{copyText(allPromptsText());toast(t("copiedAll"));};
+$("#dlTxtBtn").onclick=()=>{dlBlob(new Blob([allPromptsText()],{type:"text/plain;charset=utf-8"}),
+  S.name.toLowerCase().replace(/[^a-z0-9]+/g,"-")+"-logo-prompts.txt");toast(t("downloadDone"));};
 
-/* ================= detail modal ================= */
-function openModal(c){
-  cur=c;
-  $("#dTitle").innerHTML=`${esc(c.name)} <span>·</span> ${FAM_LABEL[c.family][lang]||FAM_LABEL[c.family].en}`;
-  paintModal();
-  $("#scrim").classList.add("open");document.body.style.overflow="hidden";
-}
-function paintModal(){
-  const c=cur,svg=conceptSVG(c);
-  $("#bigPrev").innerHTML=svg;
-  const startIdx=PALETTES.findIndex(p=>p.name===c.pal.name);
-  const idxs=[startIdx===-1?0:startIdx];while(idxs.length<6){const i=Math.floor(Math.random()*PALETTES.length);if(!idxs.includes(i))idxs.push(i);}
-  const vr=$("#varRow");vr.innerHTML="";
-  idxs.forEach(i=>{const p=PALETTES[i],b=document.createElement("button");
-    b.className="swatch"+(p.name===c.pal.name?" on":"");b.title=p.name;
-    b.innerHTML=`<i style="background:${p.bg}"></i><i style="background:${p.ink};clip-path:polygon(100% 0,100% 100%,62% 100%)"></i><i style="background:${p.accent};clip-path:circle(26% at 30% 68%)"></i>`;
-    b.onclick=()=>{c.pal=applyColorOverrides(p);paintModal();renderGrid();};vr.appendChild(b);});
-  $("#mockCard").style.background=c.pal.bg;
-  $("#mockCard").innerHTML=`<div style="width:44%">${svg}</div><div style="font-family:${FONTS[c.fontKey].css};color:${c.pal.ink};font-size:13px;letter-spacing:3px">${esc(c.name.toUpperCase())}</div>`;
-  $("#mockIcon").style.background=c.pal.ink;
-  $("#mockIcon").innerHTML=`<div style="width:72%">${svg}</div>`;
-}
-function closeModal(){$("#scrim").classList.remove("open");document.body.style.overflow="";}
-$("#closeBtn").onclick=closeModal;
-$("#scrim").addEventListener("click",e=>{if(e.target.id==="scrim")closeModal();});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeModal();closeKit();}});
-
-/* ================= brand kit ================= */
-function openKit(){
-  if(!cur)return;
-  const c=cur;
-  $("#kitTitle").innerHTML=`${esc(c.name)} <span style="color:var(--accent)">·</span> ${FAM_LABEL[c.family][lang]||FAM_LABEL[c.family].en}`;
-  $("#kitPrimary").innerHTML=`<div style="width:64%">${conceptSVG(c)}</div>`;
-  const monoPal={...c.pal,accent:c.pal.ink};
-  const monoSVG=tileSVG(composeConcept(RNG(c.seed),{...c.ctx,mono:true,pal:monoPal}),monoPal);
-  $("#kitMono").innerHTML=`<div style="width:64%">${monoSVG}</div>`;
-  const iconSVG=tileSVG(markOnly(RNG(c.seed),{...c.ctx,pal:c.pal},200,1.02),c.pal);
-  $("#kitIcon").innerHTML=`<div style="width:64%">${iconSVG}</div>`;
-  const darkPal={bg:"#14130f",ink:"#f5f4ef",accent:c.pal.accent,soft:"#2a2a30",name:c.pal.name};
-  const darkSVG=tileSVG(composeConcept(RNG(c.seed),{...c.ctx,pal:darkPal}),darkPal);
-  $("#kitDark").innerHTML=`<div style="width:64%">${darkSVG}</div>`;
-  const kp=$("#kitPal");kp.innerHTML="";
-  [["Background",c.pal.bg],["Ink",c.pal.ink],["Accent",c.pal.accent],["Soft",c.pal.soft]].forEach(([n,hex])=>{
-    const d=document.createElement("div");d.className="kp";
-    d.innerHTML=`<i style="background:${hex}"></i><span>${n}<br><b style="color:var(--ink)">${hex}</b></span>`;kp.appendChild(d);});
-  $("#kitFont").innerHTML=`<b style="font-family:${FONTS[c.fontKey].css}">${FONTS[c.fontKey].fam}</b> — ${esc(FONTS[c.fontKey].fam)} · <span style="font-family:${FONTS[c.fontKey].css};font-size:20px">${esc(c.name.toUpperCase())}</span>`;
-  $("#kitScrim").classList.add("open");
-}
-function closeKit(){$("#kitScrim").classList.remove("open");}
-$("#kitBtn").onclick=openKit;
-$("#kitCloseBtn").onclick=closeKit;
-$("#kitScrim").addEventListener("click",e=>{if(e.target.id==="kitScrim")closeKit();});
-$("#kitDlSvg").onclick=()=>{const s=`<!-- Logo Mo · ${esc(cur.name)} · ${cur.family} · ${cur.pal.name} -->\n`+standaloneSVG(cur);
-  dlBlob(new Blob([s],{type:"image/svg+xml"}),cur.name.toLowerCase().replace(/[^a-z0-9]+/g,"-")+"-logo.svg");toast("SVG ✓");};
-$("#kitDlPng").onclick=()=>exportPNG(cur,1024);
-$("#kitDlSheet").onclick=()=>{
-  const c=cur,svg=standaloneSVG(c);
-  const sheet=`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>${esc(c.name)} — Brand Sheet · Logo Mo</title>
-<style>body{font-family:system-ui,sans-serif;max-width:720px;margin:40px auto;padding:0 24px;color:#1d1a15;background:#f5f4f0}
-h1{font-size:34px} .logo{max-width:340px;margin:24px 0} .logo svg{width:100%;height:auto;border:1px solid #ddd;border-radius:16px}
-.sw{display:flex;gap:10px;flex-wrap:wrap}.sw div{border:1px solid #ddd;border-radius:10px;overflow:hidden;min-width:120px}
-.sw i{display:block;height:44px}.sw span{display:block;padding:8px;font-size:13px;background:#fff}
-code{background:#e9e9e7;padding:2px 6px;border-radius:6px}</style></head><body>
-<h1>${esc(c.name)} — Brand Sheet</h1><p>Made with Logo Mo · style <b>${FAM_LABEL[c.family].en}</b> · ${esc(c.pal.name)} palette</p>
-<div class="logo">${svg}</div>
-<h2>Palette</h2><div class="sw">
-<div><i style="background:${c.pal.bg}"></i><span>Background<br><code>${c.pal.bg}</code></span></div>
-<div><i style="background:${c.pal.ink}"></i><span>Ink<br><code>${c.pal.ink}</code></span></div>
-<div><i style="background:${c.pal.accent}"></i><span>Accent<br><code>${c.pal.accent}</code></span></div>
-<div><i style="background:${c.pal.soft}"></i><span>Soft<br><code>${c.pal.soft}</code></span></div></div>
-<h2>Typography</h2><p>Display face: <b>${esc(FONTS[c.fontKey].fam)}</b> (Google Fonts, open license).</p>
-<p style="color:#666;font-size:13px">Exported from Logo Mo — fully offline generative logo studio.</p></body></html>`;
-  dlBlob(new Blob([sheet],{type:"text/html"}),c.name.toLowerCase().replace(/[^a-z0-9]+/g,"-")+"-brand-sheet.html");toast("Brand sheet ✓");
-};
-
-/* ================= export: SVG + PNG (fonts embedded) ================= */
-const __fc={css:null,ok:{}};
-async function embeddedCSS(families){
-  try{
-    if(!__fc.css){const link=document.querySelector('link[href*="fonts.googleapis.com/css2"]');
-      __fc.css=await(await fetch(link.href)).text();}
-    let out="";
-    for(const fam of families){
-      if(__fc.ok[fam]){out+=__fc.ok[fam];continue;}
-      const re=new RegExp("@font-face\\s*{[^}]*font-family:\\s*'"+fam.replace(/[-/\\^$*+?.()|[\]{}]/g,"\\$&")+"'[^}]*}","g");
-      const blocks=__fc.css.match(re)||[];let css=blocks.join("\n");
-      const urls=[...new Set([...css.matchAll(/url\((https:[^)]+)\)/g)].map(m=>m[1]))];
-      for(const u of urls){const d=await blobToDataURL(await(await fetch(u)).blob());css=css.split(u).join(d);}
-      __fc.ok[fam]=css;out+=css;
-    }
-    return out;
-  }catch(e){return "";}
-}
-async function exportPNG(c,size){
-  toast(t("dl")+" PNG "+size+"…");
-  await document.fonts.ready;
-  const css=await embeddedCSS([FONTS[c.fontKey].fam]);
-  let s=standaloneSVG(c).replace(/(<svg[^>]*>)/,"$1<style>"+css+"</style>");
-  const url=URL.createObjectURL(new Blob([s],{type:"image/svg+xml;charset=utf-8"}));
-  const img=new Image();
-  await new Promise((res,rej)=>{img.onload=res;img.onerror=rej;img.src=url;});
-  const cv=document.createElement("canvas");cv.width=cv.height=size;
-  cv.getContext("2d").drawImage(img,0,0,size,size);URL.revokeObjectURL(url);
-  const blob=await new Promise(r=>cv.toBlob(r,"image/png"));
-  dlBlob(blob,`${c.name.toLowerCase().replace(/[^a-z0-9]+/g,"-")}-logo-${size}.png`);
-  toast("PNG "+size+" ✓");
-}
-$("#dlSvg").onclick=()=>{const s=`<!-- Logo Mo · ${esc(cur.name)} · ${cur.family} · ${cur.pal.name} -->\n`+standaloneSVG(cur);
-  dlBlob(new Blob([s],{type:"image/svg+xml"}),cur.name.toLowerCase().replace(/[^a-z0-9]+/g,"-")+"-logo.svg");toast("SVG ✓");};
-$("#cpSvg").onclick=async()=>{try{await navigator.clipboard.writeText(standaloneSVG(cur));toast(t("copied"));}catch(e){toast("copy failed");}};
-$("#dlPng512").onclick=()=>exportPNG(cur,512);
-$("#dlPng1024").onclick=()=>exportPNG(cur,1024);
-$("#dlPng2048").onclick=()=>exportPNG(cur,2048);
 
 /* ================= history dashboard (localStorage) ================= */
 const HIST_KEY="logomo-hist-v1";
 function pushHistory(name,sd){
   try{
     const h=JSON.parse(localStorage.getItem(HIST_KEY)||"[]");
-    const c0=concepts[0],thumb=c0?conceptSVG(c0):"";
-    h.unshift({name,describe:S.describe,logoType:S.logoType,style:S.style,detail:S.detail,
-      brandColor:S.brandColor,bgColor:S.bgColor,mono:S.mono,variations:S.variations,sd,ts:Date.now(),thumb});
+    const p0=prompts[0],thumb=p0?p0.ref:"";
+    h.unshift({name,describe:S.describe,logoType:S.logoType,detail:S.detail,
+      brandColor:S.brandColor,bgColor:S.bgColor,mono:S.mono,industry:S.industry,sd,ts:Date.now(),thumb});
     localStorage.setItem(HIST_KEY,JSON.stringify(h.slice(0,12)));
     renderHistory();
   }catch(e){}
@@ -1362,16 +1327,17 @@ function renderHistory(){
   empty.hidden=h.length>0;
   h.forEach(x=>{const d=document.createElement("div");d.className="hitem";
     const when=new Date(x.ts).toLocaleDateString(lang==="tc"?"zh-Hant":"en",{month:"short",day:"numeric"});
-    const sty=x.style==="surprise"?t("surprise"):(FAM_LABEL[x.style]?FAM_LABEL[x.style][lang]||FAM_LABEL[x.style].en:x.style);
+    const lt=LOGO_TYPES.find(l=>l.id===x.logoType);
+    const sty=x.industry||(lt?(lt[lang]||lt.en):"");
     d.innerHTML=`<div class="th">${x.thumb}</div><div class="hb"><b>${esc(x.name)}</b><small>${esc(sty)} · ${when}</small></div>`;
     d.onclick=()=>{restoreHistory(x);};row.appendChild(d);});
 }
 function restoreHistory(x){
-  S.describe=x.describe||"";S.logoType=x.logoType||"icon-name";S.style=x.style||"surprise";
+  S.describe=x.describe||"";S.logoType=x.logoType||"icon-name";
   S.detail=x.detail||"balanced";S.brandColor=x.brandColor||"auto";S.bgColor=x.bgColor||"auto";
-  S.mono=!!x.mono;S.variations=x.variations||8;S.activePreset=null;S.ref=null;
+  S.mono=!!x.mono;S.industry=x.industry||null;S.activePreset=null;S.ref=null;
   $("#nameIn").value=x.name;$("#descIn").value=S.describe;
-  renderPresets();renderSuggests();renderTypeSeg();renderStyleCards();renderSwatches();renderDetailSeg();renderVarSeg();renderMonoSw();renderRefChip();renderContrastWarn();
+  renderPresets();renderSuggests();renderTypeSeg();renderSwatches();renderDetailSeg();renderMonoSw();renderRefChip();renderContrastWarn();
   buildSet(x.name,x.sd);
   window.scrollTo({top:0,behavior:"smooth"});
   toast(t("restored"));
@@ -1413,19 +1379,18 @@ $("#refFile").addEventListener("change",e=>{
 });
 
 /* ================= header + sidebar buttons ================= */
-$("#langBtn").onclick=()=>{lang=lang==="en"?"tc":"en";localStorage.setItem("logomo-lang",lang);applyI18n();renderGrid();};
+$("#langBtn").onclick=()=>{lang=lang==="en"?"tc":"en";localStorage.setItem("logomo-lang",lang);applyI18n();renderPrompts();};
 document.querySelectorAll("#themeBtn .tdot").forEach(d=>d.addEventListener("click",e=>{e.stopPropagation();theme=d.dataset.t;localStorage.setItem("logomo-theme",theme);applyTheme();}));
 $("#genBtn").onclick=generate;
 $("#diceBtn").onclick=()=>{
   const r=RNG("dice"+Date.now());
   $("#nameIn").value=r.pick(SAMPLES);
-  $("#descIn").value="";S.describe="";S.style="surprise";S.brandColor="auto";S.bgColor="auto";S.mono=false;S.ref=null;S.activePreset=null;
-  renderPresets();renderSuggests();renderStyleCards();renderSwatches();renderMonoSw();renderRefChip();renderContrastWarn();
+  $("#descIn").value="";S.describe="";S.brandColor="auto";S.bgColor="auto";S.mono=false;S.ref=null;S.activePreset=null;S.industry=null;
+  renderPresets();renderSuggests();renderSwatches();renderMonoSw();renderRefChip();renderContrastWarn();
   generate();
 };
 $("#nameIn").addEventListener("keydown",e=>{if(e.key==="Enter")generate();});
 $("#descIn").addEventListener("input",e=>{S.describe=e.target.value;S.activePreset=null;renderPresets();renderSuggests();});
-$("#moreStylesBtn").onclick=()=>{const h=$("#heritageGrid");h.hidden=!h.hidden;renderStyleCards();};
 $("#advBtn").onclick=e=>{const b=$("#advBody");const open=b.hidden;b.hidden=!open;
   e.currentTarget.classList.toggle("open",open);};
 $("#monoSw").onclick=()=>{S.mono=!S.mono;renderMonoSw();};
