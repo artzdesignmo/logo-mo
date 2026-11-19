@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Logo Mo — Offline Generative Logo Studio</title>
-<meta name="description" content="Type a name, get 18 original logo concepts. Fully offline generative logo studio — no API keys, no backend, zero dependencies.">
+<meta name="description" content="Type a name, describe it, pick a style — get a set of original logo concepts. Fully offline generative logo studio, after the logocreator way of working: no API keys, no backend, zero dependencies.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Bebas+Neue&family=DM+Serif+Display&family=Dela+Gothic+One&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Space+Grotesk:wght@400;500;700&family=Unbounded:wght@500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-/* ============ Logo Mo · studio chrome ============ */
+/* ============ Logo Mo v2 · logocreator-way app layout ============ */
 :root{
   --bg:#e9e9e7; --bg2:#dfdfdb; --ink:#1d1a15; --ink2:#5c574d;
   --card:#f5f4f0; --line:#d4d4cf; --accent:#e4572e; --accent-ink:#fff;
@@ -30,15 +30,14 @@
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--ink);font-family:var(--ui);min-height:100vh;
   transition:background .35s,color .35s;-webkit-font-smoothing:antialiased}
-/* fine grain, inherited from the openx-mo house style */
 body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.5;z-index:0;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .04 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E")}
-.wrap{max-width:1180px;margin:0 auto;padding:0 28px;position:relative;z-index:1}
+.wrap{max-width:1320px;margin:0 auto;padding:0 28px;position:relative;z-index:1}
 
-/* header */
+/* header — slim app bar */
 header.top{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
   background:color-mix(in srgb,var(--bg) 82%,transparent);border-bottom:1px solid var(--line)}
-.top-in{display:flex;align-items:center;gap:14px;padding:14px 28px;max-width:1180px;margin:0 auto}
+.top-in{display:flex;align-items:center;gap:14px;padding:12px 28px;max-width:1320px;margin:0 auto}
 .brandmark{width:34px;height:34px;flex:none}
 .wordmark{font-family:'Dela Gothic One','Noto Sans TC',sans-serif;font-size:19px;letter-spacing:.04em}
 .wordmark em{font-style:normal;color:var(--accent)}
@@ -48,7 +47,6 @@ header.top{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
   border-radius:999px;padding:8px 14px;font:500 13px var(--ui);cursor:pointer;
   display:inline-flex;align-items:center;gap:7px;transition:.2s}
 .chipbtn:hover{border-color:var(--accent);transform:translateY(-1px)}
-/* 3-way color theme switch: white / silver-gray / black */
 .theme3{gap:8px}
 .tdot{width:13px;height:13px;border-radius:50%;border:1px solid rgba(0,0,0,.28);padding:0;cursor:pointer}
 .tdot[data-t="white"]{background:#ffffff}
@@ -59,55 +57,157 @@ header.top{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
   border-radius:999px;padding:8px 14px;background:var(--card);transition:.2s}
 .gh:hover{color:var(--ink);border-color:var(--accent)}
 
-/* hero */
-.hero{padding:64px 0 8px;text-align:center}
-.hero h1{font-family:'Dela Gothic One','Noto Sans TC',sans-serif;font-size:clamp(40px,7vw,84px);
-  line-height:.95;letter-spacing:-.01em}
-.hero h1 .o{color:var(--accent)}
-.hero p{margin:18px auto 0;max-width:620px;color:var(--ink2);font-size:16.5px;line-height:1.65}
-.hero p b{color:var(--ink)}
+/* page head — compact, the form is the page */
+.pagehead{padding:38px 0 4px}
+.pagehead h1{font-family:'Dela Gothic One','Noto Sans TC',sans-serif;font-size:clamp(30px,4.4vw,54px);
+  line-height:1.02;letter-spacing:-.01em}
+.pagehead h1 .o{color:var(--accent)}
+.pagehead p{margin-top:12px;max-width:640px;color:var(--ink2);font-size:15.5px;line-height:1.65}
+.pagehead p b{color:var(--ink)}
 
-/* composer */
-.composer{margin:34px auto 0;max-width:860px;background:var(--card);border:1px solid var(--line);
-  border-radius:24px;padding:22px;box-shadow:var(--shadow)}
-.row1{display:flex;gap:10px;flex-wrap:wrap}
-.field{flex:1;min-width:200px;display:flex;flex-direction:column;gap:7px}
+/* ============ app layout: settings sidebar + gallery ============ */
+.app{display:grid;grid-template-columns:352px minmax(0,1fr);gap:22px;align-items:start;margin-top:26px}
+.app>*{min-width:0} /* grid blowout guard: sidebar presets row must scroll, not widen the track */
+.settings{position:sticky;top:76px;background:var(--card);border:1px solid var(--line);
+  border-radius:22px;box-shadow:var(--shadow);display:flex;flex-direction:column;max-height:calc(100vh - 96px)}
+.settings-scroll{overflow-y:auto;padding:20px 20px 14px;display:flex;flex-direction:column;gap:20px;scrollbar-width:thin}
+.set-title{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
+.set-head{display:flex;align-items:baseline;justify-content:space-between}
+.set-head .set-title{font-size:13px;letter-spacing:.1em;color:var(--ink)}
+.field{display:flex;flex-direction:column;gap:7px}
 .field label{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);font-weight:700}
-.field input,.field select{background:var(--bg);border:1px solid var(--line);color:var(--ink);
-  border-radius:13px;padding:13px 15px;font:500 16px var(--ui);outline:none;transition:.2s;width:100%}
-.field input:focus,.field select:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
-.btnrow{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
-.btn{border:none;border-radius:13px;padding:13px 26px;font:700 15px var(--ui);cursor:pointer;transition:.18s}
-.btn.primary{background:var(--ink);color:var(--bg)}
+.field label .opt{text-transform:none;letter-spacing:0;font-weight:400}
+.field input,.field textarea{background:var(--bg);border:1px solid var(--line);color:var(--ink);
+  border-radius:13px;padding:12px 14px;font:500 15px var(--ui);outline:none;transition:.2s;width:100%}
+.field textarea{min-height:64px;resize:vertical;line-height:1.5}
+.field input:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
+
+/* quick start preset chips — horizontal scroll */
+.presets{display:flex;gap:7px;overflow-x:auto;padding:2px 2px 6px;scrollbar-width:none}
+.presets::-webkit-scrollbar{display:none}
+.preset{flex:none;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);
+  background:var(--bg);color:var(--ink2);border-radius:999px;padding:7px 13px;
+  font:600 12.5px var(--ui);cursor:pointer;transition:.18s;white-space:nowrap}
+.preset:hover{border-color:var(--accent);color:var(--ink)}
+.preset.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.suggests{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+.suggests button{border:1px dashed var(--line);background:transparent;color:var(--ink2);
+  border-radius:999px;padding:6px 12px;font:500 12.5px var(--ui);cursor:pointer;transition:.18s}
+.suggests button:hover{color:var(--accent);border-color:var(--accent)}
+.refchip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);
+  background:var(--bg);border-radius:999px;padding:6px 12px;font:600 12px var(--ui);color:var(--ink2)}
+.refchip b{color:var(--ink)}
+.refchip button{border:none;background:none;color:var(--ink2);cursor:pointer;font-size:14px;line-height:1;padding:0 2px}
+.refchip button:hover{color:var(--accent)}
+
+/* logo type — segmented rows */
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{flex:1;min-width:0;border:1px solid var(--line);background:var(--bg);color:var(--ink2);
+  border-radius:11px;padding:9px 6px;font:600 12.5px var(--ui);cursor:pointer;transition:.18s;white-space:nowrap}
+.seg button:hover{border-color:var(--accent);color:var(--ink)}
+.seg button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.seg.small button{padding:7px 4px;font-size:12px}
+
+/* style picker — visual cards, live engine previews */
+.styles{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.stylecard{border:1.5px solid var(--line);background:var(--bg);border-radius:14px;overflow:hidden;
+  cursor:pointer;transition:.18s;text-align:left;padding:0;font-family:var(--ui)}
+.stylecard:hover{border-color:var(--accent);transform:translateY(-1px)}
+.stylecard.on{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
+.stylecard .prev{aspect-ratio:4/3;display:block;width:100%;background:#fff}
+.stylecard .prev svg{display:block;width:100%;height:100%}
+.stylecard .nm{display:flex;align-items:center;justify-content:space-between;padding:8px 11px;
+  font:700 12.5px var(--ui);color:var(--ink)}
+.stylecard .nm span{color:var(--ink2);font-weight:500;font-size:11px}
+.stylecard.dice .prev{display:flex;align-items:center;justify-content:center;font-size:34px;color:var(--ink2)}
+.morebtn{border:none;background:none;color:var(--ink2);font:600 12.5px var(--ui);cursor:pointer;
+  display:flex;align-items:center;gap:5px;padding:2px 0}
+.morebtn:hover{color:var(--accent)}
+.morebtn .chev{transition:.2s;display:inline-block}
+.morebtn.open .chev{transform:rotate(90deg)}
+
+/* color swatches */
+.swrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.csw{width:34px;height:34px;border-radius:50%;border:2px solid var(--line);cursor:pointer;
+  padding:0;transition:.18s;position:relative}
+.csw:hover{transform:scale(1.1)}
+.csw.on{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 25%,transparent)}
+.csw.auto{background:conic-gradient(#e4572e,#ffd23f,#30a46c,#2f6ff5,#b08d3e,#e4572e)}
+.csw.auto span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.5)}
+.csw.custom{overflow:hidden}
+.csw.custom input{position:absolute;inset:-6px;width:60px;height:60px;border:none;padding:0;cursor:pointer;background:none}
+.colorgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.warn{display:flex;gap:7px;align-items:flex-start;font-size:12.5px;line-height:1.5;margin-top:9px;color:#8a6d00}
+.warn.bad{color:#b3261e}
+[data-theme="black"] .warn{color:#e8c547}
+[data-theme="black"] .warn.bad{color:#ff8a80}
+.warn .ico{flex:none}
+
+/* advanced */
+.adv{border-top:1px dashed var(--line);padding-top:16px;display:flex;flex-direction:column;gap:16px}
+.switchrow{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.switchrow .lbl{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);font-weight:700}
+.switch{position:relative;width:44px;height:25px;border-radius:999px;border:none;cursor:pointer;
+  background:var(--bg2);transition:.2s;flex:none}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:19px;height:19px;border-radius:50%;
+  background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.3);transition:.2s}
+.switch.on{background:var(--accent)}
+.switch.on::after{left:22px}
+.upload{border:1.5px dashed var(--line);border-radius:13px;padding:14px;text-align:center;
+  color:var(--ink2);font-size:13px;cursor:pointer;transition:.18s;background:var(--bg)}
+.upload:hover{border-color:var(--accent);color:var(--ink)}
+.upload input{display:none}
+
+/* action bar — sticky bottom of the sidebar */
+.actionbar{position:sticky;bottom:0;background:var(--card);border-top:1px solid var(--line);
+  padding:14px 20px 16px;display:flex;flex-direction:column;gap:10px}
+.actionbar .vrow{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.actionbar .vrow .set-title{font-size:11px}
+.btnrow{display:flex;gap:9px}
+.btn{border:none;border-radius:13px;padding:13px 20px;font:700 15px var(--ui);cursor:pointer;transition:.18s}
+.btn.primary{flex:1;background:var(--ink);color:var(--bg)}
 .btn.primary:hover{transform:translateY(-2px);box-shadow:0 10px 24px -8px rgba(0,0,0,.4)}
-.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
-.btn.ghost:hover{border-color:var(--accent)}
-.samples{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--ink2)}
-.samples button{border:1px dashed var(--line);background:transparent;color:var(--ink2);
-  border-radius:999px;padding:6px 13px;font:500 13px var(--ui);cursor:pointer;transition:.18s}
-.samples button:hover{color:var(--accent);border-color:var(--accent)}
+.btn.primary:disabled{opacity:.55;transform:none;box-shadow:none;cursor:wait}
+.btn.dice{width:52px;flex:none;background:transparent;color:var(--ink);border:1px solid var(--line);font-size:19px;padding:13px 0}
+.btn.dice:hover{border-color:var(--accent)}
 
-/* toolbar */
-.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:30px 0 18px}
-.pill{border:1px solid var(--line);background:var(--card);color:var(--ink2);border-radius:999px;
-  padding:8px 16px;font:600 13px var(--ui);cursor:pointer;transition:.18s}
-.pill.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.count{margin-left:auto;font-size:13px;color:var(--ink2)}
-
-/* grid */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px;padding-bottom:10px}
+/* ============ gallery ============ */
+.gallery-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.gallery-head h2{font-family:'Dela Gothic One','Noto Sans TC',sans-serif;font-size:22px}
+.gallery-head .count{margin-left:auto;font-size:13px;color:var(--ink2)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:16px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
-  overflow:hidden;cursor:pointer;transition:transform .22s,box-shadow .22s;
-  animation:rise .5s both}
+  overflow:hidden;cursor:pointer;transition:transform .22s,box-shadow .22s;animation:rise .5s both}
 .card:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
 .card .tile{aspect-ratio:1/1;display:block;width:100%}
-.card .meta{display:flex;align-items:center;gap:8px;padding:12px 15px;border-top:1px solid var(--line)}
+.card .tile svg{display:block;width:100%;height:100%}
+.card .meta{display:flex;align-items:center;gap:8px;padding:11px 14px;border-top:1px solid var(--line)}
 .fam{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
   background:var(--bg2);border-radius:6px;padding:4px 8px;color:var(--ink2)}
 .palname{font-size:12.5px;color:var(--ink2);margin-left:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 @keyframes rise{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
+.empty{grid-column:1/-1;text-align:center;color:var(--ink2);padding:60px 20px;font-size:15px}
 
-/* modal */
+/* ============ history dashboard ============ */
+.histdash{margin-top:44px;border-top:1px solid var(--line);padding-top:22px}
+.histdash-head{display:flex;align-items:baseline;gap:12px;margin-bottom:14px}
+.histdash-head h2{font-family:'Dela Gothic One','Noto Sans TC',sans-serif;font-size:20px}
+.histdash-head button{margin-left:auto;border:1px solid var(--line);background:var(--card);color:var(--ink2);
+  border-radius:999px;padding:7px 14px;font:600 12.5px var(--ui);cursor:pointer}
+.histdash-head button:hover{border-color:var(--accent);color:var(--ink)}
+.histrow{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;scrollbar-width:thin}
+.hitem{flex:none;width:210px;border:1px solid var(--line);border-radius:14px;overflow:hidden;
+  cursor:pointer;background:var(--card);transition:.18s}
+.hitem:hover{border-color:var(--accent);transform:translateY(-2px)}
+.hitem .th{aspect-ratio:16/9;overflow:hidden}
+.hitem .th svg{width:100%;height:100%;display:block}
+.hitem .hb{padding:10px 12px}
+.hitem b{font-size:13.5px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hitem small{color:var(--ink2);font-size:11.5px;display:block;margin-top:3px}
+.histempty{color:var(--ink2);font-size:13.5px;padding:8px 0 20px}
+
+/* ============ detail modal + brand kit ============ */
 .scrim{position:fixed;inset:0;background:rgba(15,14,12,.6);backdrop-filter:blur(6px);
   z-index:100;display:none;align-items:center;justify-content:center;padding:22px}
 .scrim.open{display:flex}
@@ -127,7 +227,7 @@ header.top{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
 .mock .appicon svg{width:72%}
 .mockcap{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);text-align:center;margin-top:8px}
 .detail{padding:30px;display:flex;flex-direction:column;gap:18px}
-.detail h2{font-family:'Dela Gothic One','Noto Sans TC',sans-serif;font-size:30px;letter-spacing:.01em}
+.detail h2{font-family:'Dela Gothic One','Noto Sans TC',sans-serif;font-size:28px;letter-spacing:.01em}
 .detail h2 span{color:var(--accent)}
 .dlabel{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
 .varrow{display:flex;gap:8px;flex-wrap:wrap}
@@ -140,39 +240,51 @@ header.top{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
   padding:12px;font:600 13.5px var(--ui);cursor:pointer;transition:.18s;text-align:center}
 .exp:hover{border-color:var(--accent);transform:translateY(-1px)}
 .exp small{display:block;font-weight:400;color:var(--ink2);font-size:11.5px;margin-top:2px}
+.exp.wide{grid-column:1/-1;background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.exp.wide small{color:var(--bg);opacity:.7}
 .x{position:sticky;top:0;margin-left:auto;display:block;border:1px solid var(--line);background:var(--card);
-  color:var(--ink);width:38px;height:38px;border-radius:50%;font-size:17px;cursor:pointer;flex:none}
+  color:var(--ink);width:38px;height:38px;border-radius:50%;font-size:17px;cursor:pointer;flex:none;z-index:2}
 .x:hover{border-color:var(--accent);color:var(--accent)}
 .note{font-size:12.5px;color:var(--ink2);line-height:1.6;background:var(--bg);
   border:1px dashed var(--line);border-radius:12px;padding:12px 14px}
 
-/* history */
-.hist{position:fixed;right:0;top:0;bottom:0;width:300px;background:var(--card);z-index:110;
-  border-left:1px solid var(--line);transform:translateX(105%);transition:.3s;padding:22px;overflow:auto}
-.hist.open{transform:none}
-.hist h3{font-size:14px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px}
-.hitem{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:12px;
-  padding:8px;margin-bottom:8px;cursor:pointer;background:var(--bg);transition:.18s}
-.hitem:hover{border-color:var(--accent)}
-.hitem .th{width:44px;height:44px;border-radius:8px;overflow:hidden;flex:none;border:1px solid var(--line)}
-.hitem .th svg{width:100%;height:100%;display:block}
-.hitem b{font-size:14px;display:block}
-.hitem small{color:var(--ink2);font-size:11.5px}
+/* brand kit sheet */
+.kitgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.kitcell{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--bg)}
+.kitcell .kb{padding:14px;display:flex;align-items:center;justify-content:center;min-height:110px}
+.kitcell .kb svg{width:64%}
+.kitcell .kl{padding:8px 12px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);border-top:1px solid var(--line)}
+.kitpal{display:flex;gap:8px;flex-wrap:wrap}
+.kitpal .kp{flex:1;min-width:64px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.kitpal .kp i{display:block;height:34px}
+.kitpal .kp span{display:block;font-size:11px;padding:5px 7px;color:var(--ink2);background:var(--card)}
+.kitfont{font-size:14px;line-height:1.7}
+.kitfont b{font-size:15px}
 
-/* footer */
 footer{margin-top:70px;border-top:1px solid var(--line);padding:30px 0 46px;color:var(--ink2);font-size:13.5px}
 .foot-in{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
 .bmc{display:inline-flex;align-items:center;gap:8px;background:#ffdd00;color:#171512;font-weight:700;
   border-radius:10px;padding:9px 16px;text-decoration:none;font-size:13.5px}
 .bmc:hover{filter:brightness(.95)}
-
 .toast{position:fixed;bottom:26px;left:50%;transform:translate(-50%,80px);background:var(--ink);color:var(--bg);
   padding:12px 22px;border-radius:999px;font:600 14px var(--ui);z-index:200;transition:.3s;opacity:0}
 .toast.show{transform:translate(-50%,0);opacity:1}
-.empty{grid-column:1/-1;text-align:center;color:var(--ink2);padding:60px 20px;font-size:15px}
 
+@media(max-width:640px){
+  .top-in{padding:10px 16px;gap:10px}
+  .gh{display:none}
+  .tagline{display:none}
+  .wrap{padding:0 16px}
+  .chipbtn{padding:7px 11px}
+}
+@media(max-width:980px){
+  .app{grid-template-columns:1fr}
+  .settings{position:static;max-height:none}
+  .settings-scroll{overflow:visible}
+  .actionbar{position:sticky;bottom:0;z-index:40;box-shadow:0 -8px 24px -12px rgba(0,0,0,.3)}
+}
 @media(max-width:860px){.sheet-in{grid-template-columns:1fr}.preview{border-right:none;border-bottom:1px solid var(--line)}}
-@media(max-width:560px){.hero{padding-top:44px}.composer{padding:16px}.row1{flex-direction:column}}
+@media(max-width:560px){.pagehead{padding-top:26px}.styles{grid-template-columns:1fr 1fr}.colorgrid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
@@ -181,61 +293,117 @@ footer{margin-top:70px;border-top:1px solid var(--line);padding:30px 0 46px;colo
     <svg class="brandmark" viewBox="0 0 40 40" aria-hidden="true"><rect x="2" y="2" width="36" height="36" rx="10" fill="#171512"/><text x="20" y="28" text-anchor="middle" font-family="Dela Gothic One,sans-serif" font-size="20" fill="#f2f1ec">M<tspan fill="#e4572e">o</tspan></text></svg>
     <div><span class="wordmark">LOGO<em>&nbsp;MO</em></span><br><span class="tagline" data-i18n="tagline">generative logo studio · offline</span></div>
     <div class="spacer"></div>
-    <button class="chipbtn" id="histBtn" title="history">◷ <span data-i18n="history">History</span></button>
     <button class="chipbtn" id="langBtn">繁 / EN</button>
     <button class="chipbtn theme3" id="themeBtn" title="color theme"><span class="tdot" data-t="white"></span><span class="tdot" data-t="silver"></span><span class="tdot" data-t="black"></span></button>
     <a class="gh" href="https://github.com/artzdesignmo/logo-mo" target="_blank" rel="noopener">GitHub ↗</a>
-    <a href="https://buymeacoffee.com/whynotartmoney" target="_blank" rel="noopener" title="Buy me a coffee" aria-label="Buy me a coffee" style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;opacity:.85;line-height:0;flex-shrink:0"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#8a867e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 8h1a3 3 0 0 1 0 6h-1"/><path d="M3 8h14v6a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z"/><path d="M7 2v2M11 2v2M15 2v2"/></svg></a>
   </div>
 </header>
 
 <div class="wrap">
-  <section class="hero">
-    <h1>TYPE A NAME.<br>GET <span class="o">A DOZEN</span> LOGOS.</h1>
-    <p data-i18n="hero">A <b>fully offline</b> generative logo studio. No API keys, no backend, no waiting rooms — a seeded design engine draws <b>20 original concepts</b> in ten signature styles, right in your browser. Export real <b>SVG + PNG</b>.</p>
+  <section class="pagehead">
+    <h1>NAME IT. DESCRIBE IT.<br>PICK A <span class="o">STYLE.</span></h1>
+    <p data-i18n="hero">A <b>fully offline</b> generative logo studio, rebuilt the logocreator way: one focused form on the left, a gallery of <b>original concepts</b> on the right. No API keys, no backend, no waiting rooms — a seeded design engine draws every logo right in your browser. Export real <b>SVG + PNG</b>, or take the whole <b>brand kit</b>.</p>
   </section>
 
-  <section class="composer">
-    <div class="row1">
-      <div class="field" style="flex:2">
-        <label data-i18n="nameLabel">Brand name</label>
-        <input id="nameIn" maxlength="24" placeholder="e.g. Nebula" autocomplete="off" spellcheck="false">
-      </div>
-      <div class="field">
-        <label data-i18n="tagLabel">Tagline (optional)</label>
-        <input id="tagIn" maxlength="40" placeholder="e.g. brew & bloom" autocomplete="off" spellcheck="false">
-      </div>
-      <div class="field">
-        <label data-i18n="vibeLabel">Vibe</label>
-        <select id="vibeIn"></select>
-      </div>
-    </div>
-    <div class="btnrow">
-      <button class="btn primary" id="genBtn">✦ <span data-i18n="generate">Generate</span></button>
-      <button class="btn ghost" id="diceBtn">🎲 <span data-i18n="surprise">Surprise me</span></button>
-      <button class="btn ghost" id="shufBtn">⇄ <span data-i18n="shuffle">Shuffle styles</span></button>
-    </div>
-    <div class="samples"><span data-i18n="try">Try:</span><span id="chips"></span></div>
-  </section>
+  <div class="app">
+    <!-- ============ settings sidebar ============ -->
+    <aside class="settings" aria-label="Logo settings">
+      <div class="settings-scroll">
+        <div class="set-head"><span class="set-title" data-i18n="settings">Logo settings</span><span class="set-title" style="color:var(--accent)">v2</span></div>
 
-  <div class="toolbar" id="toolbar" hidden>
-    <button class="pill on" data-fam="all">All</button>
-    <button class="pill" data-fam="minimal">Minimal</button>
-    <button class="pill" data-fam="monoline">Monoline</button>
-    <button class="pill" data-fam="geometric">Geometric</button>
-    <button class="pill" data-fam="wordmark">Wordmark</button>
-    <button class="pill" data-fam="emblem">Emblem</button>
-    <button class="pill" data-fam="gradient">Gradient</button>
-    <button class="pill" data-fam="japanese">Japanese</button>
-    <button class="pill" data-fam="bauhaus">Bauhaus</button>
-    <button class="pill" data-fam="kandinsky">Kandinsky</button>
-    <button class="pill" data-fam="diagram">Diagram</button>
-    <span class="count" id="count"></span>
+        <div class="field">
+          <label data-i18n="nameLabel">Brand name</label>
+          <input id="nameIn" maxlength="24" placeholder="e.g. Nebula" autocomplete="off" spellcheck="false">
+        </div>
+
+        <div>
+          <div class="set-title" style="margin-bottom:8px" data-i18n="quickstart">Quick start</div>
+          <div class="presets" id="presets" role="group" aria-label="Quick start presets"></div>
+        </div>
+
+        <div class="field">
+          <label><span data-i18n="describeLabel">Describe it</span> <span class="opt" data-i18n="optional">(optional)</span></label>
+          <textarea id="descIn" maxlength="140" placeholder="A fox, friendly and modern, with a subtle leaf…"></textarea>
+          <div class="suggests" id="suggests"></div>
+          <div id="refChipSlot" style="margin-top:8px"></div>
+        </div>
+
+        <div>
+          <div class="set-title" style="margin-bottom:8px" data-i18n="typeLabel">Logo type</div>
+          <div class="seg" id="typeSeg" role="group" aria-label="Logo type"></div>
+        </div>
+
+        <div>
+          <div class="set-title" style="margin-bottom:8px" data-i18n="styleLabel">Style</div>
+          <div class="styles" id="styleGrid"></div>
+          <button class="morebtn" id="moreStylesBtn" style="margin-top:9px"><span class="chev">›</span> <span data-i18n="moreStyles">More styles — classic studio</span></button>
+          <div class="styles" id="heritageGrid" hidden style="margin-top:9px"></div>
+        </div>
+
+        <div class="colorgrid">
+          <div>
+            <div class="set-title" style="margin-bottom:8px" data-i18n="brandColor">Brand color</div>
+            <div class="swrow" id="brandSw"></div>
+          </div>
+          <div>
+            <div class="set-title" style="margin-bottom:8px" data-i18n="bgColor">Background</div>
+            <div class="swrow" id="bgSw"></div>
+          </div>
+        </div>
+        <div id="contrastWarn"></div>
+
+        <div class="adv">
+          <button class="morebtn" id="advBtn"><span class="chev">›</span> <span data-i18n="advanced">Advanced</span> <span class="opt" style="font-weight:400;text-transform:none;letter-spacing:0" data-i18n="optional">(optional)</span></button>
+          <div id="advBody" hidden style="display:flex;flex-direction:column;gap:16px">
+            <div>
+              <div class="set-title" style="margin-bottom:8px" data-i18n="detailLabel">Detail</div>
+              <div class="seg small" id="detailSeg" role="group" aria-label="Detail level"></div>
+            </div>
+            <div class="switchrow">
+              <span class="lbl" data-i18n="monoLabel">Monochrome</span>
+              <button class="switch" id="monoSw" role="switch" aria-checked="false" aria-label="Monochrome"></button>
+            </div>
+            <div>
+              <div class="set-title" style="margin-bottom:8px" data-i18n="refLabel">Reference logo</div>
+              <label class="upload"><input type="file" id="refFile" accept="image/*"><span data-i18n="refHint">Upload a logo — we read its colors, nothing leaves your browser</span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="actionbar">
+        <div class="vrow">
+          <span class="set-title" data-i18n="variations">Variations</span>
+          <div class="seg small" id="varSeg" style="width:150px" role="group" aria-label="Number of variations"></div>
+        </div>
+        <div class="btnrow">
+          <button class="btn dice" id="diceBtn" title="Feeling lucky" aria-label="Feeling lucky">🎲</button>
+          <button class="btn primary" id="genBtn">✦ <span data-i18n="generate">Generate logo</span></button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ============ gallery + history ============ -->
+    <main>
+      <div class="gallery-head">
+        <h2 data-i18n="galleryTitle">Your concepts</h2>
+        <span class="count" id="count"></span>
+      </div>
+      <div class="grid" id="grid"></div>
+
+      <section class="histdash" id="histDash">
+        <div class="histdash-head">
+          <h2 data-i18n="historyTitle">Logo history</h2>
+          <button id="clearHist" data-i18n="clearHistory">Clear history</button>
+        </div>
+        <div class="histrow" id="histRow"></div>
+        <div class="histempty" id="histEmpty" hidden data-i18n="histEmpty">Nothing yet — your generations will land here.</div>
+      </section>
+    </main>
   </div>
-
-  <div class="grid" id="grid"></div>
 </div>
 
+<!-- ============ detail modal ============ -->
 <div class="scrim" id="scrim">
   <div class="sheet"><div class="sheet-in">
     <div class="preview">
@@ -256,7 +424,7 @@ footer{margin-top:70px;border-top:1px solid var(--line);padding:30px 0 46px;colo
           <button class="exp" id="dlPng512">↓ PNG · 512<small>social avatar</small></button>
           <button class="exp" id="dlPng1024">↓ PNG · 1024<small>web / deck</small></button>
           <button class="exp" id="dlPng2048">↓ PNG · 2048<small>print starter</small></button>
-          <button class="exp" id="dlAll">↓ <span data-i18n="kit">Full kit (.zip-ish)</span><small data-i18n="kitNote">svg + 3 pngs, one click each</small></button>
+          <button class="exp wide" id="kitBtn">▣ <span data-i18n="brandKit">Brand kit</span><small data-i18n="kitNote">lockups · palette · type · brand sheet</small></button>
         </div>
       </div>
       <div class="note" data-i18n="note">Type is rendered with open fonts (Google Fonts). PNG exports embed the font automatically, so what you see is what you get — no internet needed after first load.</div>
@@ -264,7 +432,29 @@ footer{margin-top:70px;border-top:1px solid var(--line);padding:30px 0 46px;colo
   </div></div>
 </div>
 
-<aside class="hist" id="hist"><h3 data-i18n="history">History</h3><div id="histList"></div></aside>
+<!-- ============ brand kit modal ============ -->
+<div class="scrim" id="kitScrim">
+  <div class="sheet" style="max-width:760px"><div style="padding:30px;display:flex;flex-direction:column;gap:20px">
+    <button class="x" id="kitCloseBtn">✕</button>
+    <div><div class="dlabel" data-i18n="brandKit">Brand kit</div><h2 id="kitTitle" style="font-family:'Dela Gothic One','Noto Sans TC',sans-serif;font-size:28px;margin-top:4px"></h2></div>
+    <div><div class="dlabel" style="margin-bottom:8px" data-i18n="kitLockups">Lockups</div>
+      <div class="kitgrid">
+        <div class="kitcell"><div class="kb" id="kitPrimary"></div><div class="kl" data-i18n="kitPrimary">Primary · color</div></div>
+        <div class="kitcell"><div class="kb" id="kitMono" style="background:#fff"></div><div class="kl" data-i18n="kitMono">Monochrome · one ink</div></div>
+        <div class="kitcell"><div class="kb" id="kitIcon"></div><div class="kl" data-i18n="kitIcon">App icon · mark only</div></div>
+        <div class="kitcell"><div class="kb" id="kitDark" style="background:#14130f"></div><div class="kl" data-i18n="kitDark">Reversed · on dark</div></div>
+      </div>
+    </div>
+    <div><div class="dlabel" style="margin-bottom:8px" data-i18n="palette">Palette</div><div class="kitpal" id="kitPal"></div></div>
+    <div><div class="dlabel" style="margin-bottom:6px" data-i18n="kitType">Typography</div><div class="kitfont" id="kitFont"></div></div>
+    <div class="expgrid">
+      <button class="exp" id="kitDlSvg">↓ SVG<small data-i18n="svgNote">vector · infinitely scalable</small></button>
+      <button class="exp" id="kitDlPng">↓ PNG · 1024<small>web / deck</small></button>
+      <button class="exp wide" id="kitDlSheet">↓ <span data-i18n="kitSheet">Brand sheet (.html)</span><small data-i18n="kitSheetNote">logo · palette · type, one file</small></button>
+    </div>
+  </div></div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <footer><div class="wrap foot-in">
@@ -276,9 +466,14 @@ footer{margin-top:70px;border-top:1px solid var(--line);padding:30px 0 46px;colo
 <script>
 "use strict";
 /* =====================================================================
-   LOGO MO · offline generative logo studio
-   Single file, zero dependencies (only Google Fonts for display type).
-   Engine: seeded PRNG -> palette harmony -> 4 SVG generator families.
+   LOGO MO v2 · offline generative logo studio
+   Rebuilt the logocreator way (after Nutlope/logocreator, MIT):
+   form on the left, gallery on the right — brand name, quick-start
+   presets, describe-it, logo type, visual style cards, brand color +
+   background swatches, detail level, monochrome, reference colors,
+   variations, feeling lucky, brand kit, history dashboard.
+   Engine stays fully offline: seeded PRNG -> palette -> pure SVG.
+   No code copied from logocreator; only the way of working.
    ===================================================================== */
 
 /* ---------------- seeded PRNG (deterministic: same name -> same set) ---------------- */
@@ -289,6 +484,7 @@ function RNG(seed){const f=mulberry32(xmur3(String(seed))());return{
   pick:arr=>arr[Math.floor(f()*arr.length)], chance:p=>f()<p};}
 const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 let __uid=0; const uid=p=>p+(++__uid).toString(36)+Date.now().toString(36).slice(-3);
+const $=s=>document.querySelector(s);
 
 /* ---------------- curated palettes (bg / ink / accent / soft) ---------------- */
 const PALETTES=[
@@ -304,6 +500,11 @@ const PALETTES=[
  {name:"Slate Mint", bg:"#23272f", ink:"#e8eaed", accent:"#7ef0c1", soft:"#363c47"},
  {name:"Cream Volt", bg:"#fff6e9", ink:"#20242b", accent:"#5b4bff", soft:"#efe3cc"},
  {name:"Cherry", bg:"#7f1d2d", ink:"#fdf3ec", accent:"#ffd166", soft:"#9c2b3d"},
+ /* luxury + retro, for the Luxury / Retro styles */
+ {name:"Champagne", bg:"#f7f3ea", ink:"#1a1a1a", accent:"#b08d3e", soft:"#e5dcc4"},
+ {name:"Noir Gold", bg:"#141210", ink:"#f0e6d2", accent:"#c9a227", soft:"#2a251c"},
+ {name:"Retro Cream", bg:"#f5ecd7", ink:"#3b2f2f", accent:"#d96c3f", soft:"#e3d3b3"},
+ {name:"Teal Retro", bg:"#e3efe6", ink:"#1f3a33", accent:"#e07840", soft:"#c4d8c8"},
 ];
 
 /* ---------------- display fonts (open, via Google Fonts) ---------------- */
@@ -316,77 +517,13 @@ const FONTS={
  unbounded:{css:"'Unbounded',sans-serif",      fam:"Unbounded",       k:.78},
 };
 const fitSize=(text,k,maxW,base)=>Math.min(base, maxW/(Math.max(1,text.length)*k));
-
-/* ---------------- vibes: font+palette+motif shortlists ---------------- */
-const VIBES={
- any:     {en:"Anything",  tc:"隨意",     fonts:["archivo","bebas","grotesk","playfair","dmserif","unbounded"], pal:[0,1,2,3,4,5,6,7,8,9,10,11], motifs:["sun","orbit","bars","waves","dots","peaks","tri"]},
- tech:    {en:"Tech",      tc:"科技",     fonts:["grotesk","unbounded","archivo"], pal:[1,3,9,10,5], motifs:["orbit","dots","bars","tri"]},
- food:    {en:"Food",      tc:"餐飲",     fonts:["dmserif","playfair","bebas"], pal:[0,4,6,8,11], motifs:["sun","waves","peaks"]},
- fashion: {en:"Fashion",   tc:"時尚",     fonts:["playfair","bebas","dmserif"], pal:[5,7,0,1], motifs:["sun","tri","waves"]},
- finance: {en:"Finance",   tc:"金融",     fonts:["grotesk","archivo","dmserif"], pal:[3,9,5,0], motifs:["bars","peaks","dots"]},
- wellness:{en:"Wellness",  tc:"健康生活", fonts:["grotesk","dmserif","unbounded"], pal:[2,6,4,10], motifs:["sun","waves","orbit"]},
- creative:{en:"Creative",  tc:"創意",     fonts:["unbounded","archivo","playfair"], pal:[10,11,1,7], motifs:["tri","sun","dots","waves"]},
- travel:  {en:"Travel",    tc:"旅行",     fonts:["bebas","grotesk","dmserif"], pal:[3,8,6,0], motifs:["peaks","sun","waves","orbit"]},
- playful: {en:"Playful",   tc:"玩味",     fonts:["unbounded","archivo","bebas"], pal:[10,11,4,1], motifs:["dots","sun","tri","bars"]},
-};
-const FAMILIES=["minimal","monoline","geometric","wordmark","emblem","gradient","japanese","bauhaus","kandinsky","diagram"];
-const FAM_LABEL={minimal:{en:"Minimal",tc:"極簡"},monoline:{en:"Monoline",tc:"線條"},geometric:{en:"Geometric",tc:"幾何"},wordmark:{en:"Wordmark",tc:"字標"},emblem:{en:"Emblem",tc:"徽章"},gradient:{en:"Gradient",tc:"漸變"},japanese:{en:"Japanese",tc:"日式簡約"},bauhaus:{en:"Bauhaus",tc:"包浩斯"},kandinsky:{en:"Kandinsky",tc:"康定斯基"},diagram:{en:"Diagram",tc:"圖表編輯"}};
-
-/* ---------------- i18n ---------------- */
-const I18N={
-en:{tagline:"generative logo studio · offline",history:"History",hero:"A <b>fully offline</b> generative logo studio. No API keys, no backend, no waiting rooms — a seeded design engine draws <b>20 original concepts</b> in ten signature styles, right in your browser. Export real <b>SVG + PNG</b>.",
-nameLabel:"Brand name",tagLabel:"Tagline (optional)",vibeLabel:"Vibe",generate:"Generate",surprise:"Surprise me",shuffle:"Shuffle styles",try:"Try:",
-concept:"Concept",palette:"Palette",export:"Export",svgNote:"vector · infinitely scalable",copySvg:"Copy SVG code",copyNote:"paste into Figma / web",
-mockCard:"Business card",mockIcon:"App icon",kit:"Full kit",kitNote:"svg + 3 pngs, one click each",
-note:"Type is rendered with open fonts (Google Fonts). PNG exports embed the font automatically, so what you see is what you get — no internet needed after first load.",
-foot:"built in the open, free forever",concepts:"concepts",copied:"SVG code copied ✓",dl:"Downloading",needName:"Type a brand name first ✎",regen:"New set generated ✦",fontNote:"font embedded"},
-tc:{tagline:"離線生成式標誌工作室",history:"歷史記錄",hero:"<b>完全離線</b>嘅生成式標誌工作室。唔要 API key、唔要後端、唔使排隊——種子設計引擎喺瀏覽器即場畫出 <b>20 個原創概念</b>，十大風格。匯出真正嘅 <b>SVG + PNG</b>。",
-nameLabel:"品牌名",tagLabel:"標語（可選）",vibeLabel:"風格",generate:"生成",surprise:"隨機靈感",shuffle:"換一批風格",try:"試下：",
-concept:"概念",palette:"配色",export:"匯出",svgNote:"向量 · 無限放大",copySvg:"複製 SVG 代碼",copyNote:"貼去 Figma / 網頁",
-mockCard:"卡片",mockIcon:"App 圖標",kit:"全套下載",kitNote:"svg + 3 張 png",
-note:"字體用開放字型（Google Fonts）。匯出 PNG 會自動嵌入字體，所見即所得——首次載入後離線都用到。",
-foot:"開放製作，永久免費",concepts:"個概念",copied:"SVG 代碼已複製 ✓",dl:"下載中",needName:"先打個品牌名 ✎",regen:"新一輯生成咗 ✦",fontNote:"已嵌入字體"}
-};
-let lang=localStorage.getItem("logomo-lang")||"en";
-const t=k=>(I18N[lang]&&I18N[lang][k])||I18N.en[k]||k;
-function applyI18n(){document.querySelectorAll("[data-i18n]").forEach(el=>{el.innerHTML=t(el.dataset.i18n);});
- document.documentElement.lang=lang==="tc"?"zh-Hant":"en";buildVibeOptions();buildChips();renderFamPills();}
-
-/* ================= generator families (pure SVG, seeded) ================= */
 const initials=name=>name.trim().split(/\s+/).slice(0,2).map(w=>w[0]||"").join("").toUpperCase()||"M";
 const words=name=>name.trim().split(/\s+/).filter(Boolean);
-
-/* ================= generator styles (pure SVG, seeded) =================
-   Design language — style-driven (after logocreator's principles), rebuilt
-   fully offline as deterministic algorithms:
-   · 6 form styles; color is chosen separately (two-color discipline)
-   · generous negative space: artwork lives inside a ~230px clearspace
-   · optical centering: the mark sits slightly above geometric center
-   · one hero color per concept; the accent appears exactly once
-   · flat solid shapes, crisp edges — except the gradient style
-   · combination-mark default: mark + letterspaced name = real logo format
-*/
-
-/* ---------- shared composition ---------- */
-function heroPick(rng,pal){return rng.chance(.72)?[pal.ink,pal.accent]:[pal.accent,pal.ink];}
-function mdx(ctx){return ctx.layout?ctx.layout.markDx:0;}
-function nameLine(ctx,y,fs,ls,color){
-  const L=ctx.layout||{nameDy:0,nameFs:1,nameLs:0};
-  return `<text x="200" y="${(y+L.nameDy).toFixed(1)}" text-anchor="middle" font-family="${ctx.font.css}" font-size="${(fs*L.nameFs).toFixed(1)}" letter-spacing="${(ls+L.nameLs).toFixed(1)}" fill="${color}">${esc(ctx.name.trim().toUpperCase())}</text>`;
-}
-function tagLine(ctx,y){
-  if(!ctx.tagline)return "";
-  const L=ctx.layout||{tagDy:0};
-  return `<text x="200" y="${(y+L.tagDy).toFixed(1)}" text-anchor="middle" font-family="${ctx.font.css}" font-size="14" letter-spacing="5" fill="${ctx.pal.ink}" opacity=".62">${esc(ctx.tagline.toUpperCase())}</text>`;
-}
-function comboName(ctx){
-  const fs=fitSize(ctx.name,ctx.font.k,300,40);
-  return nameLine(ctx,318,fs,10,ctx.pal.ink)+tagLine(ctx,348);
-}
-function tint(hex,amt){
-  const n=parseInt(hex.slice(1),16),r=n>>16,g=n>>8&255,b=n&255,m=v=>Math.round(v+(255-v)*amt);
-  return `rgb(${m(r)},${m(g)},${m(b)})`;
-}
+function isDark(hex){const n=parseInt(hex.slice(1),16),l=(0.299*(n>>16)+0.587*(n>>8&255)+0.114*(n&255))/255;return l<0.5;}
+function tint(hex,amt){const n=parseInt(hex.slice(1),16),r=n>>16,g=n>>8&255,b=n&255,m=v=>Math.round(v+(255-v)*amt);return `rgb(${m(r)},${m(g)},${m(b)})`;}
+function shade(hex,amt){const n=parseInt(hex.slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;
+  const m=v=>amt>=0?Math.round(v+(255-v)*amt):Math.round(v*(1+amt));
+  return `rgb(${m(r)},${m(g)},${m(b)})`;}
 function blobPath(rng,cx,cy,r){
   const n=8,pts=[];
   for(let i=0;i<n;i++){const a=i/n*Math.PI*2,rr=r*rng.range(.78,1.12);pts.push([cx+rr*Math.cos(a),cy+rr*Math.sin(a)]);}
@@ -397,7 +534,7 @@ function blobPath(rng,cx,cy,r){
   return d+"Z";
 }
 
-/* ---------- mark archetypes: mathematically constructed, o={cx,cy,s,hero,ac,lw} ---------- */
+/* ================= mark archetypes: mathematically constructed, o={cx,cy,s,hero,ac,lw,bg,extra} ================= */
 const MARKS={
 arc(rng,o){const s=o.s,w=o.lw||1,r=78*s,a0=rng.range(0,Math.PI*2),sw=rng.range(Math.PI*1.05,Math.PI*1.65);
   const x1=o.cx+r*Math.cos(a0),y1=o.cy+r*Math.sin(a0),x2=o.cx+r*Math.cos(a0+sw),y2=o.cy+r*Math.sin(a0+sw);
@@ -445,7 +582,7 @@ sprig(rng,o){const s=o.s,cx=o.cx,cy=o.cy;let g=`<line x1="${cx}" y1="${cy+64*s}"
   return g;},
 sunoff(rng,o){const s=o.s;
   return `<circle cx="${(o.cx-38*s).toFixed(1)}" cy="${(o.cy-20*s).toFixed(1)}" r="${(44*s).toFixed(1)}" fill="${o.ac}"/><circle cx="${(o.cx+40*s).toFixed(1)}" cy="${(o.cy+34*s).toFixed(1)}" r="${(30*s).toFixed(1)}" fill="none" stroke="${o.hero}" stroke-width="${(6*s).toFixed(1)}"/>`;},
-/* ---- Bauhaus (canonical primaries via hero/ac/extra) ---- */
+/* ---- Bauhaus ---- */
 bautrio(rng,o){const s=o.s;
   return `<circle cx="${(o.cx-44*s).toFixed(1)}" cy="${(o.cy-10*s).toFixed(1)}" r="${(46*s).toFixed(1)}" fill="${o.ac}"/><path d="M${(o.cx+58*s).toFixed(1)},${(o.cy-58*s).toFixed(1)} L${(o.cx+104*s).toFixed(1)},${(o.cy+40*s).toFixed(1)} L${(o.cx+12*s).toFixed(1)},${(o.cy+40*s).toFixed(1)} Z" fill="${o.hero}"/><rect x="${(o.cx-96*s).toFixed(1)}" y="${(o.cy+16*s).toFixed(1)}" width="${(58*s).toFixed(1)}" height="${(58*s).toFixed(1)}" fill="${o.extra||o.hero}"/>`;},
 baugrid(rng,o){const s=o.s,cell=58*s,cols=[o.hero,o.ac,o.extra||o.hero];let g="";
@@ -460,9 +597,9 @@ bauquarter(rng,o){const s=o.s,r=66*s,cols=[o.hero,o.ac,o.extra||o.hero,o.hero];l
   return g;},
 baubars(rng,o){const s=o.s,cols=[o.hero,o.ac,o.extra||o.hero,o.hero];let g="";
   for(let i=0;i<4;i++){const w=(58-i*9)*s;
-    g+=`<rect x="${(o.cx-w/2).toFixed(1)}" y="${(o.cy-72*s+i*42*s).toFixed(1)}" width="${w.toFixed(1)}" height="${(22*s).toFixed(1)}" fill="${cols[i]}"/>`;}
+    g+=`<rect x="${(o.cx-w/2).toFixed(1)}" y="${(o.cy-72*s+i*42*s).toFixed(1)}" width="${w.toFixed(1)}" height="${(20*s).toFixed(1)}" fill="${cols[i]}"/>`;}
   return g;},
-/* ---- Kandinsky (spiritual geometry) ---- */
+/* ---- Kandinsky ---- */
 kcircle(rng,o){const s=o.s;
   return `<circle cx="${o.cx}" cy="${o.cy}" r="${(58*s).toFixed(1)}" fill="none" stroke="${o.hero}" stroke-width="${(10*s).toFixed(1)}"/><circle cx="${(o.cx-30*s).toFixed(1)}" cy="${(o.cy-34*s).toFixed(1)}" r="${(22*s).toFixed(1)}" fill="${o.ac}"/><circle cx="${(o.cx+44*s).toFixed(1)}" cy="${(o.cy+40*s).toFixed(1)}" r="${(12*s).toFixed(1)}" fill="${o.extra||o.hero}"/><line x1="${o.cx-84*s}" y1="${(o.cy+62*s).toFixed(1)}" x2="${(o.cx+84*s).toFixed(1)}" y2="${(o.cy-62*s).toFixed(1)}" stroke="${o.hero}" stroke-width="${(6*s).toFixed(1)}"/>`;},
 karcs(rng,o){const s=o.s;let g="";
@@ -473,9 +610,7 @@ ktri(rng,o){const s=o.s;
   return `<path d="M${o.cx},${(o.cy-66*s).toFixed(1)} L${(o.cx+62*s).toFixed(1)},${(o.cy+44*s).toFixed(1)} L${(o.cx-62*s).toFixed(1)},${(o.cy+44*s).toFixed(1)} Z" fill="${o.ac}"/><circle cx="${(o.cx-52*s).toFixed(1)}" cy="${(o.cy-40*s).toFixed(1)}" r="${(18*s).toFixed(1)}" fill="${o.hero}"/><line x1="${(o.cx-70*s).toFixed(1)}" y1="${(o.cy+66*s).toFixed(1)}" x2="${(o.cx+70*s).toFixed(1)}" y2="${(o.cy+66*s).toFixed(1)}" stroke="${o.hero}" stroke-width="${(7*s).toFixed(1)}"/><circle cx="${(o.cx+58*s).toFixed(1)}" cy="${(o.cy-58*s).toFixed(1)}" r="${(9*s).toFixed(1)}" fill="${o.extra||o.hero}"/>`;},
 kscatter(rng,o){const s=o.s;
   return `<circle cx="${(o.cx-40*s).toFixed(1)}" cy="${(o.cy-30*s).toFixed(1)}" r="${(34*s).toFixed(1)}" fill="${o.ac}"/><rect x="${(o.cx+8*s).toFixed(1)}" y="${(o.cy-58*s).toFixed(1)}" width="${(40*s).toFixed(1)}" height="${(40*s).toFixed(1)}" transform="rotate(18 ${(o.cx+28*s).toFixed(1)} ${(o.cy-38*s).toFixed(1)})" fill="${o.hero}"/><line x1="${(o.cx-72*s).toFixed(1)}" y1="${(o.cy+52*s).toFixed(1)}" x2="${(o.cx+72*s).toFixed(1)}" y2="${(o.cy+30*s).toFixed(1)}" stroke="${o.hero}" stroke-width="${(6*s).toFixed(1)}"/><circle cx="${(o.cx+52*s).toFixed(1)}" cy="${(o.cy+8*s).toFixed(1)}" r="${(10*s).toFixed(1)}" fill="${o.extra||o.hero}"/><path d="M${(o.cx-64*s).toFixed(1)},${(o.cy+10*s).toFixed(1)} l${(24*s).toFixed(1)},${(-30*s).toFixed(1)} l${(24*s).toFixed(1)},${(30*s).toFixed(1)} Z" fill="none" stroke="${o.ac}" stroke-width="${(5*s).toFixed(1)}"/>`;},
-/* ---- Diagram (editorial diagram vocabulary, after cathrynlavery/diagram-design) ----
-   Philosophy: deletion is the highest-quality move. 1-2 focal nodes max.
-   Flat shapes, hairline rules, generous whitespace. No shadows. */
+/* ---- Diagram (editorial diagram vocabulary, after cathrynlavery/diagram-design) ---- */
 venn(rng,o){const s=o.s,r=58*s,dx=44*s;
   return `<circle cx="${(o.cx-dx/2).toFixed(1)}" cy="${o.cy.toFixed(1)}" r="${r.toFixed(1)}" fill="none" stroke="${o.hero}" stroke-width="${(11*s).toFixed(1)}"/><circle cx="${(o.cx+dx/2).toFixed(1)}" cy="${o.cy.toFixed(1)}" r="${(r*.7).toFixed(1)}" fill="${o.ac}"/>`;},
 loop(rng,o){const s=o.s,r=62*s;let g="";
@@ -508,10 +643,124 @@ polar(rng,o){const s=o.s,n=8,R=62*s;let g="";
   for(let i=0;i<n;i++){const a=i/n*Math.PI*2,r=R*rng.range(.3,1);
     const x=o.cx+r*Math.cos(a),y=o.cy+r*Math.sin(a),focal=i%3===0;
     g+=`<line x1="${o.cx.toFixed(1)}" y1="${o.cy.toFixed(1)}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="${o.hero}" stroke-width="${(3*s).toFixed(1)}" opacity=".4"/><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${((focal?9:6)*s).toFixed(1)}" fill="${focal?o.ac:o.hero}"/>`;}
-  return g;}
+  return g;},
+/* ---- Mascot (flat geometric characters) — NEW in v2 ---- */
+fox(rng,o){const s=o.s,cx=o.cx,cy=o.cy;
+  return `<path d="M${cx-52*s},${cy-8*s} L${cx-64*s},${cy-72*s} L${cx-14*s},${cy-38*s} Z" fill="${o.hero}"/><path d="M${cx+52*s},${cy-8*s} L${cx+64*s},${cy-72*s} L${cx+14*s},${cy-38*s} Z" fill="${o.hero}"/><path d="M${cx-58*s},${cy-6*s} L${cx},${cy+62*s} L${cx+58*s},${cy-6*s} Z" fill="${o.hero}"/><circle cx="${cx-22*s}" cy="${cy-2*s}" r="${7*s}" fill="${o.bg}"/><circle cx="${cx+22*s}" cy="${cy-2*s}" r="${7*s}" fill="${o.bg}"/><circle cx="${cx}" cy="${cy+34*s}" r="${10*s}" fill="${o.ac}"/>`;},
+bird(rng,o){const s=o.s,cx=o.cx,cy=o.cy;
+  return `<circle cx="${cx}" cy="${cy+6*s}" r="${52*s}" fill="${o.hero}"/><circle cx="${cx}" cy="${cy-38*s}" r="${30*s}" fill="${o.hero}"/><path d="M${cx+28*s},${cy-44*s} L${cx+58*s},${cy-34*s} L${cx+28*s},${cy-28*s} Z" fill="${o.ac}"/><circle cx="${cx+12*s}" cy="${cy-44*s}" r="${5*s}" fill="${o.bg}"/><path d="M${cx-52*s},${cy+2*s} q${-26*s},${34*s} ${6*s},${58*s} q${20*s},${-30*s} ${52*s},${-34*s} Z" fill="${o.ac}" opacity=".85"/>`;},
+cat(rng,o){const s=o.s,cx=o.cx,cy=o.cy;
+  return `<path d="M${cx-46*s},${cy-30*s} L${cx-52*s},${cy-78*s} L${cx-8*s},${cy-52*s} Z" fill="${o.hero}"/><path d="M${cx+46*s},${cy-30*s} L${cx+52*s},${cy-78*s} L${cx+8*s},${cy-52*s} Z" fill="${o.hero}"/><circle cx="${cx}" cy="${cy}" r="${56*s}" fill="${o.hero}"/><circle cx="${cx-20*s}" cy="${cy-8*s}" r="${6*s}" fill="${o.bg}"/><circle cx="${cx+20*s}" cy="${cy-8*s}" r="${6*s}" fill="${o.bg}"/><path d="M${cx-8*s},${cy+18*s} L${cx+8*s},${cy+18*s} L${cx},${cy+28*s} Z" fill="${o.ac}"/><line x1="${cx-58*s}" y1="${cy+12*s}" x2="${cx-30*s}" y2="${cy+18*s}" stroke="${o.bg}" stroke-width="${4*s}" stroke-linecap="round"/><line x1="${cx+30*s}" y1="${cy+18*s}" x2="${cx+58*s}" y2="${cy+12*s}" stroke="${o.bg}" stroke-width="${4*s}" stroke-linecap="round"/>`;},
+bear(rng,o){const s=o.s,cx=o.cx,cy=o.cy;
+  return `<circle cx="${cx-44*s}" cy="${cy-44*s}" r="${20*s}" fill="${o.hero}"/><circle cx="${cx+44*s}" cy="${cy-44*s}" r="${20*s}" fill="${o.hero}"/><circle cx="${cx-44*s}" cy="${cy-44*s}" r="${10*s}" fill="${o.ac}"/><circle cx="${cx+44*s}" cy="${cy-44*s}" r="${10*s}" fill="${o.ac}"/><circle cx="${cx}" cy="${cy}" r="${54*s}" fill="${o.hero}"/><ellipse cx="${cx}" cy="${cy+18*s}" rx="${24*s}" ry="${18*s}" fill="${o.bg}" opacity=".9"/><circle cx="${cx-20*s}" cy="${cy-10*s}" r="${6*s}" fill="${o.bg}"/><circle cx="${cx+20*s}" cy="${cy-10*s}" r="${6*s}" fill="${o.bg}"/><ellipse cx="${cx}" cy="${cy+14*s}" rx="${9*s}" ry="${7*s}" fill="${o.ac}"/>`;},
+fish(rng,o){const s=o.s,cx=o.cx,cy=o.cy;
+  return `<ellipse cx="${cx-6*s}" cy="${cy}" rx="${58*s}" ry="${38*s}" fill="${o.hero}"/><path d="M${cx+44*s},${cy} L${cx+92*s},${cy-30*s} L${cx+92*s},${cy+30*s} Z" fill="${o.hero}"/><circle cx="${cx-30*s}" cy="${cy-8*s}" r="${7*s}" fill="${o.bg}"/><path d="M${cx-6*s},${cy-38*s} q${20*s},${-18*s} ${40*s},${-6*s}" fill="none" stroke="${o.ac}" stroke-width="${6*s}" stroke-linecap="round"/>`;},
+/* ---- Hand-drawn (doodle strokes) — NEW in v2 ---- */
+scribble(rng,o){const s=o.s,r=58*s,a0=rng.range(0,1.2);
+  const x1=o.cx+r*Math.cos(a0),y1=o.cy+r*Math.sin(a0),x2=o.cx+r*Math.cos(a0+5.4),y2=o.cy+r*Math.sin(a0+5.4);
+  return `<path d="M${x1.toFixed(1)},${y1.toFixed(1)} A${r},${(r*.92).toFixed(1)} 0 1,1 ${x2.toFixed(1)},${y2.toFixed(1)}" fill="none" stroke="${o.hero}" stroke-width="${(9*s).toFixed(1)}" stroke-linecap="round"/><path d="M${(o.cx-r*.5).toFixed(1)},${(o.cy+r*.55).toFixed(1)} q${(r*.5).toFixed(1)},${(r*.28).toFixed(1)} ${(r*.9).toFixed(1)},0" fill="none" stroke="${o.ac}" stroke-width="${(8*s).toFixed(1)}" stroke-linecap="round"/>`;},
+doodlesun(rng,o){const s=o.s,r=34*s;let g=`<circle cx="${o.cx}" cy="${o.cy}" r="${r}" fill="${o.ac}"/>`;
+  for(let i=0;i<8;i++){const a=i/8*Math.PI*2+rng.range(-.12,.12),r1=r+12*s,r2=r+rng.range(22,34)*s;
+    g+=`<line x1="${(o.cx+r1*Math.cos(a)).toFixed(1)}" y1="${(o.cy+r1*Math.sin(a)).toFixed(1)}" x2="${(o.cx+r2*Math.cos(a)).toFixed(1)}" y2="${(o.cy+r2*Math.sin(a)).toFixed(1)}" stroke="${o.hero}" stroke-width="${(7*s).toFixed(1)}" stroke-linecap="round"/>`;}
+  return g;},
+wobblystar(rng,o){const s=o.s,R=64*s,r=26*s;let pts=[];
+  for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,rr=(i%2?r:R)*rng.range(.92,1.08);
+    pts.push(`${(o.cx+rr*Math.cos(a)).toFixed(1)},${(o.cy+rr*Math.sin(a)).toFixed(1)}`);}
+  return `<polygon points="${pts.join(" ")}" fill="${o.hero}" stroke="${o.hero}" stroke-width="${(4*s).toFixed(1)}" stroke-linejoin="round"/><circle cx="${(o.cx+18*s).toFixed(1)}" cy="${(o.cy-14*s).toFixed(1)}" r="${(8*s).toFixed(1)}" fill="${o.ac}"/>`;},
+sketchwave(rng,o){const s=o.s,w=88*s;
+  return `<path d="M${o.cx-w},${o.cy-16*s} q${w/2},${-34*s} ${w},0 t${w},0" fill="none" stroke="${o.hero}" stroke-width="${(8*s).toFixed(1)}" stroke-linecap="round"/><path d="M${o.cx-w},${o.cy+22*s} q${w/2},${-30*s} ${w},0 t${w},0" fill="none" stroke="${o.ac}" stroke-width="${(8*s).toFixed(1)}" stroke-linecap="round"/>`;},
+/* ---- Luxury (hairline crest) — NEW in v2 ---- */
+crest(rng,o){const s=o.s,cx=o.cx,cy=o.cy;
+  return `<path d="M${cx-50*s},${cy-54*s} L${cx+50*s},${cy-54*s} L${cx+50*s},${cy+4*s} Q${cx+50*s},${cy+50*s} ${cx},${cy+64*s} Q${cx-50*s},${cy+50*s} ${cx-50*s},${cy+4*s} Z" fill="none" stroke="${o.hero}" stroke-width="${(4.5*s).toFixed(1)}"/><rect x="${(cx-9*s).toFixed(1)}" y="${(cy-9*s).toFixed(1)}" width="${(18*s).toFixed(1)}" height="${(18*s).toFixed(1)}" transform="rotate(45 ${cx} ${cy})" fill="${o.ac}"/>`;},
+laurel(rng,o){const s=o.s,cx=o.cx,cy=o.cy;
+  return `<path d="M${(cx-56*s).toFixed(1)},${(cy-44*s).toFixed(1)} A${(72*s).toFixed(1)},${(72*s).toFixed(1)} 0 0 0 ${(cx-56*s).toFixed(1)},${(cy+44*s).toFixed(1)}" fill="none" stroke="${o.hero}" stroke-width="${(5*s).toFixed(1)}"/><path d="M${(cx+56*s).toFixed(1)},${(cy-44*s).toFixed(1)} A${(72*s).toFixed(1)},${(72*s).toFixed(1)} 0 0 1 ${(cx+56*s).toFixed(1)},${(cy+44*s).toFixed(1)}" fill="none" stroke="${o.hero}" stroke-width="${(5*s).toFixed(1)}"/><circle cx="${cx}" cy="${cy}" r="${(10*s).toFixed(1)}" fill="${o.ac}"/>`;},
+diamond(rng,o){const s=o.s,cx=o.cx,cy=o.cy;
+  return `<rect x="${(cx-46*s).toFixed(1)}" y="${(cy-46*s).toFixed(1)}" width="${(92*s).toFixed(1)}" height="${(92*s).toFixed(1)}" transform="rotate(45 ${cx} ${cy})" fill="none" stroke="${o.hero}" stroke-width="${(5*s).toFixed(1)}"/><rect x="${(cx-26*s).toFixed(1)}" y="${(cy-26*s).toFixed(1)}" width="${(52*s).toFixed(1)}" height="${(52*s).toFixed(1)}" transform="rotate(45 ${cx} ${cy})" fill="${o.ac}"/>`;},
+/* ---- Retro (vintage badge) — NEW in v2 ---- */
+sunburst(rng,o){const s=o.s,cx=o.cx,cy=o.cy;let g="";
+  for(let i=0;i<12;i++){const a=i/12*Math.PI*2,x1=cx+30*s*Math.cos(a),y1=cy+30*s*Math.sin(a),x2=cx+72*s*Math.cos(a),y2=cy+72*s*Math.sin(a);
+    g+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="${i%2?o.ac:o.hero}" stroke-width="${(7*s).toFixed(1)}" stroke-linecap="round"/>`;}
+  return g+`<circle cx="${cx}" cy="${cy}" r="${(24*s).toFixed(1)}" fill="${o.hero}"/>`;},
+ribbon(rng,o){const s=o.s,cx=o.cx,cy=o.cy;
+  return `<path d="M${cx-70*s},${cy-34*s} L${cx+70*s},${cy-34*s} L${cx+70*s},${cy+10*s} L${cx},${cy+34*s} L${cx-70*s},${cy+10*s} Z" fill="${o.hero}"/><path d="M${cx-70*s},${cy-34*s} L${cx-92*s},${cy-14*s} L${cx-70*s},${cy+10*s} Z" fill="${o.ac}"/><path d="M${cx+70*s},${cy-34*s} L${cx+92*s},${cy-14*s} L${cx+70*s},${cy+10*s} Z" fill="${o.ac}"/>`;},
+badgestar(rng,o){const s=o.s,cx=o.cx,cy=o.cy;let g=`<circle cx="${cx}" cy="${cy}" r="${(66*s).toFixed(1)}" fill="none" stroke="${o.hero}" stroke-width="${(6*s).toFixed(1)}"/><circle cx="${cx}" cy="${cy}" r="${(54*s).toFixed(1)}" fill="none" stroke="${o.hero}" stroke-width="${(2.5*s).toFixed(1)}"/>`;
+  const R=34*s,r=14*s;let pts=[];
+  for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,rr=i%2?r:R;pts.push(`${(cx+rr*Math.cos(a)).toFixed(1)},${(cy+rr*Math.sin(a)).toFixed(1)}`);}
+  return g+`<polygon points="${pts.join(" ")}" fill="${o.ac}"/>`;},
+/* ---- 3D (extruded depth) — NEW in v2 ---- */
+cube(rng,o){const s=o.s,cx=o.cx,cy=o.cy,ex=16*s,dark=shade(o.hero,-.35);
+  return `<polygon points="${cx},${cy-58*s} ${cx+50*s},${cy-29*s} ${cx+50*s},${cy+29*s} ${cx},${cy+58*s} ${cx-50*s},${cy+29*s} ${cx-50*s},${cy-29*s}" fill="${dark}" transform="translate(${ex},${ex})"/><polygon points="${cx},${cy-58*s} ${cx+50*s},${cy-29*s} ${cx+50*s},${cy+29*s} ${cx},${cy+58*s} ${cx-50*s},${cy+29*s} ${cx-50*s},${cy-29*s}" fill="${o.hero}"/><polygon points="${cx},${cy-58*s} ${cx+50*s},${cy-29*s} ${cx},${cy} ${cx-50*s},${cy-29*s}" fill="${shade(o.hero,.25)}"/><circle cx="${(cx+18*s).toFixed(1)}" cy="${(cy+8*s).toFixed(1)}" r="${(8*s).toFixed(1)}" fill="${o.ac}"/>`;},
+cylinder(rng,o){const s=o.s,cx=o.cx,cy=o.cy,dark=shade(o.hero,-.35);
+  return `<ellipse cx="${cx}" cy="${(cy+44*s).toFixed(1)}" rx="${(52*s).toFixed(1)}" ry="${(16*s).toFixed(1)}" fill="${dark}"/><rect x="${(cx-52*s).toFixed(1)}" y="${(cy-44*s).toFixed(1)}" width="${(104*s).toFixed(1)}" height="${(88*s).toFixed(1)}" fill="${o.hero}"/><ellipse cx="${cx}" cy="${(cy-44*s).toFixed(1)}" rx="${(52*s).toFixed(1)}" ry="${(16*s).toFixed(1)}" fill="${shade(o.hero,.3)}"/><circle cx="${(cx+22*s).toFixed(1)}" cy="${(cy+4*s).toFixed(1)}" r="${(9*s).toFixed(1)}" fill="${o.ac}"/>`;},
+pyramid3d(rng,o){const s=o.s,cx=o.cx,cy=o.cy;
+  return `<polygon points="${cx},${cy-62*s} ${cx+62*s},${cy+44*s} ${cx-62*s},${cy+44*s}" fill="${shade(o.hero,-.3)}"/><polygon points="${cx},${cy-62*s} ${cx+62*s},${cy+44*s} ${cx},${cy+44*s}" fill="${o.hero}"/><circle cx="${cx}" cy="${(cy+8*s).toFixed(1)}" r="${(9*s).toFixed(1)}" fill="${o.ac}"/>`;},
+sphere(rng,o){const s=o.s,cx=o.cx,cy=o.cy;
+  return `<circle cx="${cx}" cy="${cy}" r="${(58*s).toFixed(1)}" fill="${o.hero}"/><ellipse cx="${(cx-18*s).toFixed(1)}" cy="${(cy-22*s).toFixed(1)}" rx="${(20*s).toFixed(1)}" ry="${(12*s).toFixed(1)}" fill="#ffffff" opacity=".35" transform="rotate(-24 ${(cx-18*s).toFixed(1)} ${(cy-22*s).toFixed(1)})"/><ellipse cx="${cx}" cy="${(cy+52*s).toFixed(1)}" rx="${(44*s).toFixed(1)}" ry="${(7*s).toFixed(1)}" fill="${o.hero}" opacity=".25"/><circle cx="${(cx+34*s).toFixed(1)}" cy="${(cy-30*s).toFixed(1)}" r="${(8*s).toFixed(1)}" fill="${o.ac}"/>`;},
 };
 
-/* ---- S1 · MINIMAL: one hero shape, massive negative space ---- */
+/* ================= composition: mark + name lockups ================= */
+function heroPick(rng,pal){return rng.chance(.72)?[pal.ink,pal.accent]:[pal.accent,pal.ink];}
+function mdx(ctx){return ctx.layout?ctx.layout.markDx:0;}
+function nameLine(ctx,y,fs,ls,color){
+  const L=ctx.layout||{nameDy:0,nameFs:1,nameLs:0};
+  return `<text x="200" y="${(y+L.nameDy).toFixed(1)}" text-anchor="middle" font-family="${ctx.font.css}" font-size="${(fs*L.nameFs).toFixed(1)}" letter-spacing="${(ls+L.nameLs).toFixed(1)}" fill="${color}">${esc(ctx.name.trim().toUpperCase())}</text>`;
+}
+function tagLine(ctx,y){
+  if(!ctx.tagline)return "";
+  const L=ctx.layout||{tagDy:0};
+  return `<text x="200" y="${(y+L.tagDy).toFixed(1)}" text-anchor="middle" font-family="${ctx.font.css}" font-size="14" letter-spacing="5" fill="${ctx.pal.ink}" opacity=".62">${esc(ctx.tagline.toUpperCase())}</text>`;
+}
+function comboName(ctx){
+  const fs=fitSize(ctx.name,ctx.font.k,300,40);
+  return nameLine(ctx,318,fs,10,ctx.pal.ink)+tagLine(ctx,348);
+}
+
+/* ---- emblem badge frame: any style's mark inside the double-ring badge ---- */
+function emblemFrame(ctx,innerMark){
+  const pal=ctx.pal,css=ctx.font.css,ink=pal.ink,ac=pal.accent,id=uid("emb");
+  const top=ctx.name.toUpperCase().slice(0,28),bot=(ctx.tagline||"EST · MMXXVI").toUpperCase().slice(0,28);
+  return `<defs>
+    <path id="${id}t" d="M82,200 A118,118 0 0 1 318,200"/>
+    <path id="${id}b" d="M318,200 A118,118 0 0 1 82,200"/></defs>
+  <circle cx="200" cy="200" r="150" fill="none" stroke="${ink}" stroke-width="7"/>
+  <circle cx="200" cy="200" r="100" fill="none" stroke="${ink}" stroke-width="2.5"/>
+  <text font-family="${css}" font-size="21" letter-spacing="4" fill="${ink}"><textPath href="#${id}t" startOffset="50%" text-anchor="middle">${esc(top)}</textPath></text>
+  <text font-family="${css}" font-size="17" letter-spacing="4" fill="${ink}" opacity=".75"><textPath href="#${id}b" startOffset="50%" text-anchor="middle">${esc(bot)}</textPath></text>
+  <rect x="74" y="194" width="12" height="12" transform="rotate(45 80 200)" fill="${ac}"/>
+  <rect x="314" y="194" width="12" height="12" transform="rotate(45 320 200)" fill="${ac}"/>${innerMark}`;
+}
+/* ---- mark only: a style's archetype, centered — for Abstract / Emblem logo types ---- */
+function markOnly(rng,ctx,cy,s){
+  const pal=ctx.pal,[hero,ac]=heroPick(rng,pal);
+  if(ctx.family==="wordmark"||!ctx.markKind||!MARKS[ctx.markKind]){
+    const ini=initials(ctx.name),fs=fitSize(ini,ctx.font.k,150,84);
+    return `<circle cx="200" cy="${cy}" r="${(86*s).toFixed(0)}" fill="none" stroke="${hero}" stroke-width="${(9*s).toFixed(0)}"/><text x="200" y="${(cy+fs*.36).toFixed(0)}" text-anchor="middle" font-family="${ctx.font.css}" font-size="${fs}" letter-spacing="2" fill="${hero}">${esc(ini)}</text>`;
+  }
+  return MARKS[ctx.markKind](rng,{cx:200,cy,s,hero,ac,bg:pal.bg,extra:ctx.extra});
+}
+/* ---- monogram: initials as the hero ---- */
+function genMonogram(rng,ctx){
+  const pal=ctx.pal,[hero,ac]=heroPick(rng,pal),ini=initials(ctx.name);
+  const shape=rng.pick(["circle","square","diamond"]);
+  const fs=fitSize(ini,ctx.font.k,110,58);
+  let frame="";
+  if(shape==="circle") frame=`<circle cx="200" cy="182" r="84" fill="none" stroke="${hero}" stroke-width="7"/><circle cx="200" cy="182" r="68" fill="${hero}"/>`;
+  else if(shape==="square") frame=`<rect x="116" y="98" width="168" height="168" rx="16" fill="none" stroke="${hero}" stroke-width="7"/><rect x="132" y="114" width="136" height="136" rx="10" fill="${hero}"/>`;
+  else frame=`<rect x="130" y="112" width="140" height="140" transform="rotate(45 200 182)" fill="none" stroke="${hero}" stroke-width="7"/><rect x="148" y="130" width="104" height="104" transform="rotate(45 200 182)" fill="${hero}"/>`;
+  const dot=rng.chance(.5)?`<circle cx="262" cy="120" r="8" fill="${ac}"/>`:"";
+  return frame+dot+`<text x="200" y="202" text-anchor="middle" font-family="${ctx.font.css}" font-size="${fs}" letter-spacing="2" fill="${pal.bg}">${esc(ini)}</text>`+comboName(ctx);
+}
+/* ---- the composition switch: logo type decides the lockup ---- */
+function composeConcept(rng,ctx){
+  const lt=ctx.logoType||"icon-name";
+  if(lt==="monogram") return genMonogram(rng,ctx);
+  if(lt==="wordmark") return genWordmark(rng,ctx);
+  if(lt==="emblem") return emblemFrame(ctx,markOnly(rng,ctx,200,.52));
+  if(lt==="abstract") return markOnly(rng,ctx,200,1.02);
+  return GEN[ctx.family](rng,ctx);
+}
+
+/* ================= style generators (pure SVG, seeded) ================= */
 function genMinimal(rng,ctx){
   const pal=ctx.pal,[hero,ac]=heroPick(rng,pal);
   const kind=ctx.markKind||rng.pick(KINDS.minimal);
@@ -520,21 +769,18 @@ function genMinimal(rng,ctx){
   const mark=`<g transform="rotate(${rot.toFixed(1)} 200 157)">${inner}</g>`;
   return mark+comboName(ctx);
 }
-/* ---- S2 · MONOLINE: luxury thin-stroke line mark ---- */
 function genMonoline(rng,ctx){
   const pal=ctx.pal,kind=ctx.markKind||rng.pick(KINDS.monoline);
   const mark=MARKS[kind](rng,{cx:200+mdx(ctx),cy:rng.range(148,166),s:rng.range(.94,1.06),lw:.3,hero:pal.ink,ac:pal.accent,bg:pal.bg});
   const fs=fitSize(ctx.name,ctx.font.k,300,36);
   return mark+nameLine(ctx,318,fs,12,pal.ink)+tagLine(ctx,348);
 }
-/* ---- S3 · GEOMETRIC: grid-constructed, crisp flat shapes ---- */
 function genGeometric(rng,ctx){
   const pal=ctx.pal,[hero,ac]=heroPick(rng,pal);
   const kind=ctx.markKind||rng.pick(KINDS.geometric);
   const mark=MARKS[kind](rng,{cx:200+mdx(ctx),cy:rng.range(150,164),s:rng.range(.94,1.08),hero,ac,bg:pal.bg});
   return mark+comboName(ctx);
 }
-/* ---- S4 · WORDMARK: typography as the hero ---- */
 function genWordmark(rng,ctx){
   const pal=ctx.pal,css=ctx.font.css,full=ctx.name.trim(),W=words(ctx.name),ink=pal.ink,ac=pal.accent;
   const treat=rng.pick(W.length>1?["grand","stacked","tracked"]:["grand","tracked"]);
@@ -555,23 +801,6 @@ function genWordmark(rng,ctx){
   return `<text x="200" y="212" text-anchor="middle" font-family="${css}" font-size="${fs}" fill="${ink}">${esc(full)}</text>
   <line x1="168" y1="248" x2="232" y2="248" stroke="${ac}" stroke-width="4" stroke-linecap="round"/>`+tagLine(ctx,288);
 }
-/* ---- S5 · EMBLEM: refined heritage badge ---- */
-function genEmblem(rng,ctx){
-  const pal=ctx.pal,css=ctx.font.css,ink=pal.ink,ac=pal.accent,id=uid("emb");
-  const top=ctx.name.toUpperCase().slice(0,28),bot=(ctx.tagline||"EST · MMXXVI").toUpperCase().slice(0,28);
-  const kind=ctx.markKind||rng.pick(KINDS.emblem);
-  const mark=MARKS[kind](rng,{cx:200,cy:200,s:.52,hero:ink,ac,bg:pal.bg});
-  return `<defs>
-    <path id="${id}t" d="M82,200 A118,118 0 0 1 318,200"/>
-    <path id="${id}b" d="M318,200 A118,118 0 0 1 82,200"/></defs>
-  <circle cx="200" cy="200" r="150" fill="none" stroke="${ink}" stroke-width="7"/>
-  <circle cx="200" cy="200" r="100" fill="none" stroke="${ink}" stroke-width="2.5"/>
-  <text font-family="${css}" font-size="21" letter-spacing="4" fill="${ink}"><textPath href="#${id}t" startOffset="50%" text-anchor="middle">${esc(top)}</textPath></text>
-  <text font-family="${css}" font-size="17" letter-spacing="4" fill="${ink}" opacity=".75"><textPath href="#${id}b" startOffset="50%" text-anchor="middle">${esc(bot)}</textPath></text>
-  <rect x="74" y="194" width="12" height="12" transform="rotate(45 80 200)" fill="${ac}"/>
-  <rect x="314" y="194" width="12" height="12" transform="rotate(45 320 200)" fill="${ac}"/>${mark}`;
-}
-/* ---- S6 · GRADIENT: soft fluid shape, smooth duotone ---- */
 function genGradient(rng,ctx){
   const pal=ctx.pal,id=uid("lg"),g2=tint(pal.accent,.55);
   const d=blobPath(rng,200+mdx(ctx),150+rng.range(-8,8),rng.range(78,94));
@@ -579,21 +808,6 @@ function genGradient(rng,ctx){
   return `<defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${pal.accent}"/><stop offset="1" stop-color="${g2}"/></linearGradient></defs>
   <path d="${d}" fill="url(#${id})"/>`+comboName(ctx);
 }
-
-/* ---------- variable randomness: distinct archetypes per style, jittered params ---------- */
-function sampleDistinct(rng,arr,n){const pool=[...arr],out=[];while(out.length<n&&pool.length){out.push(pool.splice(Math.floor(rng.f()*pool.length),1)[0]);}return out;}
-function isDark(hex){const n=parseInt(hex.slice(1),16),l=(0.299*(n>>16)+0.587*(n>>8&255)+0.114*(n&255))/255;return l<0.5;}
-const KINDS={
- minimal:["arc","target","lens","duo","corner","tri","halfsun","wave"],
- monoline:["arc","orbit","wave","corner","target","crescent"],
- geometric:["vesica","tri","lens","peaks","pillars","duo","corner","bautrio"],
- emblem:["target","arc","vesica","tri","enso"],
- japanese:["enso","crescent","pebble","sprig","sunoff","wave"],
- bauhaus:["bautrio","baugrid","bauquarter","baubars"],
- kandinsky:["kcircle","karcs","ktri","kscatter"],
- diagram:["venn","loop","nested","radar","quadrant","dtree","pyramid","polar"]
-};
-/* ---- S7 · JAPANESE: wabi-sabi restraint, asymmetry, ma ---- */
 function genJapanese(rng,ctx){
   const pal=ctx.pal,kind=ctx.markKind||rng.pick(KINDS.japanese);
   const ax=rng.pick([-36,36]);
@@ -601,21 +815,19 @@ function genJapanese(rng,ctx){
   const fs=fitSize(ctx.name,ctx.font.k,280,34);
   return mark+nameLine(ctx,318,fs,12,pal.ink)+tagLine(ctx,346);
 }
-/* ---- S8 · BAUHAUS: canonical primaries, basic forms ---- */
 const BAUH={red:"#E30613",yellow:"#FFD200",blue:"#0057B8"};
 function genBauhaus(rng,ctx){
   const pal=ctx.pal,kind=ctx.markKind||rng.pick(KINDS.bauhaus);
-  const cols=[BAUH.red,BAUH.yellow,BAUH.blue],c1=rng.pick(cols);
+  const cols=ctx.mono?[pal.ink,pal.accent,pal.ink]:[BAUH.red,BAUH.yellow,BAUH.blue],c1=rng.pick(cols);
   const c2=rng.pick(cols.filter(c=>c!==c1)),dark=isDark(pal.bg);
   const mark=MARKS[kind](rng,{cx:200+mdx(ctx),cy:rng.range(148,164),s:rng.range(.95,1.08),hero:c1,ac:c2,extra:dark?"#F5F4EF":"#111111",bg:pal.bg});
   const fs=fitSize(ctx.name,ctx.font.k,300,44);
   return mark+`<text x="200" y="318" text-anchor="middle" font-family="${ctx.font.css}" font-size="${fs}" letter-spacing="4" fill="${pal.ink}">${esc(ctx.name.trim().toLowerCase())}</text>`+tagLine(ctx,348);
 }
-/* ---- S9 · KANDINSKY: spiritual geometry, cosmic composition ---- */
 const KAND={yellow:"#F5C518",red:"#E63946",blue:"#2B5CE6"};
 function genKandinsky(rng,ctx){
   const pal=ctx.pal,kind=ctx.markKind||rng.pick(KINDS.kandinsky);
-  const cols=[KAND.yellow,KAND.red,KAND.blue],c1=rng.pick(cols);
+  const cols=ctx.mono?[pal.ink,pal.accent,pal.ink]:[KAND.yellow,KAND.red,KAND.blue],c1=rng.pick(cols);
   const c2=rng.pick(cols.filter(c=>c!==c1)),dark=isDark(pal.bg);
   const inner=MARKS[kind](rng,{cx:200+mdx(ctx),cy:rng.range(148,164),s:rng.range(.95,1.1),hero:dark?"#F5F4EF":"#141414",ac:c1,extra:c2,bg:pal.bg});
   const rot=rng.chance(.5)?rng.range(-10,10):0;
@@ -623,193 +835,608 @@ function genKandinsky(rng,ctx){
   const fs=fitSize(ctx.name,ctx.font.k,300,40);
   return mark+nameLine(ctx,318,fs,8,pal.ink)+tagLine(ctx,348);
 }
-
-/* ---- S10 · DIAGRAM: editorial diagram vocabulary as logo marks ----
-   After cathrynlavery/diagram-design: Venn, loop, nested, radar, quadrant,
-   tree, pyramid, polar. One accent focal max. No shadows. */
 function genDiagram(rng,ctx){
   const pal=ctx.pal,[hero,ac]=heroPick(rng,pal);
   const kind=ctx.markKind||rng.pick(KINDS.diagram);
   const mark=MARKS[kind](rng,{cx:200+mdx(ctx),cy:rng.range(148,166),s:rng.range(.94,1.08),hero,ac,bg:pal.bg});
   return mark+comboName(ctx);
 }
-
-const GEN={minimal:genMinimal,monoline:genMonoline,geometric:genGeometric,wordmark:genWordmark,emblem:genEmblem,gradient:genGradient,japanese:genJapanese,bauhaus:genBauhaus,kandinsky:genKandinsky,diagram:genDiagram};
-
-function tileSVG(inner,pal){return `<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" role="img"><rect width="400" height="400" fill="${pal.bg}"/>${inner}</svg>`;}
-function standaloneSVG(concept){
- const inner=GEN[concept.family](RNG(concept.seed),{...concept.ctx,pal:concept.pal});
- return tileSVG(inner,concept.pal).replace("<svg ",`<svg width="1200" height="1200" `)
-   .replace('role="img"',`role="img" aria-label="${esc(concept.name)} logo concept"`);
+/* ---- v2 styles ---- */
+function genMascot(rng,ctx){
+  const pal=ctx.pal,[hero,ac]=heroPick(rng,pal);
+  const kind=ctx.markKind||rng.pick(KINDS.mascot);
+  const mark=MARKS[kind](rng,{cx:200+mdx(ctx),cy:rng.range(150,166),s:rng.range(.92,1.05),hero,ac,bg:pal.bg});
+  return mark+comboName(ctx);
+}
+function genHandDrawn(rng,ctx){
+  const pal=ctx.pal,kind=ctx.markKind||rng.pick(KINDS.handdrawn);
+  const mark=MARKS[kind](rng,{cx:200+mdx(ctx),cy:rng.range(148,166),s:rng.range(.9,1.05),hero:pal.ink,ac:pal.accent,bg:pal.bg});
+  const rot=rng.range(-4,4);
+  const fs=fitSize(ctx.name,ctx.font.k,300,36);
+  return `<g transform="rotate(${rot.toFixed(1)} 200 157)">${mark}</g>`+nameLine(ctx,318,fs,10,pal.ink)+tagLine(ctx,348);
+}
+function genLuxury(rng,ctx){
+  const pal=ctx.pal,kind=ctx.markKind||rng.pick(KINDS.luxury);
+  const mark=MARKS[kind](rng,{cx:200+mdx(ctx),cy:rng.range(148,164),s:rng.range(.94,1.06),hero:pal.ink,ac:pal.accent,bg:pal.bg});
+  const fs=fitSize(ctx.name,ctx.font.k,300,34);
+  return mark+nameLine(ctx,318,fs,14,pal.ink)+tagLine(ctx,348);
+}
+function genRetro(rng,ctx){
+  const pal=ctx.pal,kind=ctx.markKind||rng.pick(KINDS.retro);
+  const mark=MARKS[kind](rng,{cx:200+mdx(ctx),cy:rng.range(148,164),s:rng.range(.94,1.06),hero:pal.ink,ac:pal.accent,bg:pal.bg});
+  return mark+comboName(ctx);
+}
+function gen3D(rng,ctx){
+  const pal=ctx.pal,[hero,ac]=heroPick(rng,pal);
+  const kind=ctx.markKind||rng.pick(KINDS.threed);
+  const mark=MARKS[kind](rng,{cx:200+mdx(ctx),cy:rng.range(150,164),s:rng.range(.94,1.06),hero,ac,bg:pal.bg});
+  return mark+comboName(ctx);
 }
 
-/* ================= app state ================= */
-const $=s=>document.querySelector(s);
-let concepts=[], cur=null, famFilter="all", salt=(Date.now()%100000);
+/* ================= style registry ================= */
+const KINDS={
+ minimal:["arc","target","lens","duo","corner","tri","halfsun","wave"],
+ monoline:["arc","orbit","wave","corner","target","crescent"],
+ geometric:["vesica","tri","lens","peaks","pillars","duo","corner","bautrio"],
+ japanese:["enso","crescent","pebble","sprig","sunoff","wave"],
+ bauhaus:["bautrio","baugrid","bauquarter","baubars"],
+ kandinsky:["kcircle","karcs","ktri","kscatter"],
+ diagram:["venn","loop","nested","radar","quadrant","dtree","pyramid","polar"],
+ mascot:["fox","bird","cat","bear","fish"],
+ handdrawn:["scribble","doodlesun","wobblystar","sketchwave"],
+ luxury:["crest","laurel","diamond"],
+ retro:["sunburst","ribbon","badgestar"],
+ threed:["cube","cylinder","pyramid3d","sphere"]
+};
+const GEN={minimal:genMinimal,monoline:genMonoline,geometric:genGeometric,gradient:genGradient,
+ japanese:genJapanese,bauhaus:genBauhaus,kandinsky:genKandinsky,diagram:genDiagram,
+ mascot:genMascot,handdrawn:genHandDrawn,luxury:genLuxury,retro:genRetro,threed:gen3D};
+const PRIMARY_STYLES=["minimal","geometric","gradient","mascot","handdrawn","luxury","retro","threed"];
+const HERITAGE_STYLES=["monoline","japanese","bauhaus","kandinsky","diagram"];
+const ALL_STYLES=[...PRIMARY_STYLES,...HERITAGE_STYLES];
+const FAM_LABEL={minimal:{en:"Minimal",tc:"極簡"},monoline:{en:"Monoline",tc:"線條"},geometric:{en:"Geometric",tc:"幾何"},
+ gradient:{en:"Gradient",tc:"漸變"},japanese:{en:"Japanese",tc:"日式簡約"},bauhaus:{en:"Bauhaus",tc:"包浩斯"},
+ kandinsky:{en:"Kandinsky",tc:"康定斯基"},diagram:{en:"Diagram",tc:"圖表編輯"},
+ mascot:{en:"Mascot",tc:"吉祥物"},handdrawn:{en:"Hand-drawn",tc:"手繪"},luxury:{en:"Luxury",tc:"奢華"},
+ retro:{en:"Retro",tc:"復古"},threed:{en:"3D",tc:"立體"}};
+const LOGO_TYPES=[
+ {id:"icon-name",en:"Icon + Name",tc:"圖標＋名稱"},
+ {id:"emblem",en:"Emblem",tc:"徽章"},
+ {id:"monogram",en:"Monogram",tc:"字母徽"},
+ {id:"wordmark",en:"Wordmark",tc:"純字標"},
+ {id:"abstract",en:"Abstract",tc:"純圖形"}];
+const DETAIL_LEVELS=[{id:"minimal",en:"Minimal",tc:"極簡"},{id:"balanced",en:"Balanced",tc:"均衡"},{id:"detailed",en:"Detailed",tc:"細緻"}];
+
+function tileSVG(inner,pal){return `<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" role="img"><rect width="400" height="400" fill="${pal.bg}"/>${inner}</svg>`;}
+function conceptSVG(c){
+  const inner=composeConcept(RNG(c.seed),{...c.ctx,pal:c.pal});
+  return tileSVG(applyDetail(inner,c),c.pal);
+}
+/* detail level: Detailed adds a hairline orbit ring + dots around the mark */
+function applyDetail(inner,c){
+  if(c.detail!=="detailed")return inner;
+  const p=c.pal;let dots="";
+  [[200,29],[72,157],[328,157]].forEach(([x,y],i)=>{
+    dots+=`<circle cx="${x}" cy="${y}" r="${i===0?7:5}" fill="${i===0?p.accent:p.ink}"/>`;});
+  return `<circle cx="200" cy="157" r="128" fill="none" stroke="${p.ink}" stroke-width="2" opacity=".28"/>${dots}${inner}`;
+}
+function standaloneSVG(concept){
+  const inner=composeConcept(RNG(concept.seed),{...concept.ctx,pal:concept.pal});
+  return tileSVG(applyDetail(inner,concept),concept.pal).replace("<svg ",`<svg width="1200" height="1200" `)
+    .replace('role="img"',`role="img" aria-label="${esc(concept.name)} logo concept"`);
+}
+
+/* ================= i18n ================= */
+const I18N={
+en:{tagline:"generative logo studio · offline",hero:"A <b>fully offline</b> generative logo studio, rebuilt the logocreator way: one focused form on the left, a gallery of <b>original concepts</b> on the right. No API keys, no backend, no waiting rooms — a seeded design engine draws every logo right in your browser. Export real <b>SVG + PNG</b>, or take the whole <b>brand kit</b>.",
+settings:"Logo settings",nameLabel:"Brand name",quickstart:"Quick start",describeLabel:"Describe it",optional:"(optional)",
+typeLabel:"Logo type",styleLabel:"Style",moreStyles:"More styles — classic studio",lessStyles:"Fewer styles",
+brandColor:"Brand color",bgColor:"Background",advanced:"Advanced",detailLabel:"Detail",monoLabel:"Monochrome",
+refLabel:"Reference logo",refHint:"Upload a logo — we read its colors, nothing leaves your browser",
+variations:"Variations",generate:"Generate logo",galleryTitle:"Your concepts",historyTitle:"Logo history",
+clearHistory:"Clear history",histEmpty:"Nothing yet — your generations will land here.",
+concept:"Concept",palette:"Palette",export:"Export",svgNote:"vector · infinitely scalable",copySvg:"Copy SVG code",
+copyNote:"paste into Figma / web",mockCard:"Business card",mockIcon:"App icon",brandKit:"Brand kit",
+kitNote:"lockups · palette · type · brand sheet",
+note:"Type is rendered with open fonts (Google Fonts). PNG exports embed the font automatically, so what you see is what you get — no internet needed after first load.",
+foot:"built in the open, free forever",kitLockups:"Lockups",kitPrimary:"Primary · color",kitMono:"Monochrome · one ink",
+kitIcon:"App icon · mark only",kitDark:"Reversed · on dark",kitType:"Typography",kitSheet:"Brand sheet (.html)",
+kitSheetNote:"logo · palette · type, one file",
+concepts:"concepts",copied:"SVG code copied ✓",dl:"Downloading",needName:"Type a brand name first ✎",
+regen:"New set generated ✦",fontNote:"font embedded",surprise:"Surprise",auto:"Auto",
+aiPicks:"Engine picks a fitting color — regenerate for different looks.",
+lowContrast:"Low contrast: your logo may be hard to see on this background.",
+refInspired:"Inspired by reference",refReady:"Reference colors applied ✓",cleared:"History cleared",
+restored:"Restored ✓",applied:"Applied ✓"},
+tc:{tagline:"離線生成式標誌工作室",hero:"<b>完全離線</b>嘅生成式標誌工作室，照 logocreator 嗰套做法重做：左邊一張集中嘅表單，右邊一格格<b>原創概念</b>。唔要 API key、唔要後端、唔使排隊——種子設計引擎喺瀏覽器即場畫出每個標誌。匯出真正嘅 <b>SVG + PNG</b>，或者成套<b>品牌套裝</b>拎走。",
+settings:"標誌設定",nameLabel:"品牌名",quickstart:"快速開始",describeLabel:"描述一下",optional:"（可選）",
+typeLabel:"標誌類型",styleLabel:"風格",moreStyles:"更多風格 — 經典工作室",lessStyles:"收起",
+brandColor:"品牌顏色",bgColor:"背景",advanced:"進階",detailLabel:"細緻度",monoLabel:"單色",
+refLabel:"參考標誌",refHint:"上傳一個標誌——我哋只讀佢嘅顏色，唔會離開你部機",
+variations:"變化數量",generate:"生成標誌",galleryTitle:"你嘅概念",historyTitle:"標誌歷史",
+clearHistory:"清除歷史",histEmpty:"未有住——你生成嘅作品會喺呢度出現。",
+concept:"概念",palette:"配色",export:"匯出",svgNote:"向量 · 無限放大",copySvg:"複製 SVG 代碼",
+copyNote:"貼去 Figma / 網頁",mockCard:"卡片",mockIcon:"App 圖標",brandKit:"品牌套裝",
+kitNote:"組合 · 配色 · 字體 · 品牌頁",
+note:"字體用開放字型（Google Fonts）。匯出 PNG 會自動嵌入字體，所見即所得——首次載入後離線都用到。",
+foot:"開放製作，永久免費",kitLockups:"組合",kitPrimary:"主版 · 彩色",kitMono:"單色 · 一隻墨",
+kitIcon:"App 圖標 · 淨圖形",kitDark:"反白 · 深底",kitType:"字體",kitSheet:"品牌頁 (.html)",
+kitSheetNote:"標誌 · 配色 · 字體，一個檔",
+concepts:"個概念",copied:"SVG 代碼已複製 ✓",dl:"下載中",needName:"先打個品牌名 ✎",
+regen:"新一輯生成咗 ✦",fontNote:"已嵌入字體",surprise:"隨機",auto:"自動",
+aiPicks:"引擎會揀一個啱嘅顏色——再生成會有唔同效果。",
+lowContrast:"對比太低：喺呢個背景上面個標誌可能睇唔清楚。",
+refInspired:"參考咗呢個標誌",refReady:"已套用參考顏色 ✓",cleared:"歷史已清除",
+restored:"已還原 ✓",applied:"已套用 ✓"}
+};
+let lang=localStorage.getItem("logomo-lang")||"en";
+const t=k=>(I18N[lang]&&I18N[lang][k])||I18N.en[k]||k;
+function applyI18n(){document.querySelectorAll("[data-i18n]").forEach(el=>{el.innerHTML=t(el.dataset.i18n);});
+ document.documentElement.lang=lang==="tc"?"zh-Hant":"en";
+ renderPresets();renderSuggests();renderTypeSeg();renderStyleCards();renderSwatches();renderDetailSeg();renderVarSeg();renderContrastWarn();renderHistory();}
+
+/* ================= state ================= */
+const SAMPLES=["Nebula","Fern & Field","Kobo Studio","Lumen","Driftwell","Mono & Co","Halcyon","Pip & Post","Northloop","Wanderly"];
+const S={name:"Nebula",describe:"",logoType:"icon-name",style:"surprise",detail:"balanced",
+  brandColor:"auto",bgColor:"auto",mono:false,variations:8,ref:null,activePreset:null};
+let concepts=[],cur=null,salt=(Date.now()%100000);
 const THEMES=["white","silver","black"];
 let theme=localStorage.getItem("logomo-theme")||"silver";
 if(theme==="light")theme="silver"; if(theme==="dark")theme="black";
 if(!THEMES.includes(theme))theme="silver";
 function applyTheme(){document.documentElement.dataset.theme=theme;document.querySelectorAll("#themeBtn .tdot").forEach(d=>d.classList.toggle("on",d.dataset.t===theme));}
-applyTheme();
-const SAMPLES=["Nebula","Fern & Field","Kobo Studio","Lumen","Driftwell","Mono & Co","Halcyon","Pip & Post","Northloop","Wanderly"];
-
 function toast(msg){const el=$("#toast");el.textContent=msg;el.classList.add("show");clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove("show"),2200);}
 function download(url,filename){const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();}
 function dlBlob(blob,filename){const u=URL.createObjectURL(blob);download(u,filename);setTimeout(()=>URL.revokeObjectURL(u),5000);}
 const blobToDataURL=b=>new Promise(res=>{const r=new FileReader();r.onload=()=>res(r.result);r.readAsDataURL(b);});
 
-/* ================= controls ================= */
-function buildVibeOptions(){const s=$("#vibeIn");s.innerHTML="";Object.entries(VIBES).forEach(([k,v])=>{const o=document.createElement("option");o.value=k;o.textContent=lang==="tc"?v.tc:v.en;s.appendChild(o);});}
-function buildChips(){const c=$("#chips");c.innerHTML="";SAMPLES.slice(0,6).forEach(n=>{const b=document.createElement("button");b.textContent=n;b.onclick=()=>{$("#nameIn").value=n;generate();};c.appendChild(b);});}
-function renderFamPills(){document.querySelectorAll(".pill").forEach(p=>{const f=p.dataset.fam;p.textContent=f==="all"?(lang==="tc"?"全部":"All"):(FAM_LABEL[f]?FAM_LABEL[f][lang]||FAM_LABEL[f].en:f);p.classList.toggle("on",f===famFilter);});}
-document.querySelectorAll(".pill").forEach(p=>p.onclick=()=>{famFilter=p.dataset.fam;renderFamPills();renderGrid();});
+/* ================= quick start presets (industry seeds, after logocreator's list) ================= */
+const PRESETS=[
+ {id:"tech",icon:"⌘",label:{en:"Tech",tc:"科技"},logoType:"icon-name",style:"geometric",bg:"#FFFFFF",detail:"balanced",describe:"a clean geometric mark suggesting connection, speed and reliability"},
+ {id:"coffee",icon:"◍",label:{en:"Coffee",tc:"咖啡"},logoType:"icon-name",style:"handdrawn",bg:"#F5F1E8",detail:"balanced",describe:"a warm hand-drawn coffee cup with rising steam, cozy and artisanal"},
+ {id:"fitness",icon:"◉",label:{en:"Fitness",tc:"健身"},logoType:"icon-name",style:"minimal",bg:"#14130F",detail:"balanced",describe:"a bold dynamic mark suggesting motion, energy and strength"},
+ {id:"finance",icon:"◆",label:{en:"Finance",tc:"金融"},logoType:"emblem",style:"luxury",bg:"#FFFFFF",detail:"balanced",describe:"a refined emblem suggesting trust, stability and growth"},
+ {id:"beauty",icon:"✿",label:{en:"Beauty",tc:"美妝"},logoType:"icon-name",style:"luxury",bg:"#FFFFFF",detail:"balanced",describe:"an elegant minimal floral mark, soft, premium and refined"},
+ {id:"food",icon:"❦",label:{en:"Restaurant",tc:"餐飲"},logoType:"emblem",style:"retro",bg:"#F5F1E8",detail:"detailed",describe:"a vintage restaurant badge, appetizing, classic and crafted"},
+ {id:"eco",icon:"❧",label:{en:"Eco",tc:"環保"},logoType:"icon-name",style:"minimal",bg:"#FFFFFF",detail:"minimal",describe:"a simple leaf-based mark, organic, calm and sustainable"},
+ {id:"gaming",icon:"▶",label:{en:"Gaming",tc:"遊戲"},logoType:"icon-name",style:"threed",bg:"#14130F",detail:"detailed",describe:"a bold 3D emblem with energy, edge and a futuristic feel"},
+ {id:"law",icon:"§",label:{en:"Law",tc:"法律"},logoType:"monogram",style:"luxury",bg:"#FFFFFF",detail:"balanced",describe:"a classic monogram, authoritative, timeless and trustworthy"},
+ {id:"creative",icon:"✦",label:{en:"Creative",tc:"創意"},logoType:"abstract",style:"gradient",bg:"#FFFFFF",detail:"balanced",describe:"a vibrant gradient abstract mark, playful, bold and modern"},
+ {id:"realestate",icon:"⌂",label:{en:"Real Estate",tc:"地產"},logoType:"icon-name",style:"minimal",bg:"#FFFFFF",detail:"balanced",describe:"a clean architectural mark suggesting property, trust and modern living"},
+ {id:"photo",icon:"◎",label:{en:"Photo",tc:"攝影"},logoType:"icon-name",style:"minimal",bg:"#14130F",detail:"minimal",describe:"a sleek minimal aperture or lens mark, sharp and modern"},
+];
+const DESCRIBE_SUGGESTIONS=[
+ "A fox, friendly and modern","A mountain, calm and strong","A leaf, organic and fresh",
+ "A wave, flowing and free","A sun, warm and bright","A star, bold and playful"];
+/* describe keywords -> archetype hints (steer the mark, never the wording) */
+const DESCRIBE_HINTS=[
+ {re:/fox|狐/,kinds:["fox"]},{re:/bird|owl|鳥|貓頭鷹/,kinds:["bird"]},{re:/cat|貓/,kinds:["cat"]},
+ {re:/bear|熊/,kinds:["bear"]},{re:/fish|whale|魚|鯨/,kinds:["fish"]},
+ {re:/leaf|plant|tree|eco|green|葉|樹|植物/,kinds:["sprig","pebble","wave"]},
+ {re:/sun|日|陽/,kinds:["halfsun","doodlesun","sunoff","sunburst"]},
+ {re:/wave|sea|ocean|surf|浪|海/,kinds:["wave","sketchwave"]},
+ {re:/mountain|peak|山/,kinds:["peaks"]},
+ {re:/star|星/,kinds:["wobblystar","badgestar"]},
+ {re:/circle|ring|圈|圓/,kinds:["target","arc","enso","scribble"]},
+ {re:/diamond|gem|鑽/,kinds:["diamond","corner"]},
+];
+function describeHints(text){
+  const out=[];
+  DESCRIBE_HINTS.forEach(h=>{if(h.re.test(text||""))out.push(...h.kinds);});
+  return [...new Set(out)];
+}
+
+/* ================= controls rendering ================= */
+function renderPresets(){
+  const box=$("#presets");box.innerHTML="";
+  PRESETS.forEach(p=>{const b=document.createElement("button");b.className="preset"+(S.activePreset===p.id?" on":"");
+    b.innerHTML=`<span>${p.icon}</span>${esc(p.label[lang]||p.label.en)}`;
+    b.title=`${p.label.en}: ${FAM_LABEL[p.style].en} style`;
+    b.onclick=()=>applyPreset(p);box.appendChild(b);});
+}
+function applyPreset(p){
+  S.activePreset=p.id;S.logoType=p.logoType;S.style=p.style;S.detail=p.detail;
+  S.describe=p.describe;$("#descIn").value=p.describe;
+  S.bgColor=p.bg;S.brandColor="auto";S.mono=false;S.ref=null;
+  renderPresets();renderTypeSeg();renderStyleCards();renderSwatches();renderDetailSeg();renderMonoSw();renderRefChip();renderContrastWarn();
+  generate();
+}
+function renderSuggests(){
+  const box=$("#suggests");box.innerHTML="";
+  if((S.describe||"").trim()!=="")return;
+  DESCRIBE_SUGGESTIONS.forEach(s=>{const b=document.createElement("button");b.textContent=s.length>26?s.slice(0,24)+"…":s;
+    b.onclick=()=>{S.describe=s;$("#descIn").value=s;S.activePreset=null;renderPresets();renderSuggests();};box.appendChild(b);});
+}
+function renderTypeSeg(){
+  const box=$("#typeSeg");box.innerHTML="";
+  LOGO_TYPES.forEach(lt=>{const b=document.createElement("button");b.textContent=lt[lang]||lt.en;
+    b.className=S.logoType===lt.id?"on":"";
+    b.onclick=()=>{S.logoType=lt.id;S.activePreset=null;renderPresets();renderTypeSeg();};box.appendChild(b);});
+}
+function renderDetailSeg(){
+  const box=$("#detailSeg");box.innerHTML="";
+  DETAIL_LEVELS.forEach(d=>{const b=document.createElement("button");b.textContent=d[lang]||d.en;
+    b.className=S.detail===d.id?"on":"";
+    b.onclick=()=>{S.detail=d.id;renderDetailSeg();};box.appendChild(b);});
+}
+function renderVarSeg(){
+  const box=$("#varSeg");box.innerHTML="";
+  [4,8,12].forEach(n=>{const b=document.createElement("button");b.textContent=String(n);
+    b.className=S.variations===n?"on":"";
+    b.onclick=()=>{S.variations=n;renderVarSeg();};box.appendChild(b);});
+}
+function renderMonoSw(){const el=$("#monoSw");el.classList.toggle("on",S.mono);el.setAttribute("aria-checked",String(S.mono));}
+
+/* ---- style cards: live engine previews (the style draws its own thumbnail) ---- */
+const PREVIEW_PAL={minimal:0,geometric:3,gradient:10,mascot:4,handdrawn:0,luxury:12,retro:14,threed:1,monoline:5,japanese:0,bauhaus:0,kandinsky:0,diagram:3};
+function stylePreviewSVG(fam){
+  const pal=PALETTES[PREVIEW_PAL[fam]||0];
+  const ctx={name:"Mo",tagline:"",logoType:"icon-name",family:fam,font:FONTS.grotesk,markKind:(KINDS[fam]||[])[0],
+    layout:{nameDy:0,nameFs:1,nameLs:0,tagDy:0,markDx:0},mono:false,detail:"balanced"};
+  const inner=composeConcept(RNG("preview|"+fam),{...ctx,pal});
+  return tileSVG(inner,pal).replace("<svg ",'<svg preserveAspectRatio="xMidYMid slice" ');
+}
+function styleCard(fam){
+  const b=document.createElement("button");b.className="stylecard"+(S.style===fam?" on":"");
+  const n=(KINDS[fam]||[]).length;
+  b.innerHTML=`<span class="prev">${stylePreviewSVG(fam)}</span><span class="nm">${FAM_LABEL[fam][lang]||FAM_LABEL[fam].en}<span>${n?n+" marks":"fluid"}</span></span>`;
+  b.onclick=()=>{S.style=fam;S.activePreset=null;renderPresets();renderStyleCards();};
+  return b;
+}
+function renderStyleCards(){
+  const g=$("#styleGrid");g.innerHTML="";
+  const dice=document.createElement("button");dice.className="stylecard dice"+(S.style==="surprise"?" on":"");
+  dice.innerHTML=`<span class="prev">🎲</span><span class="nm">${t("surprise")}<span>all styles</span></span>`;
+  dice.onclick=()=>{S.style="surprise";S.activePreset=null;renderPresets();renderStyleCards();};
+  g.appendChild(dice);
+  PRIMARY_STYLES.forEach(f=>g.appendChild(styleCard(f)));
+  const h=$("#heritageGrid");
+  if(!h.hidden){h.innerHTML="";HERITAGE_STYLES.forEach(f=>h.appendChild(styleCard(f)));}
+  const mb=$("#moreStylesBtn");
+  mb.querySelector("[data-i18n]").textContent=h.hidden?t("moreStyles"):t("lessStyles");
+  mb.classList.toggle("open",!h.hidden);
+}
+
+/* ---- color swatches ---- */
+const BRAND_COLORS=[{name:"Blue",color:"#2F6FF5"},{name:"Red",color:"#E5484D"},{name:"Green",color:"#30A46C"},{name:"Yellow",color:"#F2C40F"}];
+const BG_COLORS=[{name:"White",color:"#FFFFFF"},{name:"Gray",color:"#C9C8C2"},{name:"Black",color:"#14130F"}];
+function renderSwatches(){
+  const b=$("#brandSw");b.innerHTML="";
+  const auto=document.createElement("button");auto.className="csw auto"+(S.brandColor==="auto"?" on":"");auto.title=t("auto");
+  auto.innerHTML="<span>AUTO</span>";
+  auto.onclick=()=>{S.brandColor="auto";S.activePreset=null;renderPresets();renderSwatches();renderContrastWarn();};
+  b.appendChild(auto);
+  BRAND_COLORS.forEach(c=>{const d=document.createElement("button");d.className="csw"+(S.brandColor===c.color?" on":"");
+    d.style.background=c.color;d.title=c.name;
+    d.onclick=()=>{S.brandColor=c.color;S.activePreset=null;renderPresets();renderSwatches();renderContrastWarn();};b.appendChild(d);});
+  const custom=document.createElement("span");custom.className="csw custom";
+  custom.title="Custom color";
+  custom.innerHTML=`<input type="color" value="${S.brandColor.startsWith("#")?S.brandColor:"#e4572e"}" aria-label="Custom brand color">`;
+  custom.querySelector("input").addEventListener("input",e=>{S.brandColor=e.target.value;S.activePreset=null;renderPresets();renderContrastWarn();
+    b.querySelectorAll(".csw").forEach(x=>x.classList.remove("on"));custom.classList.add("on");});
+  b.appendChild(custom);
+  const g=$("#bgSw");g.innerHTML="";
+  const gauto=document.createElement("button");gauto.className="csw auto"+(S.bgColor==="auto"?" on":"");gauto.title=t("auto");
+  gauto.innerHTML="<span>AUTO</span>";
+  gauto.onclick=()=>{S.bgColor="auto";S.activePreset=null;renderPresets();renderSwatches();renderContrastWarn();};
+  g.appendChild(gauto);
+  BG_COLORS.forEach(c=>{const d=document.createElement("button");d.className="csw"+(S.bgColor===c.color?" on":"");
+    d.style.background=c.color;d.title=c.name;
+    d.onclick=()=>{S.bgColor=c.color;S.activePreset=null;renderPresets();renderSwatches();renderContrastWarn();};g.appendChild(d);});
+}
+/* WCAG luminance + contrast, after logocreator's warning */
+function lum(hex){const n=parseInt(hex.slice(1),16);
+  const ch=i=>{const c=((n>>(i*8))&255)/255;return c<=.03928?c/12.92:Math.pow((c+.055)/1.055,2.4);};
+  return .2126*ch(2)+.7152*ch(1)+.0722*ch(0);}
+function contrastRatio(a,b){const l1=lum(a),l2=lum(b);return (Math.max(l1,l2)+.05)/(Math.min(l1,l2)+.05);}
+function renderContrastWarn(){
+  const box=$("#contrastWarn");
+  if(S.brandColor==="auto"||S.bgColor==="auto"){
+    box.innerHTML=`<div class="warn"><span class="ico">✦</span><span>${t("aiPicks")}</span></div>`;return;}
+  const r=contrastRatio(S.brandColor,S.bgColor);
+  if(r<1.6){box.innerHTML=`<div class="warn bad"><span class="ico">⚠</span><span>${t("lowContrast")}</span></div>`;}
+  else box.innerHTML="";
+}
+function renderRefChip(){
+  const slot=$("#refChipSlot");slot.innerHTML="";
+  if(!S.ref)return;
+  const d=document.createElement("span");d.className="refchip";
+  d.innerHTML=`✦ <b>${t("refInspired")}</b><i style="display:inline-block;width:14px;height:14px;border-radius:50%;background:${S.ref.colors[0]};border:1px solid var(--line)"></i><i style="display:inline-block;width:14px;height:14px;border-radius:50%;background:${S.ref.colors[1]};border:1px solid var(--line)"></i>`;
+  const x=document.createElement("button");x.textContent="✕";x.title="Remove reference";
+  x.onclick=()=>{S.ref=null;S.brandColor="auto";S.bgColor="auto";renderRefChip();renderSwatches();renderContrastWarn();};
+  d.appendChild(x);slot.appendChild(d);
+}
 
 /* ================= generation ================= */
-function generate(){
- const name=$("#nameIn").value.trim(), tagline=$("#tagIn").value.trim(), vibeKey=$("#vibeIn").value||"any";
- if(!name){toast(t("needName"));$("#nameIn").focus();return;}
- salt=(Date.now()%100000);
- buildSet(name,tagline,vibeKey,salt);
- pushHistory(name,tagline,vibeKey,salt);
- toast(t("regen"));
+function palIdxFor(fam){
+  if(fam==="luxury")return [12,13,0,5,7];
+  if(fam==="retro")return [14,15,0,4,8];
+  if(fam==="mascot")return [10,11,4,1,0];
+  if(fam==="handdrawn")return [0,8,6,4];
+  if(fam==="threed")return [1,3,9,10];
+  return [0,1,2,3,4,5,6,7,8,9,10,11];
 }
-function buildSet(name,tagline,vibeKey,sd){
- const vibe=VIBES[vibeKey]||VIBES.any, r=RNG(name+"|"+vibeKey+"|"+sd);
- concepts=[];
- FAMILIES.forEach(fam=>{
-   const kinds=KINDS[fam]?sampleDistinct(r,KINDS[fam],2):[undefined,undefined];
-   for(let i=0;i<2;i++){
-     const pal=PALETTES[r.pick(vibe.pal)], fontKey=r.pick(vibe.fonts);
-     const seed=`${name}|${vibeKey}|${fam}|${i}|${sd}`;
-     const lr=RNG(seed+"|layout");
-     const layout={nameDy:lr.range(-6,6),nameFs:lr.range(.94,1.05),nameLs:lr.range(-2,2),tagDy:lr.range(-4,4),markDx:lr.range(-8,8)};
-     concepts.push({id:uid("c"),family:fam,name,tagline,pal,fontKey,seed,
-       ctx:{name,tagline,vibe,font:FONTS[fontKey],markKind:kinds[i],layout}});
-   }
- });
- $("#toolbar").hidden=false;
- renderGrid();
+function fontKeysFor(fam){
+  if(fam==="luxury")return ["playfair","dmserif","bebas"];
+  if(fam==="retro")return ["dmserif","bebas","archivo"];
+  if(fam==="handdrawn")return ["grotesk","dmserif","unbounded"];
+  return ["archivo","bebas","grotesk","playfair","dmserif","unbounded"];
+}
+function applyColorOverrides(pal){
+  let p={...pal};
+  if(S.bgColor!=="auto"){
+    p.bg=S.bgColor;
+    if(isDark(S.bgColor)!==isDark(pal.bg))p.ink=isDark(S.bgColor)?"#f5f4ef":"#1a1814";
+  }
+  if(S.brandColor!=="auto")p.accent=S.brandColor;
+  if(S.mono)p.accent=p.ink;
+  return p;
+}
+function sampleDistinct(rng,arr,n){const pool=[...arr],out=[];while(out.length<n&&pool.length){out.push(pool.splice(Math.floor(rng.f()*pool.length),1)[0]);}return out;}
+function generate(){
+  const name=$("#nameIn").value.trim();
+  if(!name){toast(t("needName"));$("#nameIn").focus();return;}
+  S.name=name;S.describe=$("#descIn").value.trim();
+  salt=(Date.now()%100000);
+  buildSet(name,salt);
+  pushHistory(name,salt);
+  toast(t("regen"));
+}
+function buildSet(name,sd){
+  const r=RNG(name+"|"+S.logoType+"|"+S.style+"|"+S.detail+"|"+sd);
+  const hints=describeHints(S.describe);
+  concepts=[];
+  let styles;
+  if(S.style==="surprise"){
+    styles=[...ALL_STYLES];
+    for(let i=styles.length-1;i>0;i--){const j=Math.floor(r.f()*(i+1));[styles[i],styles[j]]=[styles[j],styles[i]];}
+    const hitStyle=hints.length?ALL_STYLES.find(f=>(KINDS[f]||[]).includes(hints[0])):null;
+    if(hitStyle)styles=[hitStyle,...styles.filter(s=>s!==hitStyle)];
+  }else styles=[S.style];
+  const used={};
+  for(let i=0;i<S.variations;i++){
+    const fam=styles[i%styles.length];
+    const pool=KINDS[fam]||[];
+    used[fam]=used[fam]||[];
+    let kind;
+    const hit=hints.find(h=>pool.includes(h)&&!used[fam].includes(h));
+    if(hit)kind=hit;
+    else{
+      const avail=pool.filter(k=>!used[fam].includes(k));
+      kind=avail.length?r.pick(avail):(pool.length?r.pick(pool):undefined);
+    }
+    if(kind)used[fam].push(kind);
+    const pal=applyColorOverrides(PALETTES[r.pick(palIdxFor(fam))]);
+    const fontKey=r.pick(fontKeysFor(fam));
+    const seed=`${name}|${S.logoType}|${fam}|${i}|${sd}`;
+    const lr=RNG(seed+"|layout");
+    const jit=S.detail==="minimal"?0:S.detail==="detailed"?1.6:1;
+    const layout={nameDy:lr.range(-6,6)*jit,nameFs:lr.range(.94,1.05),nameLs:lr.range(-2,2)*jit,tagDy:lr.range(-4,4)*jit,markDx:lr.range(-8,8)*jit};
+    concepts.push({id:uid("c"),family:fam,name,tagline:"",pal,fontKey,seed,detail:S.detail,mono:S.mono,
+      ctx:{name,tagline:"",logoType:S.logoType,family:fam,font:FONTS[fontKey],markKind:kind,layout,mono:S.mono,detail:S.detail}});
+  }
+  renderGrid();
 }
 function renderGrid(){
- const g=$("#grid");g.innerHTML="";
- const list=concepts.filter(c=>famFilter==="all"||c.family===famFilter);
- $("#count").textContent=`${list.length} ${t("concepts")}`;
- if(!list.length){g.innerHTML=`<div class="empty">—</div>`;return;}
- list.forEach((c,i)=>{
-   const inner=GEN[c.family](RNG(c.seed),{...c.ctx,pal:c.pal});
-   const d=document.createElement("div");d.className="card";d.style.animationDelay=(i*45)+"ms";
-   d.innerHTML=`<div class="tile">${tileSVG(inner,c.pal)}</div>
-     <div class="meta"><span class="fam">${FAM_LABEL[c.family][lang]||FAM_LABEL[c.family].en}</span><span class="palname">${esc(c.pal.name)}</span></div>`;
-   d.onclick=()=>openModal(c);
-   g.appendChild(d);
- });
+  const g=$("#grid");g.innerHTML="";
+  $("#count").textContent=`${concepts.length} ${t("concepts")}`;
+  if(!concepts.length){g.innerHTML=`<div class="empty">—</div>`;return;}
+  concepts.forEach((c,i)=>{
+    const d=document.createElement("div");d.className="card";d.style.animationDelay=(i*45)+"ms";
+    d.innerHTML=`<div class="tile">${conceptSVG(c)}</div>
+      <div class="meta"><span class="fam">${FAM_LABEL[c.family][lang]||FAM_LABEL[c.family].en}</span><span class="palname">${esc(c.pal.name)}</span></div>`;
+    d.onclick=()=>openModal(c);
+    g.appendChild(d);
+  });
 }
 
 /* ================= detail modal ================= */
-function conceptSVG(c){return GEN[c.family](RNG(c.seed),{...c.ctx,pal:c.pal});}
 function openModal(c){
- cur=c;
- $("#dTitle").innerHTML=`${esc(c.name)} <span>·</span> ${FAM_LABEL[c.family][lang]||FAM_LABEL[c.family].en}`;
- paintModal();
- $("#scrim").classList.add("open");document.body.style.overflow="hidden";
+  cur=c;
+  $("#dTitle").innerHTML=`${esc(c.name)} <span>·</span> ${FAM_LABEL[c.family][lang]||FAM_LABEL[c.family].en}`;
+  paintModal();
+  $("#scrim").classList.add("open");document.body.style.overflow="hidden";
 }
 function paintModal(){
- const c=cur, inner=conceptSVG(c), svg=tileSVG(inner,c.pal);
- $("#bigPrev").innerHTML=svg;
- // palette variants: current + 5 others
- const idxs=[PALETTES.indexOf(c.pal)];while(idxs.length<6){const i=Math.floor(Math.random()*PALETTES.length);if(!idxs.includes(i))idxs.push(i);}
- const vr=$("#varRow");vr.innerHTML="";
- idxs.forEach(i=>{const p=PALETTES[i],b=document.createElement("button");
-   b.className="swatch"+(p===c.pal?" on":"");b.title=p.name;
-   b.innerHTML=`<i style="background:${p.bg}"></i><i style="background:${p.ink};clip-path:polygon(100% 0,100% 100%,62% 100%)"></i><i style="background:${p.accent};clip-path:circle(26% at 30% 68%)"></i>`;
-   b.onclick=()=>{c.pal=p;paintModal();renderGrid();};vr.appendChild(b);});
- // mockups reuse the live artwork
- $("#mockCard").style.background=c.pal.bg;
- $("#mockCard").innerHTML=`<div style="width:44%">${svg}</div><div style="font-family:${FONTS[c.fontKey].css};color:${c.pal.ink};font-size:13px;letter-spacing:3px">${esc(c.name.toUpperCase())}</div>${c.tagline?`<div style="color:${c.pal.ink};opacity:.6;font-size:9px;letter-spacing:2px">${esc(c.tagline.toUpperCase())}</div>`:""}`;
- $("#mockIcon").style.background=c.pal.ink;
- $("#mockIcon").innerHTML=`<div style="width:72%">${svg}</div>`;
+  const c=cur,svg=conceptSVG(c);
+  $("#bigPrev").innerHTML=svg;
+  const startIdx=PALETTES.findIndex(p=>p.name===c.pal.name);
+  const idxs=[startIdx===-1?0:startIdx];while(idxs.length<6){const i=Math.floor(Math.random()*PALETTES.length);if(!idxs.includes(i))idxs.push(i);}
+  const vr=$("#varRow");vr.innerHTML="";
+  idxs.forEach(i=>{const p=PALETTES[i],b=document.createElement("button");
+    b.className="swatch"+(p.name===c.pal.name?" on":"");b.title=p.name;
+    b.innerHTML=`<i style="background:${p.bg}"></i><i style="background:${p.ink};clip-path:polygon(100% 0,100% 100%,62% 100%)"></i><i style="background:${p.accent};clip-path:circle(26% at 30% 68%)"></i>`;
+    b.onclick=()=>{c.pal=applyColorOverrides(p);paintModal();renderGrid();};vr.appendChild(b);});
+  $("#mockCard").style.background=c.pal.bg;
+  $("#mockCard").innerHTML=`<div style="width:44%">${svg}</div><div style="font-family:${FONTS[c.fontKey].css};color:${c.pal.ink};font-size:13px;letter-spacing:3px">${esc(c.name.toUpperCase())}</div>`;
+  $("#mockIcon").style.background=c.pal.ink;
+  $("#mockIcon").innerHTML=`<div style="width:72%">${svg}</div>`;
 }
 function closeModal(){$("#scrim").classList.remove("open");document.body.style.overflow="";}
 $("#closeBtn").onclick=closeModal;
 $("#scrim").addEventListener("click",e=>{if(e.target.id==="scrim")closeModal();});
-document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeModal();closeKit();}});
+
+/* ================= brand kit ================= */
+function openKit(){
+  if(!cur)return;
+  const c=cur;
+  $("#kitTitle").innerHTML=`${esc(c.name)} <span style="color:var(--accent)">·</span> ${FAM_LABEL[c.family][lang]||FAM_LABEL[c.family].en}`;
+  $("#kitPrimary").innerHTML=`<div style="width:64%">${conceptSVG(c)}</div>`;
+  const monoPal={...c.pal,accent:c.pal.ink};
+  const monoSVG=tileSVG(composeConcept(RNG(c.seed),{...c.ctx,mono:true,pal:monoPal}),monoPal);
+  $("#kitMono").innerHTML=`<div style="width:64%">${monoSVG}</div>`;
+  const iconSVG=tileSVG(markOnly(RNG(c.seed),{...c.ctx,pal:c.pal},200,1.02),c.pal);
+  $("#kitIcon").innerHTML=`<div style="width:64%">${iconSVG}</div>`;
+  const darkPal={bg:"#14130f",ink:"#f5f4ef",accent:c.pal.accent,soft:"#2a2a30",name:c.pal.name};
+  const darkSVG=tileSVG(composeConcept(RNG(c.seed),{...c.ctx,pal:darkPal}),darkPal);
+  $("#kitDark").innerHTML=`<div style="width:64%">${darkSVG}</div>`;
+  const kp=$("#kitPal");kp.innerHTML="";
+  [["Background",c.pal.bg],["Ink",c.pal.ink],["Accent",c.pal.accent],["Soft",c.pal.soft]].forEach(([n,hex])=>{
+    const d=document.createElement("div");d.className="kp";
+    d.innerHTML=`<i style="background:${hex}"></i><span>${n}<br><b style="color:var(--ink)">${hex}</b></span>`;kp.appendChild(d);});
+  $("#kitFont").innerHTML=`<b style="font-family:${FONTS[c.fontKey].css}">${FONTS[c.fontKey].fam}</b> — ${esc(FONTS[c.fontKey].fam)} · <span style="font-family:${FONTS[c.fontKey].css};font-size:20px">${esc(c.name.toUpperCase())}</span>`;
+  $("#kitScrim").classList.add("open");
+}
+function closeKit(){$("#kitScrim").classList.remove("open");}
+$("#kitBtn").onclick=openKit;
+$("#kitCloseBtn").onclick=closeKit;
+$("#kitScrim").addEventListener("click",e=>{if(e.target.id==="kitScrim")closeKit();});
+$("#kitDlSvg").onclick=()=>{const s=`<!-- Logo Mo · ${esc(cur.name)} · ${cur.family} · ${cur.pal.name} -->\n`+standaloneSVG(cur);
+  dlBlob(new Blob([s],{type:"image/svg+xml"}),cur.name.toLowerCase().replace(/[^a-z0-9]+/g,"-")+"-logo.svg");toast("SVG ✓");};
+$("#kitDlPng").onclick=()=>exportPNG(cur,1024);
+$("#kitDlSheet").onclick=()=>{
+  const c=cur,svg=standaloneSVG(c);
+  const sheet=`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>${esc(c.name)} — Brand Sheet · Logo Mo</title>
+<style>body{font-family:system-ui,sans-serif;max-width:720px;margin:40px auto;padding:0 24px;color:#1d1a15;background:#f5f4f0}
+h1{font-size:34px} .logo{max-width:340px;margin:24px 0} .logo svg{width:100%;height:auto;border:1px solid #ddd;border-radius:16px}
+.sw{display:flex;gap:10px;flex-wrap:wrap}.sw div{border:1px solid #ddd;border-radius:10px;overflow:hidden;min-width:120px}
+.sw i{display:block;height:44px}.sw span{display:block;padding:8px;font-size:13px;background:#fff}
+code{background:#e9e9e7;padding:2px 6px;border-radius:6px}</style></head><body>
+<h1>${esc(c.name)} — Brand Sheet</h1><p>Made with Logo Mo · style <b>${FAM_LABEL[c.family].en}</b> · ${esc(c.pal.name)} palette</p>
+<div class="logo">${svg}</div>
+<h2>Palette</h2><div class="sw">
+<div><i style="background:${c.pal.bg}"></i><span>Background<br><code>${c.pal.bg}</code></span></div>
+<div><i style="background:${c.pal.ink}"></i><span>Ink<br><code>${c.pal.ink}</code></span></div>
+<div><i style="background:${c.pal.accent}"></i><span>Accent<br><code>${c.pal.accent}</code></span></div>
+<div><i style="background:${c.pal.soft}"></i><span>Soft<br><code>${c.pal.soft}</code></span></div></div>
+<h2>Typography</h2><p>Display face: <b>${esc(FONTS[c.fontKey].fam)}</b> (Google Fonts, open license).</p>
+<p style="color:#666;font-size:13px">Exported from Logo Mo — fully offline generative logo studio.</p></body></html>`;
+  dlBlob(new Blob([sheet],{type:"text/html"}),c.name.toLowerCase().replace(/[^a-z0-9]+/g,"-")+"-brand-sheet.html");toast("Brand sheet ✓");
+};
 
 /* ================= export: SVG + PNG (fonts embedded) ================= */
 const __fc={css:null,ok:{}};
 async function embeddedCSS(families){
- try{
-  if(!__fc.css){const link=document.querySelector('link[href*="fonts.googleapis.com/css2"]');
-   __fc.css=await(await fetch(link.href)).text();}
-  let out="";
-  for(const fam of families){
-   if(__fc.ok[fam]){out+=__fc.ok[fam];continue;}
-   const re=new RegExp("@font-face\\s*{[^}]*font-family:\\s*'"+fam.replace(/[-/\\^$*+?.()|[\]{}]/g,"\\$&")+"'[^}]*}","g");
-   const blocks=__fc.css.match(re)||[];let css=blocks.join("\n");
-   const urls=[...new Set([...css.matchAll(/url\((https:[^)]+)\)/g)].map(m=>m[1]))];
-   for(const u of urls){const d=await blobToDataURL(await(await fetch(u)).blob());css=css.split(u).join(d);}
-   __fc.ok[fam]=css;out+=css;
-  }
-  return out;
- }catch(e){return "";}
+  try{
+    if(!__fc.css){const link=document.querySelector('link[href*="fonts.googleapis.com/css2"]');
+      __fc.css=await(await fetch(link.href)).text();}
+    let out="";
+    for(const fam of families){
+      if(__fc.ok[fam]){out+=__fc.ok[fam];continue;}
+      const re=new RegExp("@font-face\\s*{[^}]*font-family:\\s*'"+fam.replace(/[-/\\^$*+?.()|[\]{}]/g,"\\$&")+"'[^}]*}","g");
+      const blocks=__fc.css.match(re)||[];let css=blocks.join("\n");
+      const urls=[...new Set([...css.matchAll(/url\((https:[^)]+)\)/g)].map(m=>m[1]))];
+      for(const u of urls){const d=await blobToDataURL(await(await fetch(u)).blob());css=css.split(u).join(d);}
+      __fc.ok[fam]=css;out+=css;
+    }
+    return out;
+  }catch(e){return "";}
 }
 async function exportPNG(c,size){
- toast(t("dl")+" PNG "+size+"…");
- await document.fonts.ready;
- const css=await embeddedCSS([FONTS[c.fontKey].fam]);
- let s=standaloneSVG(c).replace(/(<svg[^>]*>)/,"$1<style>"+css+"</style>");
- const url=URL.createObjectURL(new Blob([s],{type:"image/svg+xml;charset=utf-8"}));
- const img=new Image();
- await new Promise((res,rej)=>{img.onload=res;img.onerror=rej;img.src=url;});
- const cv=document.createElement("canvas");cv.width=cv.height=size;
- cv.getContext("2d").drawImage(img,0,0,size,size);URL.revokeObjectURL(url);
- const blob=await new Promise(r=>cv.toBlob(r,"image/png"));
- dlBlob(blob,`${c.name.toLowerCase().replace(/[^a-z0-9]+/g,"-")}-logo-${size}.png`);
- toast("PNG "+size+" ✓");
+  toast(t("dl")+" PNG "+size+"…");
+  await document.fonts.ready;
+  const css=await embeddedCSS([FONTS[c.fontKey].fam]);
+  let s=standaloneSVG(c).replace(/(<svg[^>]*>)/,"$1<style>"+css+"</style>");
+  const url=URL.createObjectURL(new Blob([s],{type:"image/svg+xml;charset=utf-8"}));
+  const img=new Image();
+  await new Promise((res,rej)=>{img.onload=res;img.onerror=rej;img.src=url;});
+  const cv=document.createElement("canvas");cv.width=cv.height=size;
+  cv.getContext("2d").drawImage(img,0,0,size,size);URL.revokeObjectURL(url);
+  const blob=await new Promise(r=>cv.toBlob(r,"image/png"));
+  dlBlob(blob,`${c.name.toLowerCase().replace(/[^a-z0-9]+/g,"-")}-logo-${size}.png`);
+  toast("PNG "+size+" ✓");
 }
 $("#dlSvg").onclick=()=>{const s=`<!-- Logo Mo · ${esc(cur.name)} · ${cur.family} · ${cur.pal.name} -->\n`+standaloneSVG(cur);
- dlBlob(new Blob([s],{type:"image/svg+xml"}),cur.name.toLowerCase().replace(/[^a-z0-9]+/g,"-")+"-logo.svg");toast("SVG ✓");};
+  dlBlob(new Blob([s],{type:"image/svg+xml"}),cur.name.toLowerCase().replace(/[^a-z0-9]+/g,"-")+"-logo.svg");toast("SVG ✓");};
 $("#cpSvg").onclick=async()=>{try{await navigator.clipboard.writeText(standaloneSVG(cur));toast(t("copied"));}catch(e){toast("copy failed");}};
 $("#dlPng512").onclick=()=>exportPNG(cur,512);
 $("#dlPng1024").onclick=()=>exportPNG(cur,1024);
 $("#dlPng2048").onclick=()=>exportPNG(cur,2048);
-$("#dlAll").onclick=async()=>{ $("#dlSvg").click();
- for(const s of[512,1024,2048]){await exportPNG(cur,s);await new Promise(r=>setTimeout(r,400));} };
 
-/* ================= history (localStorage) ================= */
-function pushHistory(name,tagline,vibeKey,sd){
- try{
-  const h=JSON.parse(localStorage.getItem("logomo-hist-v1")||"[]");
-  const c0=concepts[0], thumb=c0?tileSVG(GEN[c0.family](RNG(c0.seed),{...c0.ctx,pal:c0.pal}),c0.pal):"";
-  h.unshift({name,tagline,vibe:vibeKey,sd,ts:Date.now(),thumb});
-  localStorage.setItem("logomo-hist-v1",JSON.stringify(h.slice(0,12)));
-  renderHistory();
- }catch(e){}
+/* ================= history dashboard (localStorage) ================= */
+const HIST_KEY="logomo-hist-v1";
+function pushHistory(name,sd){
+  try{
+    const h=JSON.parse(localStorage.getItem(HIST_KEY)||"[]");
+    const c0=concepts[0],thumb=c0?conceptSVG(c0):"";
+    h.unshift({name,describe:S.describe,logoType:S.logoType,style:S.style,detail:S.detail,
+      brandColor:S.brandColor,bgColor:S.bgColor,mono:S.mono,variations:S.variations,sd,ts:Date.now(),thumb});
+    localStorage.setItem(HIST_KEY,JSON.stringify(h.slice(0,12)));
+    renderHistory();
+  }catch(e){}
 }
 function renderHistory(){
- const box=$("#histList");box.innerHTML="";
- let h=[];try{h=JSON.parse(localStorage.getItem("logomo-hist-v1")||"[]");}catch(e){}
- if(!h.length){box.innerHTML=`<div style="color:var(--ink2);font-size:13px">—</div>`;return;}
- h.forEach(x=>{const d=document.createElement("div");d.className="hitem";
-  d.innerHTML=`<div class="th">${x.thumb}</div><div><b>${esc(x.name)}</b><small>${esc(VIBES[x.vibe]? (lang==="tc"?VIBES[x.vibe].tc:VIBES[x.vibe].en):"")}</small></div>`;
-  d.onclick=()=>{$("#nameIn").value=x.name;$("#tagIn").value=x.tagline||"";$("#vibeIn").value=x.vibe;buildSet(x.name,x.tagline||"",x.vibe,x.sd);$("#hist").classList.remove("open");window.scrollTo({top:0,behavior:"smooth"});};
-  box.appendChild(d);});
+  const row=$("#histRow"),empty=$("#histEmpty");row.innerHTML="";
+  let h=[];try{h=JSON.parse(localStorage.getItem(HIST_KEY)||"[]");}catch(e){}
+  empty.hidden=h.length>0;
+  h.forEach(x=>{const d=document.createElement("div");d.className="hitem";
+    const when=new Date(x.ts).toLocaleDateString(lang==="tc"?"zh-Hant":"en",{month:"short",day:"numeric"});
+    const sty=x.style==="surprise"?t("surprise"):(FAM_LABEL[x.style]?FAM_LABEL[x.style][lang]||FAM_LABEL[x.style].en:x.style);
+    d.innerHTML=`<div class="th">${x.thumb}</div><div class="hb"><b>${esc(x.name)}</b><small>${esc(sty)} · ${when}</small></div>`;
+    d.onclick=()=>{restoreHistory(x);};row.appendChild(d);});
 }
-$("#histBtn").onclick=()=>{renderHistory();$("#hist").classList.toggle("open");};
+function restoreHistory(x){
+  S.describe=x.describe||"";S.logoType=x.logoType||"icon-name";S.style=x.style||"surprise";
+  S.detail=x.detail||"balanced";S.brandColor=x.brandColor||"auto";S.bgColor=x.bgColor||"auto";
+  S.mono=!!x.mono;S.variations=x.variations||8;S.activePreset=null;S.ref=null;
+  $("#nameIn").value=x.name;$("#descIn").value=S.describe;
+  renderPresets();renderSuggests();renderTypeSeg();renderStyleCards();renderSwatches();renderDetailSeg();renderVarSeg();renderMonoSw();renderRefChip();renderContrastWarn();
+  buildSet(x.name,x.sd);
+  window.scrollTo({top:0,behavior:"smooth"});
+  toast(t("restored"));
+}
+$("#clearHist").onclick=()=>{try{localStorage.removeItem(HIST_KEY);}catch(e){}renderHistory();toast(t("cleared"));};
 
-/* ================= header buttons ================= */
-$("#langBtn").onclick=()=>{lang=lang==="en"?"tc":"en";localStorage.setItem("logomo-lang",lang);applyI18n();renderGrid();renderHistory();};
+/* ================= reference upload: read its colors (offline, canvas) ================= */
+$("#refFile").addEventListener("change",e=>{
+  const f=e.target.files[0];if(!f)return;
+  const url=URL.createObjectURL(f);const img=new Image();
+  img.onload=()=>{
+    try{
+      const cv=document.createElement("canvas");cv.width=cv.height=48;
+      const cx2=cv.getContext("2d");cx2.drawImage(img,0,0,48,48);
+      const data=cx2.getImageData(0,0,48,48).data;
+      const buckets=new Map();
+      for(let i=0;i<data.length;i+=16){
+        const r=data[i],g=data[i+1],b=data[i+2],a=data[i+3];
+        if(a<200)continue;
+        if(r>245&&g>245&&b>245)continue;
+        const key=[r>>5,g>>5,b>>5].join(",");
+        const cur2=buckets.get(key)||{n:0,r:0,g:0,b:0};
+        cur2.n++;cur2.r+=r;cur2.g+=g;cur2.b+=b;buckets.set(key,cur2);
+      }
+      const ranked=[...buckets.values()].sort((x,y)=>y.n-x.n).slice(0,6)
+        .map(v=>"#"+[v.r/v.n,v.g/v.n,v.b/v.n].map(n=>Math.round(n).toString(16).padStart(2,"0")).join(""));
+      if(ranked.length){
+        const accent=ranked[0];
+        let bg=ranked.find(c=>c!==accent&&contrastRatio(c,accent)>1.4)||(isDark(accent)?"#FFFFFF":"#14130F");
+        S.brandColor=accent;S.bgColor=bg;S.ref={label:f.name,colors:[accent,bg]};S.activePreset=null;
+        renderPresets();renderSwatches();renderRefChip();renderContrastWarn();
+        toast(t("refReady"));
+      }
+    }catch(err){toast("reference failed");}
+    URL.revokeObjectURL(url);e.target.value="";
+  };
+  img.onerror=()=>{URL.revokeObjectURL(url);toast("reference failed");};
+  img.src=url;
+});
+
+/* ================= header + sidebar buttons ================= */
+$("#langBtn").onclick=()=>{lang=lang==="en"?"tc":"en";localStorage.setItem("logomo-lang",lang);applyI18n();renderGrid();};
 document.querySelectorAll("#themeBtn .tdot").forEach(d=>d.addEventListener("click",e=>{e.stopPropagation();theme=d.dataset.t;localStorage.setItem("logomo-theme",theme);applyTheme();}));
 $("#genBtn").onclick=generate;
-$("#diceBtn").onclick=()=>{const r=RNG("dice"+Date.now());$("#nameIn").value=r.pick(SAMPLES);$("#tagIn").value="";$("#vibeIn").value=r.pick(Object.keys(VIBES));generate();};
-$("#shufBtn").onclick=()=>{if(!$("#nameIn").value.trim()){$("#nameIn").value=SAMPLES[0];}generate();};
+$("#diceBtn").onclick=()=>{
+  const r=RNG("dice"+Date.now());
+  $("#nameIn").value=r.pick(SAMPLES);
+  $("#descIn").value="";S.describe="";S.style="surprise";S.brandColor="auto";S.bgColor="auto";S.mono=false;S.ref=null;S.activePreset=null;
+  renderPresets();renderSuggests();renderStyleCards();renderSwatches();renderMonoSw();renderRefChip();renderContrastWarn();
+  generate();
+};
 $("#nameIn").addEventListener("keydown",e=>{if(e.key==="Enter")generate();});
+$("#descIn").addEventListener("input",e=>{S.describe=e.target.value;S.activePreset=null;renderPresets();renderSuggests();});
+$("#moreStylesBtn").onclick=()=>{const h=$("#heritageGrid");h.hidden=!h.hidden;renderStyleCards();};
+$("#advBtn").onclick=e=>{const b=$("#advBody");const open=b.hidden;b.hidden=!open;
+  e.currentTarget.classList.toggle("open",open);};
+$("#monoSw").onclick=()=>{S.mono=!S.mono;renderMonoSw();};
 
 /* ================= boot: instant wow ================= */
-applyI18n();renderHistory();
+applyTheme();
+applyI18n();
+renderMonoSw();renderRefChip();
 $("#nameIn").value="Nebula";
-buildSet("Nebula","brew & bloom","any",salt);
-pushHistory("Nebula","brew & bloom","any",salt);
+buildSet("Nebula",salt);
+pushHistory("Nebula",salt);
 </script>
 </body>
 </html>

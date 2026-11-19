@@ -1,32 +1,46 @@
 # Logo Mo — Offline Generative Logo Studio
 
-**Type a name. Get eighteen logos.** A fully offline, zero-dependency generative logo studio that draws 20 original logo concepts in ten signature styles — right in your browser. No API keys, no backend, no waiting rooms.
+**Name it. Describe it. Pick a style.** A fully offline, zero-dependency generative logo studio, rebuilt the logocreator way: one focused form on the left, a gallery of original concepts on the right. No API keys, no backend, no waiting rooms.
 
 ![Logo Mo demo](IMG_6977.png)
 
 **Live demo:** https://artzdesignmo.github.io/logo-mo/
 
+## The way it works (after logocreator)
+
+Logocreator (Nutlope/logocreator) showed the cleanest way to make a logo: brand name → quick-start preset → describe it → logo type → style → colors → generate → gallery → brand kit. Logo Mo v2 adopts that whole flow — rebuilt offline, with a seeded design engine instead of an image model.
+
+1. **Brand name** — the only required field.
+2. **Quick start** — 12 industry presets (Tech, Coffee, Fitness, Finance, Beauty, Restaurant, Eco, Gaming, Law, Creative, Real Estate, Photo). One tap seeds logo type, style, description and background.
+3. **Describe it** — optional, in plain words ("a friendly fox"). Keywords steer the mark: fox → mascot fox, leaf → organic sprig, sun → half-sun. Suggestion chips when the box is empty.
+4. **Logo type** — Icon + Name, Emblem, Monogram, Wordmark, Abstract. The same mark re-locks into five real logo formats.
+5. **Style** — visual cards, each preview drawn live by the engine itself. 8 primary styles (Minimal, Geometric, Gradient, Mascot, Hand-drawn, Luxury, Retro, 3D) plus 5 classic studio styles under *More styles* (Monoline, Japanese, Bauhaus, Kandinsky, Diagram).
+6. **Brand color + Background** — Auto (engine picks) or a fixed swatch, plus a custom picker. A WCAG contrast warning appears when the pair is hard to read.
+7. **Advanced** — detail level (Minimal / Balanced / Detailed), Monochrome switch, and a reference-logo upload: the image never leaves your browser, its dominant colors become your palette.
+8. **Variations** — 4 / 8 / 12 concepts per generation, plus a Feeling-lucky dice.
+
 ## Features
 
 - **Seeded design engine** — the same name always generates the same set; shuffle for fresh variations. Deterministic, no AI calls.
-- **10 style engines** — Minimal, Monoline, Geometric, Wordmark, Emblem, Gradient, Japanese, Bauhaus, Kandinsky, Diagram (editorial diagram vocabulary after cathrynlavery/diagram-design: Venn, loop, nested, radar, quadrant, tree, pyramid, polar). Each style draws from a library of mathematically-constructed marks with generous negative space, optical centering and strict two-color discipline. Archetypes never repeat within a style per generation; scale, position and rotation are jittered for variable randomness.
-- **12 curated palettes** + 6 open display fonts, shortlisted per vibe (Tech, Food, Fashion, Finance, Wellness, Creative, Travel, Playful).
+- **13 style engines** — every style draws from a library of mathematically-constructed marks with generous negative space, optical centering and strict two-color discipline. Archetypes never repeat within a style per generation; scale, position and rotation are jittered for variable randomness. Diagram keeps its editorial vocabulary after cathrynlavery/diagram-design (Venn, loop, nested, radar, quadrant, tree, pyramid, polar).
+- **16 curated palettes** + 6 open display fonts, shortlisted per style (Luxury leans Champagne / Noir Gold, Retro leans cream and teal).
 - **Detail studio** — click any concept for palette variants, a business-card mockup, an app-icon mockup.
+- **Brand kit** — four lockups (primary, monochrome, app icon, reversed on dark), the palette with hex values, the display typeface, and one-click downloads: SVG, PNG 1024, and a standalone brand-sheet HTML file.
 - **Real exports** — SVG (infinitely scalable), PNG at 512 / 1024 / 2048, copy-SVG-to-clipboard. PNG exports automatically embed the display font, so exports match the screen pixel-for-pixel.
-- **History** — last 12 brands saved in localStorage, one click to revisit.
-- **Bilingual** EN / 繁體中文, **day/night** studio themes, keyboard-first (Enter to generate).
+- **History dashboard** — last 12 generations saved in localStorage with thumbnails; one click restores the whole form (name, description, type, style, colors) and regenerates the set.
+- **Bilingual** EN / 繁體中文, **day/night** studio themes, keyboard-first (Enter to generate). On phones the Generate bar sticks to the bottom, one thumb-tap away.
 
 ## Usage
 
 Open `index.html` — that's it. No build, no install, no server.
 
-1. Type a brand name (+ optional tagline), pick a vibe.
-2. Hit **Generate** — 20 concepts appear instantly.
-3. Click a concept to open the detail studio: try palette variants, preview mockups, export SVG/PNG.
+1. Type a brand name, describe it in a few words, pick a style.
+2. Hit **Generate** — concepts appear instantly.
+3. Click a concept to open the detail studio, then **Brand kit** for the full set.
 
 ## How it works
 
-A seeded PRNG (`xmur3` + `mulberry32`) drives everything: palette harmony selection, font pairing, style and mark-archetype choice. Each concept is pure inline SVG generated by one of ten style generators — no canvas, no libraries, no AI calls. The PNG exporter serializes the SVG, embeds the webfont as a data URI, and rasterizes via an offscreen canvas.
+A seeded PRNG (`xmur3` + `mulberry32`) drives everything: palette harmony selection, font pairing, style and mark-archetype choice. Each concept is pure inline SVG generated by one of thirteen style generators — no canvas, no libraries, no AI calls. The PNG exporter serializes the SVG, embeds the webfont as a data URI, and rasterizes via an offscreen canvas. Reference-logo colors are read with a 48×48 canvas sample — fully client-side.
 
 ## Tech
 
