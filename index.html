@@ -870,7 +870,266 @@ const LOGO_TYPES=[
 const DETAIL_LEVELS=[{id:"minimal",en:"Minimal",tc:"極簡"},{id:"balanced",en:"Balanced",tc:"均衡"},{id:"detailed",en:"Detailed",tc:"細緻"}];
 
 function tileSVG(inner,pal){return `<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" role="img"><rect width="400" height="400" fill="${pal.bg}"/>${inner}</svg>`;}
+
+/* ================= atlas reference previews (v3.2): hand-drawn to match the Nebula atlas ================= */
+/* Each of the 22 approaches has a fixed atlas tile: fixed background, fixed mark,
+   wordmark set in the user's brand name (ctx.name). The prompt text is untouched;
+   palette / mono / detail settings still steer the prompt, not the preview. */
+const ATLAS_BG={
+ 'minimal-geometric':'#7F1D2D','luxury-monogram':'#FFFDF9','modern-wordmark':'#FFF6E9',
+ 'friendly-mascot':'#101014','retro-badge':'#E3EFE6','abstract-gradient':'#F7E8E4',
+ 'handdrawn-artisan':'#E8DCC8','japanese-zen':'#0B3D5C','bauhaus':'#101014',
+ 'monoline':'#E8DCC8','three-d':'#23272F','editorial-diagram':'#0E2A1F',
+ 'chrome-metal':'#FFF6E9','brutalist-type':'#2B1A2E','pixel-sharp':'#F7E8E4',
+ 'stamp-seal':'#F7E8E4','morph-mark':'#2B1A2E','crafted-linework':'#0E2A1F',
+ 'toasty-organic':'#F7E8E4','storybook-gothic':'#FFFDFB','smooth-atmospheric':'#23272F',
+ 'negative-space':'#0E2A1F'};
+/* wordmark line under the mark (baseline y=318), atlas casing per tile */
+function atlasWM(ctx,o){
+  const tr=o.transform||'upper';
+  let txt=ctx.name.trim();
+  if(tr==='upper')txt=txt.toUpperCase();
+  else if(tr==='lower')txt=txt.toLowerCase();
+  const fs=fitSize(txt,o.k||.62,300,o.fs||27);
+  const ls=o.ls||9, k=o.k||.62;
+  const nat=txt.length*fs*k+(txt.length-1)*ls;
+  const tl=nat>300?` textLength="300" lengthAdjust="spacingAndGlyphs"`:'';
+  return `<text x="200" y="${o.y||318}" text-anchor="middle" font-family="${o.fam||"'Space Grotesk',sans-serif"}" font-weight="${o.w||500}" font-size="${fs}" letter-spacing="${ls}"${tl} fill="${o.color}">${esc(txt)}</text>`;
+}
+function star4(cx,cy,R,r,fill){
+  let pts=[];
+  for(let i=0;i<8;i++){const a=-Math.PI/2+i*Math.PI/4,rr=i%2?r:R;
+    pts.push((cx+rr*Math.cos(a)).toFixed(1)+','+(cy+rr*Math.sin(a)).toFixed(1));}
+  return `<polygon points="${pts.join(' ')}" fill="${fill}"/>`;
+}
+function arcText(id,r,top,bot,fs,ls,color){
+  return `<defs><path id="${id}t" d="M${200-r},160 A${r},${r} 0 0 1 ${200+r},160"/><path id="${id}b" d="M${200-r},160 A${r},${r} 0 0 0 ${200+r},160"/></defs>
+  <text font-family="'DM Serif Display',serif" font-size="${fs}" letter-spacing="${ls}" fill="${color}"><textPath href="#${id}t" startOffset="50%" text-anchor="middle">${esc(top)}</textPath></text>
+  <text font-family="'DM Serif Display',serif" font-size="${fs-2}" letter-spacing="${ls}" fill="${color}" opacity=".8"><textPath href="#${id}b" startOffset="50%" text-anchor="middle">${esc(bot)}</textPath></text>`;
+}
+const ATLAS={
+/* 01 Minimal Geometric — white ring, three dots on a triangle, gold centre + corner */
+'minimal-geometric'(ctx){
+  const W='#F5F4EF',G='#FFD166';
+  return `<circle cx="200" cy="160" r="58" fill="none" stroke="${W}" stroke-width="3"/>
+  <line x1="200" y1="160" x2="200" y2="102" stroke="${W}" stroke-width="2.5"/>
+  <line x1="200" y1="160" x2="150" y2="189" stroke="${W}" stroke-width="2.5"/>
+  <line x1="200" y1="160" x2="250" y2="189" stroke="${W}" stroke-width="2.5"/>
+  <polygon points="200,150 193,164 207,164" fill="${G}"/>
+  <circle cx="200" cy="102" r="7" fill="${W}"/><circle cx="150" cy="189" r="7" fill="${W}"/><circle cx="250" cy="189" r="7" fill="${G}"/>`
+  +atlasWM(ctx,{color:'#F5F4EF'});
+},
+/* 02 Luxury Monogram — interlocked serif initials, gold diamond, hairline */
+'luxury-monogram'(ctx){
+  const G='#C9A227',B='#141210';
+  const w=words(ctx.name);
+  const ini=(w.length>=2?(w[0][0]+w[1][0]):ctx.name.replace(/\s/g,'').slice(0,2)||'M').toUpperCase();
+  const a=ini[0]||'N',b=ini[1]||'';
+  const second=b?`<text x="224" y="212" text-anchor="middle" font-family="'Playfair Display',serif" font-weight="900" font-size="100" fill="${B}">${esc(b)}</text>`:'';
+  return `<text x="168" y="202" text-anchor="middle" font-family="'Playfair Display',serif" font-weight="900" font-size="100" fill="${G}">${esc(a)}</text>${second}
+  <rect x="240" y="104" width="12" height="12" transform="rotate(45 246 110)" fill="${G}"/>
+  <line x1="156" y1="230" x2="250" y2="230" stroke="${G}" stroke-width="1.5"/>`
+  +atlasWM(ctx,{color:'#B08D3E',fam:"'Playfair Display',serif",w:700,fs:24,ls:10});
+},
+/* 03 Modern Wordmark — the name itself, bold grotesque + purple underline */
+'modern-wordmark'(ctx){
+  const fs=fitSize(ctx.name.trim(),.72,320,64);
+  const w=ctx.name.trim().length*fs*.72;
+  return `<text x="200" y="208" text-anchor="middle" font-family="'Archivo Black',sans-serif" font-size="${fs}" fill="#20242B">${esc(ctx.name.trim())}</text>
+  <rect x="${(200-w/2).toFixed(1)}" y="232" width="${w.toFixed(1)}" height="4.5" rx="2" fill="#5B4BFF"/>`;
+},
+/* 04 Friendly Mascot — yellow smiley face, white forehead dot */
+'friendly-mascot'(ctx){
+  return `<circle cx="200" cy="160" r="56" fill="#FFD23F"/>
+  <circle cx="200" cy="124" r="5" fill="#F5F4EF"/>
+  <line x1="182" y1="148" x2="194" y2="148" stroke="#14130F" stroke-width="5" stroke-linecap="round"/>
+  <line x1="206" y1="148" x2="218" y2="148" stroke="#14130F" stroke-width="5" stroke-linecap="round"/>
+  <path d="M182,168 Q200,184 218,168" fill="none" stroke="#14130F" stroke-width="5" stroke-linecap="round"/>`
+  +atlasWM(ctx,{color:'#F5F4EF'});
+},
+/* 05 Retro Badge — double-ring badge, orange star, name + EST. 2026 on the ring */
+'retro-badge'(ctx){
+  const id=uid('arc');
+  const top=ctx.name.trim().toUpperCase().slice(0,12);
+  return `<circle cx="200" cy="160" r="74" fill="none" stroke="#1F3A33" stroke-width="3"/>
+  <circle cx="200" cy="160" r="54" fill="none" stroke="#E07840" stroke-width="2.5"/>
+  <circle cx="200" cy="160" r="38" fill="none" stroke="#1F3A33" stroke-width="2"/>`
+  +arcText(id,61,top,'EST · 2026',11,2,'#1F3A33')
+  +star4(200,160,26,6,'#E07840')
+  +atlasWM(ctx,{color:'#1F3A33',fam:"'DM Serif Display',serif",w:400,fs:26,ls:8});
+},
+/* 06 Abstract Gradient — coral-to-mauve blob, wavy line, red dot */
+'abstract-gradient'(ctx){
+  const id=uid('ag');
+  return `<defs><linearGradient id="${id}" x1="0" y1="0" x2=".7" y2="1"><stop offset="0" stop-color="#DE7077"/><stop offset="1" stop-color="#B04F68"/></linearGradient></defs>
+  <path d="M206,92 C236,92 260,114 258,144 C256,172 238,184 226,204 C214,224 184,232 164,216 C144,200 142,172 154,150 C164,130 156,112 172,102 C182,94 192,92 206,92 Z" fill="url(#${id})"/>
+  <path d="M168,168 Q184,156 200,166 T232,162" fill="none" stroke="#3D2B2B" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="248" cy="128" r="6" fill="#E63946"/>`
+  +atlasWM(ctx,{transform:'lower',color:'#3D2B2B',ls:6});
+},
+/* 07 Hand-drawn Artisan — loose ink loop, blue dot + blue strokes */
+'handdrawn-artisan'(ctx){
+  return `<g transform="rotate(-18 200 160)"><path d="M174,192 C158,152 174,106 210,96 C244,86 266,114 256,148 C246,180 216,196 190,186" fill="none" stroke="#1A1814" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M196,170 C192,148 204,126 224,126 C240,126 246,144 236,158" fill="none" stroke="#1A1814" stroke-width="4.5" stroke-linecap="round"/>
+  <circle cx="200" cy="154" r="4.5" fill="#1D5C8A"/>
+  <path d="M248,108 Q260,100 268,110" fill="none" stroke="#1D5C8A" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M164,150 Q156,162 162,174" fill="none" stroke="#1D5C8A" stroke-width="3.5" stroke-linecap="round"/></g>`
+  +atlasWM(ctx,{transform:'none',color:'#2E2A24',fam:"'DM Serif Display',serif",w:400,fs:30,ls:2});
+},
+/* 08 Japanese Zen — red ensō, white droplet with a smile */
+'japanese-zen'(ctx){
+  return `<path d="M254,180 A58,58 0 1 1 233,112" fill="none" stroke="#FF6B6B" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="233" cy="112" r="4" fill="#EAF6FF"/>
+  <path d="M200,138 C212,156 220,168 220,180 A20,20 0 1 1 180,180 C180,168 188,156 200,138 Z" fill="#EAF6FF"/>
+  <path d="M192,186 Q200,192 208,186" fill="none" stroke="#0B3D5C" stroke-width="2.5" stroke-linecap="round"/>`
+  +atlasWM(ctx,{color:'#EAF6FF',fs:26});
+},
+/* 09 Bauhaus — red circle, yellow square + dot, blue triangle, white square */
+'bauhaus'(ctx){
+  return `<circle cx="176" cy="126" r="27" fill="#E30613"/>
+  <rect x="199" y="100" width="52" height="52" fill="#FFD200"/>
+  <circle cx="225" cy="126" r="5" fill="#101014"/>
+  <polygon points="176,169 148,221 204,221" fill="#0057B8"/>
+  <rect x="199" y="169" width="52" height="52" fill="#F5F4EF"/>`
+  +atlasWM(ctx,{color:'#F5F4EF'});
+},
+/* 10 Monoline — one unbroken line knot, blue dot */
+'monoline'(ctx){
+  return `<g transform="rotate(18 200 160)"><path d="M200,102 C230,100 252,122 250,152 C248,182 224,200 198,194 C172,188 162,158 172,132 C180,110 190,104 200,102 Z" fill="none" stroke="#1A1814" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M184,144 C202,136 222,146 222,166 C222,186 204,198 186,192 C168,186 164,162 176,150 C180,146 182,144 184,144 Z" fill="none" stroke="#1A1814" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="238" cy="158" r="5" fill="#1D5C8A"/></g>`
+  +atlasWM(ctx,{color:'#2E2A24',fs:24,ls:14});
+},
+/* 11 3D / Isometric — mint cube, white outline */
+'three-d'(ctx){
+  const W='#E8EAED';
+  return `<polygon points="200,102 250,131 200,160 150,131" fill="#7EF0C1" stroke="${W}" stroke-width="2.5" stroke-linejoin="round"/>
+  <polygon points="150,131 200,160 200,218 150,189" fill="#1B1E26" stroke="${W}" stroke-width="2.5" stroke-linejoin="round"/>
+  <polygon points="250,131 200,160 200,218 250,189" fill="#4FA97F" stroke="${W}" stroke-width="2.5" stroke-linejoin="round"/>
+  <polygon points="200,102 250,131 250,189 200,218 150,189 150,131" fill="none" stroke="${W}" stroke-width="3" stroke-linejoin="round"/>`
+  +atlasWM(ctx,{color:'#E8EAED'});
+},
+/* 12 Editorial Diagram — tick ring, white + gold circles, crosshair, gold dot */
+'editorial-diagram'(ctx){
+  let ticks='';
+  for(let i=0;i<24;i++){const a=i/24*Math.PI*2;
+    ticks+=`<line x1="${(200+58*Math.cos(a)).toFixed(1)}" y1="${(160+58*Math.sin(a)).toFixed(1)}" x2="${(200+66*Math.cos(a)).toFixed(1)}" y2="${(160+66*Math.sin(a)).toFixed(1)}" stroke="#EEF3E6" stroke-width="2" opacity=".8"/>`;}
+  return ticks+`<circle cx="200" cy="160" r="46" fill="none" stroke="#EEF3E6" stroke-width="2"/>
+  <circle cx="200" cy="160" r="32" fill="none" stroke="#FFB703" stroke-width="2.5"/>
+  <line x1="200" y1="104" x2="200" y2="216" stroke="#EEF3E6" stroke-width="1.5" opacity=".6"/>
+  <line x1="144" y1="160" x2="256" y2="160" stroke="#EEF3E6" stroke-width="1.5" opacity=".6"/>
+  <circle cx="200" cy="160" r="5" fill="#FFB703"/>`
+  +atlasWM(ctx,{color:'#EEF3E6'});
+},
+/* 13 Chrome / Liquid Metal — silver blob, white highlight arcs */
+'chrome-metal'(ctx){
+  const id=uid('ag');
+  return `<defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F4F6F8"/><stop offset=".5" stop-color="#C9D0D7"/><stop offset="1" stop-color="#9AA3AD"/></linearGradient></defs>
+  <path d="M204,98 C232,96 254,116 254,146 C254,176 236,196 212,206 C188,216 160,206 152,180 C144,154 156,128 168,114 C178,102 186,100 204,98 Z" fill="url(#${id})" stroke="#8A919C" stroke-width="1.5" opacity=".95"/>
+  <path d="M172,150 Q190,120 224,128" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" opacity=".85"/>
+  <path d="M180,178 Q200,164 226,170" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" opacity=".6"/>`
+  +atlasWM(ctx,{color:'#20242B'});
+},
+/* 14 Brutalist Type — the name itself, huge condensed caps + salmon underline */
+'brutalist-type'(ctx){
+  const txt=ctx.name.trim().toUpperCase();
+  const fs=fitSize(txt,.48,340,110);
+  const w=txt.length*fs*.48;
+  return `<text x="200" y="208" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="${fs}" letter-spacing="2" textLength="${w.toFixed(1)}" lengthAdjust="spacingAndGlyphs" fill="#F6ECF4">${esc(txt)}</text>
+  <rect x="${(200-w/2).toFixed(1)}" y="230" width="${w.toFixed(1)}" height="6" fill="#FFB4A2"/>`;
+},
+/* 15 Pixel Sharp — pixel N, black + red squares (8×9 grid, cell 13) */
+'pixel-sharp'(ctx){
+  const K='#241D18',R='#E63946';
+  const grid=[
+   'RKK..KKR',
+   'K.K...K',
+   'RKK..K.',
+   '.....K.',
+   '....R..',
+   '...R...',
+   '..K..K.',
+   '.K...K.',
+   'KKR...K'];
+  let g='';
+  grid.forEach((row,ri)=>{[...row].forEach((ch,ci)=>{
+    if(ch==='.')return;
+    g+=`<rect x="${148+ci*13}" y="${101+ri*13}" width="12" height="12" fill="${ch==='R'?R:K}"/>`;});});
+  return g+atlasWM(ctx,{color:'#3D2B2B'});
+},
+/* 16 Stamp & Seal — dotted ring, red ring, arced name, globe centre, cancel slashes */
+'stamp-seal'(ctx){
+  const id=uid('arc');
+  const top=ctx.name.trim().toUpperCase().slice(0,12);
+  return `<circle cx="200" cy="160" r="70" fill="none" stroke="#3D2B2B" stroke-width="2.5" stroke-dasharray="0.5 7" stroke-linecap="round"/>
+  <circle cx="200" cy="160" r="52" fill="none" stroke="#D64545" stroke-width="2"/>`
+  +arcText(id,56,top,'EST · 2026',10,2,'#3D2B2B')
+  +`<circle cx="200" cy="160" r="30" fill="none" stroke="#3D2B2B" stroke-width="2"/>
+  <path d="M200,136 C214,152 214,168 200,184 C186,168 186,152 200,136 Z" fill="#D64545"/>
+  <line x1="176" y1="160" x2="224" y2="160" stroke="#3D2B2B" stroke-width="1.5"/>
+  <line x1="258" y1="140" x2="272" y2="132" stroke="#D64545" stroke-width="3" stroke-linecap="round"/>
+  <line x1="258" y1="152" x2="272" y2="144" stroke="#D64545" stroke-width="3" stroke-linecap="round"/>`
+  +atlasWM(ctx,{color:'#3D2B2B',fam:"'DM Serif Display',serif",w:400,fs:26,ls:8});
+},
+/* 17 Morph Mark — white N with a salmon ribbon loop */
+'morph-mark'(ctx){
+  return `<path d="M168,204 L168,116 L232,204 L232,116" fill="none" stroke="#F6ECF4" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M238,108 C266,112 264,142 244,156 C224,170 196,178 172,170" fill="none" stroke="#FFB4A2" stroke-width="3.5" stroke-linecap="round"/>`
+  +atlasWM(ctx,{color:'#F6ECF4',fs:24,ls:14});
+},
+/* 18 Crafted Linework — gold sunburst ring, pale inner ring, gold star */
+'crafted-linework'(ctx){
+  let rays='';
+  for(let i=0;i<36;i++){const a=i/36*Math.PI*2;
+    rays+=`<line x1="${(200+32*Math.cos(a)).toFixed(1)}" y1="${(160+32*Math.sin(a)).toFixed(1)}" x2="${(200+54*Math.cos(a)).toFixed(1)}" y2="${(160+54*Math.sin(a)).toFixed(1)}" stroke="#E8DCC8" stroke-width="1" opacity=".5"/>`;}
+  return `<circle cx="200" cy="160" r="58" fill="none" stroke="#C9A227" stroke-width="2"/>${rays}
+  <circle cx="200" cy="160" r="26" fill="none" stroke="#E8DCC8" stroke-width="1.5"/>`
+  +star4(200,160,24,6,'#FFB703')
+  +atlasWM(ctx,{color:'#EEF3E6',fam:"'Playfair Display',serif",w:700,fs:24,ls:9});
+},
+/* 19 Toasty / Warm Organic — red blob face, dark + white eyes, smile */
+'toasty-organic'(ctx){
+  return `<path d="M202,104 C230,100 252,120 250,150 C248,180 230,196 212,208 C194,220 166,212 156,188 C146,164 154,136 170,120 C182,108 188,106 202,104 Z" fill="#D64545"/>
+  <circle cx="182" cy="152" r="7" fill="#2B2118"/>
+  <circle cx="214" cy="152" r="7" fill="#F7E8E4"/>
+  <path d="M186,172 Q200,184 214,172" fill="none" stroke="#2B2118" stroke-width="4" stroke-linecap="round"/>`
+  +atlasWM(ctx,{transform:'lower',color:'#3D2B2B',fs:30,ls:2,w:700});
+},
+/* 20 Storybook Gothic — black serif N, red crescent + berries */
+'storybook-gothic'(ctx){
+  return `<circle cx="186" cy="100" r="13" fill="#E63946"/>
+  <circle cx="192" cy="96" r="11" fill="#FFFDFB"/>
+  <path d="M224,104 Q234,96 242,104" fill="none" stroke="#E63946" stroke-width="3" stroke-linecap="round"/>
+  <text x="200" y="208" text-anchor="middle" font-family="'Playfair Display',serif" font-weight="900" font-size="120" fill="#141210">N</text>
+  <line x1="158" y1="183" x2="152" y2="192" stroke="#141210" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="158" cy="178" r="5" fill="#E63946"/>
+  <line x1="242" y1="183" x2="248" y2="192" stroke="#141210" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="242" cy="178" r="5" fill="#E63946"/>`
+  +atlasWM(ctx,{color:'#1A1814',fam:"'Playfair Display',serif",w:700,fs:24,ls:9});
+},
+/* 21 Smooth Atmospheric — aurora blob, white wave, two dots */
+'smooth-atmospheric'(ctx){
+  const id=uid('ag');
+  return `<defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8B7CF6"/><stop offset=".55" stop-color="#6C95D5"/><stop offset="1" stop-color="#5EC8B8"/></linearGradient></defs>
+  <path d="M198,124 C224,114 250,128 250,152 C250,174 228,186 204,184 C180,182 158,170 160,148 C162,130 176,130 198,124 Z" fill="url(#${id})"/>
+  <path d="M168,158 Q184,142 200,152 T232,150" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" opacity=".9"/>
+  <circle cx="176" cy="108" r="3.5" fill="#FFFFFF"/>
+  <circle cx="238" cy="104" r="4" fill="#7EF0C1"/>`
+  +atlasWM(ctx,{transform:'lower',color:'#E8EAED',ls:6});
+},
+/* 22 Negative Space — yellow crescent + white square, dark disc, white play triangle */
+'negative-space'(ctx){
+  return `<circle cx="170" cy="160" r="48" fill="#FFB703"/>
+  <rect x="196" y="112" width="96" height="96" rx="6" fill="#F5F4EF"/>
+  <circle cx="212" cy="160" r="30" fill="#0E2A1F"/>
+  <polygon points="204,142 204,178 228,160" fill="#F5F4EF"/>
+  <circle cx="280" cy="124" r="4" fill="#FFB703"/>`
+  +atlasWM(ctx,{color:'#EEF3E6'});
+},
+};
 function conceptSVG(c){
+  /* atlas previews replace the procedural engine; prompt text is untouched */
+  if(ATLAS[c.id]) return tileSVG(ATLAS[c.id](c.ctx),{bg:ATLAS_BG[c.id]});
   const inner=composeConcept(RNG(c.seed),{...c.ctx,pal:c.pal});
   return tileSVG(applyDetail(inner,c),c.pal);
 }
@@ -1339,7 +1598,7 @@ function buildSet(name,sd){
     const layout={nameDy:lr.range(-6,6)*jit,nameFs:lr.range(.94,1.05),nameLs:lr.range(-2,2)*jit,tagDy:lr.range(-4,4)*jit,markDx:lr.range(-8,8)*jit};
     const pool=KINDS[a.fam]||[];
     const kind=pool.find(k=>hints.includes(k))||r.pick(pool)||undefined;
-    const c={ctx:{name,tagline:"",logoType:a.logoType,family:a.fam,font:FONTS[fontKey],markKind:kind,layout,mono:S.mono,detail:S.detail},
+    const c={id:a.id,ctx:{name,tagline:"",logoType:a.logoType,family:a.fam,font:FONTS[fontKey],markKind:kind,layout,mono:S.mono,detail:S.detail},
       pal,detail:S.detail,mono:S.mono,name,seed};
     const ref=conceptSVG(c);
     const built=buildPrompt(a,{brand:name,kw,pal});
